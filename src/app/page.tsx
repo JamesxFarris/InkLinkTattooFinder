@@ -22,15 +22,15 @@ export default async function HomePage() {
       <JsonLd data={websiteJsonLd()} />
 
       {/* Hero — immersive background image with search */}
-      <section className="relative overflow-hidden">
+      <section className="relative min-h-[480px] overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-[center_25%]"
           style={{ backgroundImage: `url(${HERO_IMAGE})` }}
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-stone-900/70" aria-hidden="true" />
+        <div className="absolute inset-0 bg-stone-900/65" aria-hidden="true" />
 
-        <div className="relative mx-auto max-w-3xl px-4 pb-20 pt-16 text-center sm:pb-28 sm:pt-24">
+        <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pb-28 sm:pt-24">
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
             Find the Best{" "}
             <span className="text-red-400">Tattoo Artists</span>{" "}

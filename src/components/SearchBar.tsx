@@ -17,8 +17,8 @@ export function SearchBar({ className, size = "default" }: { className?: string;
   const isLarge = size === "large";
 
   return (
-    <form onSubmit={handleSubmit} className={className} role="search" aria-label="Search tattoo shops">
-      <div className={`flex w-full overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-stone-900/5 dark:bg-stone-900 dark:ring-white/10 ${isLarge ? "max-w-3xl shadow-2xl" : "max-w-2xl"}`}>
+    <form onSubmit={handleSubmit} className={`${isLarge ? "w-full" : ""} ${className || ""}`} role="search" aria-label="Search tattoo shops">
+      <div className={`flex w-full overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-stone-900/5 dark:bg-stone-900 dark:ring-white/10 ${isLarge ? "shadow-2xl" : "max-w-2xl"}`}>
         <div className="flex flex-1 items-center px-5">
           <svg
             className={`text-stone-400 ${isLarge ? "h-6 w-6" : "h-5 w-5"}`}

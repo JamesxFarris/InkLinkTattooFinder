@@ -2,7 +2,7 @@
 // These are permanent CDN URLs that serve optimized images.
 
 export const HERO_IMAGE =
-  "https://images.pexels.com/photos/4125662/pexels-photo-4125662.jpeg?auto=compress&fit=crop&w=1920&q=80";
+  "https://images.pexels.com/photos/7005669/pexels-photo-7005669.jpeg?auto=compress&fit=crop&w=1920&q=80";
 
 export const TATTOO_STOCK_IMAGES = [
   "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=800&q=80",
