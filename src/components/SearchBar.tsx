@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function SearchBar({ className }: { className?: string }) {
+export function SearchBar({ className, size = "default" }: { className?: string; size?: "default" | "large" }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
@@ -14,12 +14,14 @@ export function SearchBar({ className }: { className?: string }) {
     router.push(`/search?${params.toString()}`);
   }
 
+  const isLarge = size === "large";
+
   return (
     <form onSubmit={handleSubmit} className={className} role="search" aria-label="Search tattoo shops">
-      <div className="flex w-full max-w-2xl overflow-hidden rounded-xl border border-neutral-300 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
-        <div className="flex flex-1 items-center px-4">
+      <div className={`flex w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10 ${isLarge ? "shadow-2xl" : ""}`}>
+        <div className="flex flex-1 items-center px-5">
           <svg
-            className="h-5 w-5 text-neutral-400"
+            className={`text-neutral-400 ${isLarge ? "h-6 w-6" : "h-5 w-5"}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -38,12 +40,12 @@ export function SearchBar({ className }: { className?: string }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search tattoo shops, styles, or cities..."
             aria-label="Search tattoo shops, styles, or cities"
-            className="w-full bg-transparent px-3 py-3 text-sm outline-none placeholder:text-neutral-400"
+            className={`w-full bg-transparent px-4 outline-none placeholder:text-neutral-400 ${isLarge ? "py-5 text-base" : "py-3.5 text-sm"}`}
           />
         </div>
         <button
           type="submit"
-          className="bg-red-600 px-6 py-3 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+          className={`bg-red-600 font-semibold text-white transition-colors hover:bg-red-700 ${isLarge ? "px-8 text-base" : "px-6 text-sm"}`}
         >
           Search
         </button>

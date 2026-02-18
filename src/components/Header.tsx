@@ -2,44 +2,34 @@ import Link from "next/link";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/80">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 bg-white/90 shadow-sm backdrop-blur-lg dark:bg-neutral-950/90">
+      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-baseline gap-1.5" aria-label="InkLink Tattoo Finder — Home">
-          <span className="text-2xl font-bold text-red-600">InkLink</span>
-          <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Tattoo Finder</span>
+          <span className="text-2xl font-bold tracking-tight text-red-600">InkLink</span>
+          <span className="hidden text-sm font-medium text-neutral-400 sm:inline dark:text-neutral-500">Tattoo Finder</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Main navigation">
-          <Link
-            href="/categories"
-            className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
-          >
-            Styles
-          </Link>
-          <Link
-            href="/search"
-            className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
-          >
-            Search
-          </Link>
-          <Link
-            href="/about"
-            className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
-          >
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
-          >
-            Contact
-          </Link>
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
+          {[
+            { href: "/categories", label: "Styles" },
+            { href: "/search", label: "Search" },
+            { href: "/about", label: "About" },
+            { href: "/contact", label: "Contact" },
+          ].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="relative text-sm font-medium text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-3">
           <Link
             href="/search"
-            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+            className="rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-red-600/25 transition-all hover:bg-red-700 hover:shadow-lg hover:shadow-red-600/30"
           >
             Find a Shop
           </Link>
