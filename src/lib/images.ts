@@ -2,17 +2,17 @@
 // These are permanent CDN URLs that serve optimized images.
 
 export const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=1920&q=80";
+  "https://images.pexels.com/photos/4125662/pexels-photo-4125662.jpeg?auto=compress&fit=crop&w=1920&q=80";
 
 export const TATTOO_STOCK_IMAGES = [
   "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1598371839696-5c5bb1c12e38?auto=format&fit=crop&w=800&q=80",
   "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1590246814883-57c511e76a3b?auto=format&fit=crop&w=800&q=80",
   "https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=800&q=80",
   "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
   "https://images.unsplash.com/photo-1604431696980-07e518647bec?auto=format&fit=crop&w=800&q=80",
   "https://images.unsplash.com/photo-1542856204-00101eb6def4?auto=format&fit=crop&w=800&q=80",
+  "https://images.pexels.com/photos/955938/pexels-photo-955938.jpeg?auto=compress&fit=crop&w=800&q=80",
+  "https://images.pexels.com/photos/4125659/pexels-photo-4125659.jpeg?auto=compress&fit=crop&w=800&q=80",
 ];
 
 // City-specific stock images (skylines / landmarks)
