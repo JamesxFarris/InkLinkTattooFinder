@@ -16,12 +16,12 @@ export function websiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "InkLink Tattoo Finder",
-    url: "https://inkfinder.com",
+    url: "https://inklinktattoofinder.com",
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://inkfinder.com/search?q={search_term_string}",
+        urlTemplate: "https://inklinktattoofinder.com/search?q={search_term_string}",
       },
       "query-input": "required name=search_term_string",
     },

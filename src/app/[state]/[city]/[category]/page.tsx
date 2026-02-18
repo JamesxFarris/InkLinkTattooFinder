@@ -56,7 +56,7 @@ export default async function CityCategoryPage({ params, searchParams }: Props) 
 
   const jsonLdItems = listings.map((l, i) => ({
     name: l.name,
-    url: `https://inkfinder.com/listing/${l.slug}`,
+    url: `https://inklinktattoofinder.com/listing/${l.slug}`,
     position: i + 1,
   }));
 

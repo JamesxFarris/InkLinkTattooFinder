@@ -4,7 +4,7 @@ import { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://inkfinder.com";
+  const baseUrl = "https://inklinktattoofinder.com";
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
