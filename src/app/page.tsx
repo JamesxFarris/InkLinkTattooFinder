@@ -31,7 +31,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-stone-900/65" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pb-28 sm:pt-24">
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h1 className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
             Find the Best{" "}
             <span className="text-red-400">Tattoo Artists</span>{" "}
             Near You
@@ -91,7 +91,7 @@ export default async function HomePage() {
       {featured.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mb-10">
-            <h2 className="section-heading text-3xl font-bold text-stone-900 dark:text-stone-100">
+            <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
               Featured Shops
             </h2>
             <p className="mt-4 text-stone-500 dark:text-stone-400">
@@ -106,7 +106,7 @@ export default async function HomePage() {
       <section className="border-y border-stone-200/60 bg-stone-100/40 dark:border-stone-800/40 dark:bg-stone-900/30">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mb-10">
-            <h2 className="section-heading text-3xl font-bold text-stone-900 dark:text-stone-100">
+            <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
               Browse by Style
             </h2>
             <p className="mt-4 text-stone-500 dark:text-stone-400">
@@ -128,7 +128,7 @@ export default async function HomePage() {
       {/* Top Cities */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="mb-10">
-          <h2 className="section-heading text-3xl font-bold text-stone-900 dark:text-stone-100">
+          <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
             Top Cities
           </h2>
           <p className="mt-4 text-stone-500 dark:text-stone-400">
@@ -147,7 +147,7 @@ export default async function HomePage() {
         <section className="border-t border-stone-200/60 bg-stone-100/40 dark:border-stone-800/40 dark:bg-stone-900/30">
           <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
             <div className="mb-10">
-              <h2 className="section-heading text-3xl font-bold text-stone-900 dark:text-stone-100">
+              <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
                 Recently Added
               </h2>
               <p className="mt-4 text-stone-500 dark:text-stone-400">
@@ -162,7 +162,7 @@ export default async function HomePage() {
       {/* CTA Section */}
       <section className="bg-stone-900 dark:bg-stone-950">
         <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="font-display text-3xl font-bold text-white">
             Own a tattoo shop?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-stone-400">
