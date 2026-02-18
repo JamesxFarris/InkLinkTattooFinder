@@ -22,7 +22,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="bg-gradient-to-b from-neutral-900 to-neutral-800 px-4 py-20 text-center text-white sm:py-28">
         <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Find the Best <span className="text-red-500">Tattoo Artists</span> Near You
+          <span className="text-red-500">InkLink</span> Tattoo Finder — Find the Best Tattoo Artists Near You
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-neutral-300">
           Browse thousands of tattoo shops and artists by style, city, and ratings.

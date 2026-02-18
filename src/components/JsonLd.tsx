@@ -15,7 +15,7 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "InkFinder",
+    name: "InkLink Tattoo Finder",
     url: "https://inkfinder.com",
     potentialAction: {
       "@type": "SearchAction",

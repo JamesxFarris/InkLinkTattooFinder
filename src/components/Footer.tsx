@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950">
+    <footer className="border-t border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950" role="contentinfo">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3 className="text-lg font-bold text-red-600">InkFinder</h3>
+            <h3 className="text-lg font-bold text-red-600">InkLink <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Tattoo Finder</span></h3>
             <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
               Find the best tattoo artists and shops near you. Browse by style,
               city, and read reviews.
@@ -86,7 +86,7 @@ export function Footer() {
 
         <div className="mt-10 border-t border-neutral-200 pt-6 dark:border-neutral-800">
           <p className="text-center text-sm text-neutral-500 dark:text-neutral-500">
-            &copy; {new Date().getFullYear()} InkFinder. All rights reserved.
+            &copy; {new Date().getFullYear()} InkLink Tattoo Finder. All rights reserved.
           </p>
         </div>
       </div>

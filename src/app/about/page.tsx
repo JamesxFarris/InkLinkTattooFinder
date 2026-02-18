@@ -2,9 +2,9 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About InkFinder",
+  title: "About InkLink Tattoo Finder",
   description:
-    "InkFinder helps you discover the best tattoo artists and shops near you. Learn about our mission to connect tattoo enthusiasts with talented artists.",
+    "InkLink Tattoo Finder helps you discover the best tattoo artists and shops near you. Learn about our mission to connect tattoo enthusiasts with talented artists.",
 };
 
 export default function AboutPage() {
@@ -13,12 +13,12 @@ export default function AboutPage() {
       <Breadcrumbs items={[{ label: "About" }]} />
 
       <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
-        About InkFinder
+        About InkLink Tattoo Finder
       </h1>
 
       <div className="mt-6 space-y-6 leading-relaxed text-neutral-600 dark:text-neutral-400">
         <p>
-          InkFinder is the premier directory for finding tattoo artists and shops
+          InkLink Tattoo Finder is the premier directory for finding tattoo artists and shops
           across the United States. Whether you&apos;re looking for a specific
           tattoo style, a walk-in friendly shop, or the highest-rated artists in
           your city, we make it easy to find the perfect match.
@@ -49,7 +49,7 @@ export default function AboutPage() {
         </h2>
         <p>
           If you own a tattoo shop and want to update your listing or get
-          featured on InkFinder, reach out through our{" "}
+          featured on InkLink Tattoo Finder, reach out through our{" "}
           <a href="/contact" className="text-red-600 hover:underline">
             contact page
           </a>

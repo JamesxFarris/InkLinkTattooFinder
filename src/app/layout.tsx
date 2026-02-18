@@ -5,8 +5,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "InkFinder — Find Tattoo Artists & Shops Near You",
-    template: "%s | InkFinder",
+    default: "InkLink Tattoo Finder — Find Tattoo Artists & Shops Near You",
+    template: "%s | InkLink Tattoo Finder",
   },
   description:
     "Discover the best tattoo artists and shops in your area. Browse by style, city, and read reviews to find your next tattoo artist.",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "InkFinder",
+    siteName: "InkLink Tattoo Finder",
   },
   robots: {
     index: true,

@@ -39,7 +39,7 @@ export function truncate(text: string, length: number): string {
   return text.slice(0, length).trimEnd() + "...";
 }
 
-export const SITE_NAME = "InkFinder";
+export const SITE_NAME = "InkLink Tattoo Finder";
 export const SITE_DESCRIPTION =
   "Find the best tattoo artists and shops near you. Browse by style, city, and read reviews.";
 export const ITEMS_PER_PAGE = 12;

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "InkFinder privacy policy — how we collect, use, and protect your information.",
+  description: "InkLink Tattoo Finder privacy policy — how we collect, use, and protect your information.",
 };
 
 export default function PrivacyPage() {
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
           Information We Collect
         </h2>
         <p>
-          InkFinder collects minimal information to provide our directory
+          InkLink Tattoo Finder collects minimal information to provide our directory
           service. We may collect anonymous usage data such as pages visited and
           search queries to improve our service.
         </p>
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
           How We Use Information
         </h2>
         <p>
-          Any information collected is used solely to improve the InkFinder
+          Any information collected is used solely to improve the InkLink Tattoo Finder
           directory experience. We do not sell personal information to third
           parties.
         </p>
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
           Business Listings
         </h2>
         <p>
-          Business information displayed on InkFinder (names, addresses, phone
+          Business information displayed on InkLink Tattoo Finder (names, addresses, phone
           numbers, hours, ratings) is sourced from publicly available data.
           Business owners may request updates or removal by contacting us.
         </p>

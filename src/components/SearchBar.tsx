@@ -15,7 +15,7 @@ export function SearchBar({ className }: { className?: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={className}>
+    <form onSubmit={handleSubmit} className={className} role="search" aria-label="Search tattoo shops">
       <div className="flex w-full max-w-2xl overflow-hidden rounded-xl border border-neutral-300 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
         <div className="flex flex-1 items-center px-4">
           <svg
@@ -23,6 +23,7 @@ export function SearchBar({ className }: { className?: string }) {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -36,6 +37,7 @@ export function SearchBar({ className }: { className?: string }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search tattoo shops, styles, or cities..."
+            aria-label="Search tattoo shops, styles, or cities"
             className="w-full bg-transparent px-3 py-3 text-sm outline-none placeholder:text-neutral-400"
           />
         </div>

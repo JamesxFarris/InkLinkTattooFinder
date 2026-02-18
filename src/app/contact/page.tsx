@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Get in touch with InkFinder. Reach out about listing your shop, updating information, or general inquiries.",
+    "Get in touch with InkLink Tattoo Finder. Reach out about listing your shop, updating information, or general inquiries.",
 };
 
 export default function ContactPage() {
