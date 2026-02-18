@@ -15,10 +15,10 @@ export default function Error({
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-      <h1 className="text-4xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-100">
         Something went wrong
       </h1>
-      <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         An unexpected error occurred. Please try again.
       </p>
       <button

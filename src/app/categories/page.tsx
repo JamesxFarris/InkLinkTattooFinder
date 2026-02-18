@@ -22,17 +22,17 @@ export default async function CategoriesPage() {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumbs items={[{ label: "Styles & Categories" }]} />
 
-      <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
         Tattoo Styles & Categories
       </h1>
-      <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         Browse all tattoo styles and find artists who specialize in your
         preferred look.
       </p>
 
       {/* Tattoo Styles */}
       <section className="mt-10">
-        <h2 className="mb-4 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+        <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
           Tattoo Styles
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -49,7 +49,7 @@ export default async function CategoriesPage() {
       {/* Artist Specializations */}
       {artistSpecs.length > 0 && (
         <section className="mt-10">
-          <h2 className="mb-4 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
             Artist Specializations
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -67,7 +67,7 @@ export default async function CategoriesPage() {
       {/* Services & Suppliers */}
       {suppliers.length > 0 && (
         <section className="mt-10">
-          <h2 className="mb-4 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
             Services & Suppliers
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

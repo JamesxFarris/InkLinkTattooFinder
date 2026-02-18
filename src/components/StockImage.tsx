@@ -27,7 +27,7 @@ export function StockImage({
   if (error) {
     return (
       <div
-        className={`bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 ${className || ""}`}
+        className={`bg-gradient-to-br from-stone-800 via-stone-900 to-stone-950 ${className || ""}`}
         style={fill ? { position: "absolute", inset: 0 } : { width, height }}
         role="img"
         aria-label={alt}

@@ -49,13 +49,13 @@ export function FilterSidebar({
   return (
     <aside className="space-y-6">
       <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
           Sort By
         </h3>
         <select
           value={currentSort}
           onChange={(e) => updateParam("sort", e.target.value === "relevance" ? null : e.target.value)}
-          className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+          className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm dark:border-stone-700 dark:bg-stone-900"
         >
           {sortOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -66,7 +66,7 @@ export function FilterSidebar({
       </div>
 
       <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
           Style
         </h3>
         <div className="space-y-2">
@@ -75,7 +75,7 @@ export function FilterSidebar({
             className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
               !currentCategory
                 ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
-                : "text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
+                : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
             }`}
           >
             All Styles
@@ -87,7 +87,7 @@ export function FilterSidebar({
               className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
                 currentCategory === cat.slug
                   ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
-                  : "text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
+                  : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
               }`}
             >
               {cat.name}
@@ -97,7 +97,7 @@ export function FilterSidebar({
       </div>
 
       <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
           Price Range
         </h3>
         <div className="space-y-2">
@@ -106,7 +106,7 @@ export function FilterSidebar({
             className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
               !currentPrice
                 ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
-                : "text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
+                : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
             }`}
           >
             Any Price
@@ -118,7 +118,7 @@ export function FilterSidebar({
               className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
                 currentPrice === opt.value
                   ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
-                  : "text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
+                  : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
               }`}
             >
               {opt.label}
@@ -128,7 +128,7 @@ export function FilterSidebar({
       </div>
 
       <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
           Features
         </h3>
         <label className="flex cursor-pointer items-center gap-2">
@@ -138,9 +138,9 @@ export function FilterSidebar({
             onChange={(e) =>
               updateParam("walkIns", e.target.checked ? "true" : null)
             }
-            className="rounded border-neutral-300 text-red-600 focus:ring-red-500"
+            className="rounded border-stone-300 text-red-600 focus:ring-red-500"
           />
-          <span className="text-sm text-neutral-700 dark:text-neutral-300">
+          <span className="text-sm text-stone-700 dark:text-stone-300">
             Walk-ins Welcome
           </span>
         </label>

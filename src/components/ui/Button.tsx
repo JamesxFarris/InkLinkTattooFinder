@@ -20,11 +20,11 @@ export function Button({
         variant === "primary" &&
           "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
         variant === "secondary" &&
-          "bg-neutral-900 text-white hover:bg-neutral-800 focus:ring-neutral-500 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200",
+          "bg-stone-900 text-white hover:bg-stone-800 focus:ring-stone-500 dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200",
         variant === "outline" &&
-          "border border-neutral-300 bg-transparent hover:bg-neutral-100 focus:ring-neutral-500 dark:border-neutral-700 dark:hover:bg-neutral-800",
+          "border border-stone-300 bg-transparent hover:bg-stone-100 focus:ring-stone-500 dark:border-stone-700 dark:hover:bg-stone-800",
         variant === "ghost" &&
-          "bg-transparent hover:bg-neutral-100 focus:ring-neutral-500 dark:hover:bg-neutral-800",
+          "bg-transparent hover:bg-stone-100 focus:ring-stone-500 dark:hover:bg-stone-800",
         size === "sm" && "px-3 py-1.5 text-sm",
         size === "md" && "px-4 py-2 text-sm",
         size === "lg" && "px-6 py-3 text-base",

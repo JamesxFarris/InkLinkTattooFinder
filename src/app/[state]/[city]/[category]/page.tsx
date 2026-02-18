@@ -72,11 +72,11 @@ export default async function CityCategoryPage({ params, searchParams }: Props) 
         ]}
       />
 
-      <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
         {category.name} Tattoo Artists in {city.name},{" "}
         {city.state.abbreviation}
       </h1>
-      <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         {category.description ||
           `Browse ${category.name.toLowerCase()} tattoo artists in ${city.name}, ${city.state.name}.`}
       </p>

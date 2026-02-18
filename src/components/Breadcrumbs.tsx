@@ -4,7 +4,7 @@ import type { BreadcrumbItem } from "@/types";
 export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400">
         <li>
           <Link
             href="/"
@@ -15,7 +15,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         </li>
         {items.map((item, i) => (
           <li key={i} className="flex items-center gap-1.5">
-            <span className="text-neutral-300 dark:text-neutral-600">/</span>
+            <span className="text-stone-300 dark:text-stone-600">/</span>
             {item.href ? (
               <Link
                 href={item.href}
@@ -24,7 +24,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
                 {item.label}
               </Link>
             ) : (
-              <span className="font-medium text-neutral-900 dark:text-neutral-100">
+              <span className="font-medium text-stone-900 dark:text-stone-100">
                 {item.label}
               </span>
             )}

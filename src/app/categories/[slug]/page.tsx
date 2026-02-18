@@ -49,11 +49,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
       <div className="flex items-center gap-3">
         {category.icon && <span className="text-3xl">{category.icon}</span>}
-        <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+        <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
           {category.name} Tattoo Artists
         </h1>
       </div>
-      <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         {category.description ||
           `Find ${category.name.toLowerCase()} tattoo artists across the United States.`}
       </p>

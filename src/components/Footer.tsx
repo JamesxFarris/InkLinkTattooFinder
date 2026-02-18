@@ -2,18 +2,18 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950" role="contentinfo">
+    <footer className="border-t border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-950" role="contentinfo">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:pr-8">
             <Link href="/" className="inline-flex items-baseline gap-1.5" aria-label="InkLink Tattoo Finder">
               <span className="text-xl font-bold text-red-600">InkLink</span>
-              <span className="text-xs font-medium text-neutral-400 dark:text-neutral-500">
+              <span className="text-xs font-medium text-stone-400 dark:text-stone-500">
                 Tattoo Finder
               </span>
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
+            <p className="mt-4 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
               Find the best tattoo artists and shops near you. Browse by style,
               city, and read reviews to find your perfect artist.
             </p>
@@ -21,7 +21,7 @@ export function Footer() {
 
           {/* Popular Styles */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-900 dark:text-stone-100">
               Popular Styles
             </h4>
             <ul className="mt-4 space-y-3">
@@ -35,7 +35,7 @@ export function Footer() {
                 <li key={style.slug}>
                   <Link
                     href={`/categories/${style.slug}`}
-                    className="text-sm text-neutral-500 transition-colors hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400"
+                    className="text-sm text-stone-500 transition-colors hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
                   >
                     {style.name}
                   </Link>
@@ -46,7 +46,7 @@ export function Footer() {
 
           {/* Top Cities */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-900 dark:text-stone-100">
               Top Cities
             </h4>
             <ul className="mt-4 space-y-3">
@@ -60,7 +60,7 @@ export function Footer() {
                 <li key={city.path}>
                   <Link
                     href={city.path}
-                    className="text-sm text-neutral-500 transition-colors hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400"
+                    className="text-sm text-stone-500 transition-colors hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
                   >
                     {city.name}
                   </Link>
@@ -71,7 +71,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-900 dark:text-stone-100">
               Company
             </h4>
             <ul className="mt-4 space-y-3">
@@ -83,7 +83,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-neutral-500 transition-colors hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400"
+                    className="text-sm text-stone-500 transition-colors hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
                   >
                     {link.name}
                   </Link>
@@ -93,8 +93,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-neutral-200 pt-8 dark:border-neutral-800">
-          <p className="text-center text-sm text-neutral-400 dark:text-neutral-500">
+        <div className="mt-14 border-t border-stone-200 pt-8 dark:border-stone-800">
+          <p className="text-center text-sm text-stone-400 dark:text-stone-500">
             &copy; {new Date().getFullYear()} InkLink Tattoo Finder. All rights reserved.
           </p>
         </div>

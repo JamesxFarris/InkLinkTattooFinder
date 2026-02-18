@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-white/90 shadow-sm backdrop-blur-lg dark:bg-neutral-950/90">
+    <header className="sticky top-0 z-50 bg-white/90 shadow-sm backdrop-blur-lg dark:bg-stone-950/90">
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-baseline gap-1.5" aria-label="InkLink Tattoo Finder — Home">
           <span className="text-2xl font-bold tracking-tight text-red-600">InkLink</span>
-          <span className="hidden text-sm font-medium text-neutral-400 sm:inline dark:text-neutral-500">Tattoo Finder</span>
+          <span className="hidden text-sm font-medium text-stone-400 sm:inline dark:text-stone-500">Tattoo Finder</span>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
@@ -19,7 +19,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="relative text-sm font-medium text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+              className="relative text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
             >
               {link.label}
             </Link>

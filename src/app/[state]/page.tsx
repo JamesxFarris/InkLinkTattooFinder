@@ -33,10 +33,10 @@ export default async function StatePage({ params }: Props) {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumbs items={[{ label: state.name }]} />
 
-      <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
         Tattoo Shops in {state.name}
       </h1>
-      <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         Browse tattoo shops and artists across {state.name}. Select a city below
         to find the best ink near you.
       </p>
@@ -48,7 +48,7 @@ export default async function StatePage({ params }: Props) {
       </div>
 
       {cities.length === 0 && (
-        <p className="mt-8 text-center text-neutral-500">
+        <p className="mt-8 text-center text-stone-500">
           No cities with listings found in {state.name} yet. Check back soon!
         </p>
       )}

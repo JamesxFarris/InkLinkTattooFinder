@@ -45,10 +45,10 @@ export default async function CityPage({ params }: Props) {
         ]}
       />
 
-      <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
         Tattoo Shops in {city.name}, {city.state.abbreviation}
       </h1>
-      <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         Find the best tattoo artists and shops in {city.name},{" "}
         {city.state.name}. Browse by style or explore all listings below.
       </p>
@@ -56,7 +56,7 @@ export default async function CityPage({ params }: Props) {
       {/* Categories for this city */}
       {categories.length > 0 && (
         <section className="mt-10">
-          <h2 className="mb-4 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
             Browse by Style
           </h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -73,7 +73,7 @@ export default async function CityPage({ params }: Props) {
 
       {/* All listings */}
       <section className="mt-10">
-        <h2 className="mb-4 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+        <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
           All Shops in {city.name}
         </h2>
         <ListingGrid listings={listings} />

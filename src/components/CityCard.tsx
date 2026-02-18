@@ -9,7 +9,7 @@ export function CityCard({ city }: { city: CityWithCount }) {
   return (
     <Link
       href={`/${city.state.slug}/${city.slug}`}
-      className="group relative block h-48 overflow-hidden rounded-2xl shadow-[var(--card-shadow)] ring-1 ring-black/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:ring-white/[0.06]"
+      className="group relative block h-48 overflow-hidden rounded-2xl shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:ring-white/[0.06]"
     >
       {/* Background image */}
       <StockImage
@@ -19,8 +19,8 @@ export function CityCard({ city }: { city: CityWithCount }) {
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+      {/* Warm gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/25 to-transparent" />
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-end p-5">

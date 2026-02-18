@@ -70,11 +70,11 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
       {/* Results */}
       <div className="flex-1">
         <div className="mb-6 flex items-center justify-between">
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="text-sm text-stone-500 dark:text-stone-400">
             {total} {total === 1 ? "result" : "results"} found
             {params.q && (
               <>
-                {" "}for <span className="font-medium text-neutral-900 dark:text-neutral-100">&quot;{params.q}&quot;</span>
+                {" "}for <span className="font-medium text-stone-900 dark:text-stone-100">&quot;{params.q}&quot;</span>
               </>
             )}
           </p>
@@ -97,7 +97,7 @@ export default async function SearchPage({ searchParams }: Props) {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumbs items={[{ label: "Search" }]} />
 
-      <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
         Search Tattoo Shops
       </h1>
       <div className="mt-4 mb-8">
@@ -107,7 +107,7 @@ export default async function SearchPage({ searchParams }: Props) {
       <Suspense
         fallback={
           <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-300 border-t-red-600" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-stone-300 border-t-red-600" />
           </div>
         }
       >

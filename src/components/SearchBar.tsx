@@ -18,10 +18,10 @@ export function SearchBar({ className, size = "default" }: { className?: string;
 
   return (
     <form onSubmit={handleSubmit} className={className} role="search" aria-label="Search tattoo shops">
-      <div className={`flex w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10 ${isLarge ? "shadow-2xl" : ""}`}>
+      <div className={`flex w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-stone-900/5 dark:bg-stone-900 dark:ring-white/10 ${isLarge ? "shadow-2xl" : ""}`}>
         <div className="flex flex-1 items-center px-5">
           <svg
-            className={`text-neutral-400 ${isLarge ? "h-6 w-6" : "h-5 w-5"}`}
+            className={`text-stone-400 ${isLarge ? "h-6 w-6" : "h-5 w-5"}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -40,7 +40,7 @@ export function SearchBar({ className, size = "default" }: { className?: string;
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search tattoo shops, styles, or cities..."
             aria-label="Search tattoo shops, styles, or cities"
-            className={`w-full bg-transparent px-4 outline-none placeholder:text-neutral-400 ${isLarge ? "py-5 text-base" : "py-3.5 text-sm"}`}
+            className={`w-full bg-transparent px-4 outline-none placeholder:text-stone-400 ${isLarge ? "py-5 text-base" : "py-3.5 text-sm"}`}
           />
         </div>
         <button

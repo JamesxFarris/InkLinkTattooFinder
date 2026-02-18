@@ -45,7 +45,7 @@ export function Pagination({
       {currentPage > 1 && (
         <Link
           href={buildHref(currentPage - 1)}
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          className="rounded-lg border border-stone-300 px-3 py-2 text-sm hover:bg-stone-100 dark:border-stone-700 dark:hover:bg-stone-800"
         >
           Previous
         </Link>
@@ -53,7 +53,7 @@ export function Pagination({
 
       {pages.map((page, i) =>
         page === "ellipsis" ? (
-          <span key={`e-${i}`} className="px-2 text-neutral-400">
+          <span key={`e-${i}`} className="px-2 text-stone-400">
             ...
           </span>
         ) : (
@@ -64,7 +64,7 @@ export function Pagination({
               "rounded-lg px-3 py-2 text-sm transition-colors",
               page === currentPage
                 ? "bg-red-600 text-white"
-                : "border border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                : "border border-stone-300 hover:bg-stone-100 dark:border-stone-700 dark:hover:bg-stone-800"
             )}
           >
             {page}
@@ -75,7 +75,7 @@ export function Pagination({
       {currentPage < totalPages && (
         <Link
           href={buildHref(currentPage + 1)}
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          className="rounded-lg border border-stone-300 px-3 py-2 text-sm hover:bg-stone-100 dark:border-stone-700 dark:hover:bg-stone-800"
         >
           Next
         </Link>

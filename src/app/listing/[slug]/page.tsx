@@ -70,13 +70,13 @@ export default async function ListingPage({ params }: Props) {
         {/* Main Content */}
         <div className="lg:col-span-2">
           {/* Header */}
-          <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+                <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
                   {listing.name}
                 </h1>
-                <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+                <p className="mt-1 text-stone-600 dark:text-stone-400">
                   {listing.address && `${listing.address}, `}
                   {listing.city.name}, {listing.city.state.abbreviation}
                   {listing.zipCode && ` ${listing.zipCode}`}
@@ -96,7 +96,7 @@ export default async function ListingPage({ params }: Props) {
                       className={
                         i < Math.round(listing.googleRating!)
                           ? "text-yellow-500"
-                          : "text-neutral-300 dark:text-neutral-600"
+                          : "text-stone-300 dark:text-stone-600"
                       }
                     >
                       &#9733;
@@ -105,7 +105,7 @@ export default async function ListingPage({ params }: Props) {
                 </div>
                 <span className="font-semibold">{listing.googleRating}</span>
                 {listing.googleReviewCount && (
-                  <span className="text-sm text-neutral-500">
+                  <span className="text-sm text-stone-500">
                     ({listing.googleReviewCount} reviews)
                   </span>
                 )}
@@ -125,10 +125,10 @@ export default async function ListingPage({ params }: Props) {
 
             {listing.description && (
               <div className="mt-6">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
                   About
                 </h2>
-                <p className="mt-2 leading-relaxed text-neutral-600 dark:text-neutral-400">
+                <p className="mt-2 leading-relaxed text-stone-600 dark:text-stone-400">
                   {listing.description}
                 </p>
               </div>
@@ -137,7 +137,7 @@ export default async function ListingPage({ params }: Props) {
             {/* Features */}
             <div className="mt-6 flex flex-wrap gap-3">
               {listing.priceRange && (
-                <div className="rounded-lg bg-neutral-100 px-3 py-1.5 text-sm dark:bg-neutral-800">
+                <div className="rounded-lg bg-stone-100 px-3 py-1.5 text-sm dark:bg-stone-800">
                   Price:{" "}
                   {listing.priceRange === "budget" && "$ Budget"}
                   {listing.priceRange === "moderate" && "$$ Moderate"}
@@ -162,14 +162,14 @@ export default async function ListingPage({ params }: Props) {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Contact Info */}
-          <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+          <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+            <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
               Contact
             </h2>
             <div className="mt-4 space-y-3">
               {listing.phone && (
                 <div className="flex items-center gap-3 text-sm">
-                  <svg className="h-5 w-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="h-5 w-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <a href={`tel:${listing.phone}`} className="text-red-600 hover:underline">
@@ -179,7 +179,7 @@ export default async function ListingPage({ params }: Props) {
               )}
               {listing.website && (
                 <div className="flex items-center gap-3 text-sm">
-                  <svg className="h-5 w-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="h-5 w-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                   </svg>
                   <a href={listing.website} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline">
@@ -189,11 +189,11 @@ export default async function ListingPage({ params }: Props) {
               )}
               {listing.address && (
                 <div className="flex items-start gap-3 text-sm">
-                  <svg className="mt-0.5 h-5 w-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="mt-0.5 h-5 w-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="text-neutral-600 dark:text-neutral-400">
+                  <span className="text-stone-600 dark:text-stone-400">
                     {listing.address}
                     <br />
                     {listing.city.name}, {listing.city.state.abbreviation}{" "}
@@ -206,8 +206,8 @@ export default async function ListingPage({ params }: Props) {
 
           {/* Hours */}
           {hours && (
-            <div className="rounded-xl border border-neutral-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-900">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+            <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+              <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
                 Hours
               </h2>
               <div className="mt-4 space-y-2">
@@ -216,14 +216,14 @@ export default async function ListingPage({ params }: Props) {
                     key={day}
                     className="flex justify-between text-sm"
                   >
-                    <span className="capitalize text-neutral-600 dark:text-neutral-400">
+                    <span className="capitalize text-stone-600 dark:text-stone-400">
                       {day}
                     </span>
                     <span
                       className={
                         time === "closed"
                           ? "text-red-500"
-                          : "font-medium text-neutral-900 dark:text-neutral-100"
+                          : "font-medium text-stone-900 dark:text-stone-100"
                       }
                     >
                       {time === "closed" ? "Closed" : time}

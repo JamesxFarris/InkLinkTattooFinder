@@ -12,11 +12,11 @@ export default function AboutPage() {
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumbs items={[{ label: "About" }]} />
 
-      <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
         About InkLink Tattoo Finder
       </h1>
 
-      <div className="mt-6 space-y-6 leading-relaxed text-neutral-600 dark:text-neutral-400">
+      <div className="mt-6 space-y-6 leading-relaxed text-stone-600 dark:text-stone-400">
         <p>
           InkLink Tattoo Finder is the premier directory for finding tattoo artists and shops
           across the United States. Whether you&apos;re looking for a specific
@@ -24,7 +24,7 @@ export default function AboutPage() {
           your city, we make it easy to find the perfect match.
         </p>
 
-        <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           Our Mission
         </h2>
         <p>
@@ -33,7 +33,7 @@ export default function AboutPage() {
           up-to-date information about tattoo shops nationwide.
         </p>
 
-        <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           What We Offer
         </h2>
         <ul className="list-disc space-y-2 pl-6">
@@ -44,7 +44,7 @@ export default function AboutPage() {
           <li>Filter by walk-in availability, piercing services, and price range</li>
         </ul>
 
-        <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           For Shop Owners
         </h2>
         <p>
