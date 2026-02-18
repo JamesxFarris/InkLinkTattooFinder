@@ -40,12 +40,12 @@ export function SearchBar({ className, size = "default" }: { className?: string;
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search tattoo shops, styles, or cities..."
             aria-label="Search tattoo shops, styles, or cities"
-            className={`w-full bg-transparent px-4 outline-none placeholder:text-stone-400 ${isLarge ? "py-5 text-base" : "py-3.5 text-sm"}`}
+            className={`w-full bg-transparent px-4 text-stone-900 outline-none placeholder:text-stone-400 dark:text-stone-100 ${isLarge ? "py-5 text-lg" : "py-3.5 text-base"}`}
           />
         </div>
         <button
           type="submit"
-          className={`bg-red-600 font-semibold text-white transition-colors hover:bg-red-700 ${isLarge ? "px-8 text-base" : "px-6 text-sm"}`}
+          className={`bg-red-600 font-semibold text-white transition-colors hover:bg-red-700 ${isLarge ? "px-10 text-lg" : "px-6 text-sm"}`}
         >
           Search
         </button>
