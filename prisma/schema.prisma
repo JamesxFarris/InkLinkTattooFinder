@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ListingType {
+  shop
+  artist
+  supplier
+}
+
+enum PriceRange {
+  budget
+  moderate
+  premium
+  luxury
+}
+
+enum ListingStatus {
+  active
+  pending
+  inactive
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  type        ListingType
+  icon        String?
+  parentId    Int?
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  sortOrder   Int       @default(0)
+  listings    ListingCategory[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([type])
+}
+
+model State {
+  id           Int      @id @default(autoincrement())
+  name         String
+  abbreviation String   @unique
+  slug         String   @unique
+  cities       City[]
+  listings     Listing[]
+}
+
+model City {
+  id         Int      @id @default(autoincrement())
+  name       String
+  slug       String
+  stateId    Int
+  state      State    @relation(fields: [stateId], references: [id])
+  population Int?
+  latitude   Float?
+  longitude  Float?
+  metroArea  String?
+  listings   Listing[]
+
+  @@unique([slug, stateId])
+  @@index([stateId])
+}
+
+model Listing {
+  id                Int             @id @default(autoincrement())
+  name              String
+  slug              String          @unique
+  description       String?
+  type              ListingType
+  phone             String?
+  website           String?
+  email             String?
+  address           String?
+  cityId            Int
+  city              City            @relation(fields: [cityId], references: [id])
+  stateId           Int
+  state             State           @relation(fields: [stateId], references: [id])
+  zipCode           String?
+  latitude          Float?
+  longitude         Float?
+  priceRange        PriceRange?
+  styles            Json?
+  acceptsWalkIns    Boolean         @default(false)
+  minimumAge        Int?
+  piercingServices  Boolean         @default(false)
+  portfolioUrl      String?
+  amenities         Json?
+  hours             Json?
+  photos            Json?
+  googlePlaceId     String?
+  googleRating      Float?
+  googleReviewCount Int?
+  status            ListingStatus   @default(active)
+  featured          Boolean         @default(false)
+  categories        ListingCategory[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([cityId, status])
+  @@index([stateId, status])
+  @@index([type, status])
+}
+
+model ListingCategory {
+  listingId  Int
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([listingId, categoryId])
+  @@index([categoryId])
+}
