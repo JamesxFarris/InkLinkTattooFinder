@@ -39,9 +39,7 @@ export default async function HomePage() {
         <div className="relative px-4 py-28 text-center sm:py-36 lg:py-44">
           <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
             Find the Best{" "}
-            <span className="bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
-              Tattoo Artists
-            </span>{" "}
+            <span className="text-red-500">Tattoo Artists</span>{" "}
             Near You
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-neutral-300">
