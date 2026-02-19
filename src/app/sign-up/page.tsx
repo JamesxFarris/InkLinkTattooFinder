@@ -3,6 +3,7 @@ import { SignUpForm } from "./SignUpForm";
 
 export const metadata: Metadata = {
   title: "Sign Up",
+  alternates: { canonical: "/sign-up" },
 };
 
 export default function SignUpPage() {

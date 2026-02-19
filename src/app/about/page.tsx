@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     description:
       "We built InkLink to make finding a quality tattoo artist easy — no matter where you live.",
   },
+  alternates: { canonical: "/about" },
 };
 
 const features = [

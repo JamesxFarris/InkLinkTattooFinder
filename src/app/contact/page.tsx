@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Contact Us",
   description:
     "Get in touch with InkLink Tattoo Finder. Reach out about listing your shop, updating information, or general inquiries.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

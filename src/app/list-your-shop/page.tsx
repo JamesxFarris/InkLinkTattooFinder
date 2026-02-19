@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "List Your Shop | InkLink Tattoo Finder",
   description:
     "Submit your tattoo shop to be listed on InkLink Tattoo Finder. Reach thousands of people searching for tattoo artists in your area.",
+  alternates: { canonical: "/list-your-shop" },
 };
 
 type StateOption = { id: number; name: string };

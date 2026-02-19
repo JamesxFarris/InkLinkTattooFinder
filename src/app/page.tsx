@@ -4,9 +4,46 @@ import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CityCard } from "@/components/CityCard";
-import { JsonLd, websiteJsonLd, organizationJsonLd } from "@/components/JsonLd";
+import { CityFaq } from "@/components/CityFaq";
+import { JsonLd, websiteJsonLd, organizationJsonLd, faqJsonLd } from "@/components/JsonLd";
 import { HERO_IMAGE } from "@/lib/images";
 import { getAllCategories, getTopCities, getAllStates } from "@/lib/queries";
+import type { FaqItem } from "@/lib/faq";
+
+const homepageFaq: FaqItem[] = [
+  {
+    question: "How do I find a good tattoo artist near me?",
+    answer: "Use InkLink Tattoo Finder to search by your zip code or city. You can filter by tattoo style, read reviews, check ratings, and view artist portfolios. Look for artists with consistent quality in the style you want, positive reviews, and proper licensing.",
+  },
+  {
+    question: "How much does a tattoo cost?",
+    answer: "Tattoo pricing varies widely depending on size, detail, color, placement, and the artist's experience. Small simple designs may start around $50\u2013$100, while larger or more detailed pieces can range from $200 to several thousand dollars. Most artists charge by the hour ($100\u2013$300/hr) or offer flat rates for specific designs. Always discuss pricing during a consultation before committing.",
+  },
+  {
+    question: "What should I look for when choosing a tattoo shop?",
+    answer: "Look for a clean, licensed shop that follows health department regulations. Check that artists use single-use needles, sterile equipment, and proper sanitation practices. Read online reviews, view portfolios of their work, and visit the shop in person if possible. A reputable shop will be happy to answer questions about their sterilization process.",
+  },
+  {
+    question: "Does getting a tattoo hurt?",
+    answer: "Pain levels vary by placement, size, and personal tolerance. Areas with more bone or nerve endings (ribs, spine, inner arm, feet) tend to be more painful, while fleshier areas (outer arm, thigh, calf) are generally more tolerable. Most people describe the sensation as a scratching or burning feeling. Your artist can advise on what to expect for your specific placement.",
+  },
+  {
+    question: "How do I take care of a new tattoo?",
+    answer: "Follow your artist's aftercare instructions carefully. Generally, keep the tattoo clean and moisturized, avoid soaking it in water (no pools or baths) for 2\u20134 weeks, stay out of direct sunlight, and don't pick or scratch at peeling skin. Use a fragrance-free moisturizer and wash gently with mild soap. Proper aftercare is essential for vibrant, long-lasting results.",
+  },
+  {
+    question: "What tattoo styles are most popular?",
+    answer: "The most popular tattoo styles include Traditional (bold lines, classic imagery), Realism (photorealistic portraits and nature), Japanese (large-scale with dragons, koi, waves), Fine Line (delicate minimal designs), Blackwork (bold black ink patterns), and Watercolor (painterly color blends). Browse our style categories to find artists who specialize in each.",
+  },
+  {
+    question: "Do I need an appointment or can I walk in?",
+    answer: "It depends on the shop. Many tattoo shops accept walk-ins for smaller, simpler pieces, while custom or larger work typically requires an appointment booked in advance. Popular artists may have wait times of weeks or months. Check individual shop listings on InkLink to see their walk-in policy, or contact them directly to book a consultation.",
+  },
+  {
+    question: "How old do you have to be to get a tattoo?",
+    answer: "In most US states, you must be 18 years old to get a tattoo. Some states allow minors (typically 16+) to get tattooed with written parental consent and a parent present. Regulations vary by state, so check your local laws. Reputable shops will always verify age with a valid photo ID before tattooing.",
+  },
+];
 
 export default async function HomePage() {
   const [categories, cities, states] = await Promise.all([
@@ -19,6 +56,7 @@ export default async function HomePage() {
     <>
       <JsonLd data={websiteJsonLd()} />
       <JsonLd data={organizationJsonLd()} />
+      <JsonLd data={faqJsonLd(homepageFaq)} />
 
       {/* Hero — immersive background image with search */}
       <section className="relative min-h-[480px] overflow-hidden">
@@ -157,6 +195,19 @@ export default async function HomePage() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mb-10 text-center">
+          <h2 className="font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-4 text-stone-500 dark:text-stone-400">
+            Everything you need to know about finding and getting tattoos.
+          </p>
+        </div>
+        <CityFaq items={homepageFaq} />
       </section>
 
       {/* CTA Section */}

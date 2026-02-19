@@ -30,9 +30,18 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: "InkLink Tattoo Finder",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "InkLink Tattoo Finder",
+    description:
+      "Find the best tattoo artists and shops near you. Browse by style, city, and reviews.",
+  },
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 

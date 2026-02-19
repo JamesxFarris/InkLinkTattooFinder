@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   ...categoriesPageMeta(),
   openGraph: categoriesPageMeta(),
+  alternates: { canonical: "/categories" },
 };
 
 export default async function CategoriesPage() {
