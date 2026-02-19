@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { StatesDropdown } from "./StatesDropdown";
+import { UserMenu } from "./UserMenu";
 import { getAllStates } from "@/lib/queries";
 
 function LogoMark({ className }: { className?: string }) {
@@ -96,12 +97,7 @@ export async function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/search"
-            className="hidden rounded-full border border-stone-700 px-5 py-2 text-sm font-semibold text-stone-300 transition-all hover:border-teal-500 hover:text-white sm:inline-flex"
-          >
-            Find a Shop
-          </Link>
+          <UserMenu />
           <Link
             href="/list-your-shop"
             className="rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20"

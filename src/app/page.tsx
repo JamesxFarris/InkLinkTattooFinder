@@ -137,17 +137,20 @@ export default async function HomePage() {
               Find tattoo shops and artists in every state across the US.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {states.map((state) => (
               <Link
                 key={state.id}
                 href={`/${state.slug}`}
-                className="group rounded-lg border border-stone-200/60 bg-white px-4 py-3 transition-all hover:border-teal-500/40 hover:shadow-md dark:border-stone-700/60 dark:bg-stone-800/50 dark:hover:border-teal-500/40"
+                className="group flex h-24 flex-col items-center justify-center rounded-xl border border-stone-200/60 bg-white text-center transition-all hover:-translate-y-0.5 hover:border-teal-500/50 hover:shadow-lg dark:border-stone-700/50 dark:bg-stone-800/60 dark:hover:border-teal-500/40"
               >
-                <span className="block text-sm font-medium text-stone-800 transition-colors group-hover:text-teal-500 dark:text-stone-200 dark:group-hover:text-teal-400">
+                <span className="text-xs font-bold tracking-widest text-teal-500 dark:text-teal-400">
+                  {state.abbreviation}
+                </span>
+                <span className="mt-1 block text-sm font-semibold text-stone-800 transition-colors group-hover:text-teal-600 dark:text-stone-200 dark:group-hover:text-teal-400">
                   {state.name}
                 </span>
-                <span className="text-xs text-stone-400 dark:text-stone-500">
+                <span className="mt-0.5 text-xs text-stone-400 dark:text-stone-500">
                   {state._count.listings} {state._count.listings === 1 ? "shop" : "shops"}
                 </span>
               </Link>

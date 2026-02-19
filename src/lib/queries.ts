@@ -70,6 +70,28 @@ export async function getTopCities(limit = 20) {
   });
 }
 
+export async function getSiblingCities(
+  stateId: number,
+  excludeCityId: number,
+  limit = 12,
+) {
+  return prisma.city.findMany({
+    where: {
+      stateId,
+      id: { not: excludeCityId },
+      listings: { some: { status: "active" } },
+    },
+    include: {
+      state: true,
+      _count: {
+        select: { listings: { where: { status: "active" } } },
+      },
+    },
+    orderBy: { population: "desc" },
+    take: limit,
+  });
+}
+
 // ── Categories ──────────────────────────────────────────
 
 export async function getAllCategories() {
@@ -145,6 +167,41 @@ export async function getListingsByCity(
       take: perPage,
     }),
     prisma.listing.count({ where: { cityId, status: "active" } }),
+  ]);
+  return { listings, total, totalPages: Math.ceil(total / perPage) };
+}
+
+export async function getFeaturedListingsByCity(cityId: number) {
+  return prisma.listing.findMany({
+    where: { cityId, status: "active", featured: true },
+    include: {
+      city: { include: { state: true } },
+      state: true,
+      categories: { include: { category: true } },
+    },
+    orderBy: { googleRating: "desc" },
+  });
+}
+
+export async function getNonFeaturedListingsByCity(
+  cityId: number,
+  page = 1,
+  perPage = ITEMS_PER_PAGE,
+) {
+  const where = { cityId, status: "active" as ListingStatus, featured: false };
+  const [listings, total] = await Promise.all([
+    prisma.listing.findMany({
+      where,
+      include: {
+        city: { include: { state: true } },
+        state: true,
+        categories: { include: { category: true } },
+      },
+      orderBy: { googleRating: "desc" },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    }),
+    prisma.listing.count({ where }),
   ]);
   return { listings, total, totalPages: Math.ceil(total / perPage) };
 }

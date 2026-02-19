@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/utils";
 
@@ -7,6 +8,11 @@ type SubmitResult = { success: boolean; message: string };
 
 export async function submitListing(formData: FormData): Promise<SubmitResult> {
   try {
+    const session = await auth();
+    if (!session) {
+      return { success: false, message: "You must be signed in to submit a listing." };
+    }
+
     const name = formData.get("name") as string | null;
     const stateId = formData.get("stateId") as string | null;
     const cityName = formData.get("cityName") as string | null;
@@ -74,6 +80,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
         acceptsWalkIns,
         piercingServices,
         status: "pending",
+        userId: parseInt(session.user.id),
       },
     });
 

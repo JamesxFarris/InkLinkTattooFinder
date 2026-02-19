@@ -1,0 +1,89 @@
+"use client";
+
+import { useState } from "react";
+import { approveListing, rejectListing, adminDeleteListing } from "./actions";
+
+const statusStyles: Record<string, string> = {
+  active: "bg-green-500/10 text-green-400 border-green-500/30",
+  pending: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
+  inactive: "bg-red-500/10 text-red-400 border-red-500/30",
+};
+
+type ListingRowProps = {
+  listing: {
+    id: number;
+    name: string;
+    status: string;
+    createdAt: Date;
+    city: { name: string };
+    state: { abbreviation: string };
+    user: { email: string; name: string | null } | null;
+  };
+};
+
+export function AdminListingRow({ listing }: ListingRowProps) {
+  const [loading, setLoading] = useState(false);
+
+  async function handleAction(action: (id: number) => Promise<void>) {
+    setLoading(true);
+    await action(listing.id);
+    setLoading(false);
+  }
+
+  return (
+    <div className="rounded-xl border border-stone-800 bg-stone-900 p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-3">
+            <h2 className="font-semibold text-stone-100">{listing.name}</h2>
+            <span
+              className={`rounded-full border px-3 py-0.5 text-xs font-medium capitalize ${statusStyles[listing.status] ?? ""}`}
+            >
+              {listing.status}
+            </span>
+          </div>
+          <p className="mt-1 text-sm text-stone-400">
+            {listing.city.name}, {listing.state.abbreviation}
+            {listing.user && (
+              <span className="ml-3 text-stone-500">
+                by {listing.user.name ?? listing.user.email}
+              </span>
+            )}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {listing.status !== "active" && (
+            <button
+              onClick={() => handleAction(approveListing)}
+              disabled={loading}
+              className="rounded-lg bg-green-600/20 px-3 py-1.5 text-xs font-medium text-green-400 transition hover:bg-green-600/30 disabled:opacity-50"
+            >
+              Approve
+            </button>
+          )}
+          {listing.status !== "inactive" && (
+            <button
+              onClick={() => handleAction(rejectListing)}
+              disabled={loading}
+              className="rounded-lg bg-yellow-600/20 px-3 py-1.5 text-xs font-medium text-yellow-400 transition hover:bg-yellow-600/30 disabled:opacity-50"
+            >
+              Reject
+            </button>
+          )}
+          <button
+            onClick={() => {
+              if (confirm("Delete this listing permanently?")) {
+                handleAction(adminDeleteListing);
+              }
+            }}
+            disabled={loading}
+            className="rounded-lg bg-red-600/20 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-600/30 disabled:opacity-50"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
