@@ -95,7 +95,7 @@ export default async function ListingPage({ params }: Props) {
                       key={i}
                       className={
                         i < Math.round(listing.googleRating!)
-                          ? "text-yellow-500"
+                          ? "text-amber-500"
                           : "text-stone-300 dark:text-stone-600"
                       }
                     >
@@ -151,7 +151,7 @@ export default async function ListingPage({ params }: Props) {
                 </div>
               )}
               {listing.piercingServices && (
-                <div className="rounded-lg bg-blue-100 px-3 py-1.5 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                <div className="rounded-lg bg-stone-200 px-3 py-1.5 text-sm text-stone-700 dark:bg-stone-700 dark:text-stone-300">
                   Piercing Services
                 </div>
               )}
