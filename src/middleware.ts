@@ -1,13 +1,15 @@
-import NextAuth from "next-auth";
-import { authConfig } from "@/lib/auth.config";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const isLoggedIn = !!req.auth;
-  const role = req.auth?.user?.role;
+
+  // Read the session token cookie (next-auth uses this name)
+  const token =
+    req.cookies.get("authjs.session-token")?.value ||
+    req.cookies.get("__Secure-authjs.session-token")?.value;
+
+  const isLoggedIn = !!token;
 
   // Redirect auth pages to dashboard if already logged in
   if ((pathname === "/sign-in" || pathname === "/sign-up") && isLoggedIn) {
@@ -24,13 +26,8 @@ export default auth((req) => {
     return NextResponse.redirect(signInUrl);
   }
 
-  // Admin-only routes
-  if (pathname.startsWith("/dashboard/admin") && role !== "admin") {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [
