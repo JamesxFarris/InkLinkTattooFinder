@@ -70,20 +70,20 @@ export function SearchBar({ className, size = "default" }: { className?: string;
             type="button"
             onClick={detectLocation}
             disabled={locating}
-            title="Detect my location"
-            className="shrink-0 rounded-full p-2 text-stone-400 transition-colors hover:bg-stone-100 hover:text-teal-500 disabled:opacity-50 dark:hover:bg-stone-800 dark:hover:text-teal-400"
+            className="flex shrink-0 items-center gap-1.5 rounded-full border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-medium text-stone-600 transition-colors hover:border-teal-400 hover:bg-teal-50 hover:text-teal-600 disabled:opacity-50 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:border-teal-500 dark:hover:bg-teal-500/10 dark:hover:text-teal-400"
           >
             {locating ? (
-              <svg className={`animate-spin ${isLarge ? "h-5 w-5" : "h-4 w-4"}`} fill="none" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
               </svg>
             ) : (
-              <svg className={`${isLarge ? "h-5 w-5" : "h-4 w-4"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2v3m0 14v3m10-10h-3M5 12H2" />
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             )}
+            <span className="hidden sm:inline">{locating ? "Locating..." : "Use my location"}</span>
           </button>
         </div>
         <button

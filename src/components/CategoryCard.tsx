@@ -14,7 +14,7 @@ export function CategoryCard({
       href={href}
       className="group flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 dark:ring-stone-700"
     >
-      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-500">
+      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-stone-100 dark:bg-stone-800">
         <CategoryIcon slug={category.slug} />
       </span>
       <div className="min-w-0 flex-1">
