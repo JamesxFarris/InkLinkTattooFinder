@@ -82,7 +82,6 @@ export async function Header() {
           }))} />
           {[
             { href: "/categories", label: "Styles" },
-            { href: "/search", label: "Search" },
             { href: "/about", label: "About" },
             { href: "/contact", label: "Contact" },
           ].map((link) => (
