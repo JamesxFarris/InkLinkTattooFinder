@@ -11,7 +11,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
   return (
     <Link
       href={`/listing/${listing.slug}`}
-      className="group block overflow-hidden rounded-2xl bg-white shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 dark:ring-white/[0.06]"
+      className="group block overflow-hidden rounded-2xl bg-white shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 dark:ring-stone-700"
     >
       {/* Image */}
       <div className="relative h-52 overflow-hidden">
@@ -70,7 +70,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
           </div>
         )}
 
-        <div className="mt-4 flex items-center gap-3 border-t border-stone-100 pt-3 text-xs font-medium text-stone-500 dark:border-stone-800 dark:text-stone-400">
+        <div className="mt-4 flex items-center gap-3 border-t border-stone-100 pt-3 text-xs font-medium text-stone-500 dark:border-stone-700 dark:text-stone-400">
           {listing.priceRange && (
             <span className="rounded-md bg-stone-100 px-2 py-0.5 dark:bg-stone-800">
               {listing.priceRange === "budget" && "$"}

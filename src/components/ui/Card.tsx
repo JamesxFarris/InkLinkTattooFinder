@@ -8,7 +8,7 @@ type CardProps = {
 
 export function Card({ children, className, href }: CardProps) {
   const classes = cn(
-    "rounded-xl border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-stone-800 dark:bg-stone-900",
+    "rounded-xl border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-stone-700 dark:bg-stone-900",
     className
   );
 
@@ -51,7 +51,7 @@ export function CardFooter({
   className?: string;
 }) {
   return (
-    <div className={cn("border-t border-stone-200 p-4 dark:border-stone-800", className)}>
+    <div className={cn("border-t border-stone-200 p-4 dark:border-stone-700", className)}>
       {children}
     </div>
   );

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CategoryIcon } from "./CategoryIcon";
 import type { CategoryWithCount } from "@/types";
 
 export function CategoryCard({
@@ -11,10 +12,10 @@ export function CategoryCard({
   return (
     <Link
       href={href}
-      className="group flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 dark:ring-white/[0.06]"
+      className="group flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 dark:ring-stone-700"
     >
-      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-2xl dark:bg-amber-950/40">
-        {category.icon || "🎨"}
+      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-500">
+        <CategoryIcon slug={category.slug} />
       </span>
       <div className="min-w-0 flex-1">
         <h3 className="font-semibold text-stone-900 transition-colors group-hover:text-teal-500 dark:text-stone-100 dark:group-hover:text-teal-400">

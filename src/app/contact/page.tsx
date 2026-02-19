@@ -22,7 +22,7 @@ export default function ContactPage() {
           information? We&apos;d love to hear from you.
         </p>
 
-        <div className="rounded-2xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
           <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
             Get in Touch
           </h2>

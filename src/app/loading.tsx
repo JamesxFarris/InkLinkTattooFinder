@@ -9,7 +9,7 @@ export default function Loading() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="rounded-xl border border-stone-200 dark:border-stone-800"
+              className="rounded-xl border border-stone-200 dark:border-stone-700"
             >
               <div className="h-48 rounded-t-xl bg-stone-200 dark:bg-stone-800" />
               <div className="space-y-3 p-4">

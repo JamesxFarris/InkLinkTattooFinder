@@ -70,7 +70,7 @@ export default async function ListingPage({ params }: Props) {
         {/* Main Content */}
         <div className="lg:col-span-2">
           {/* Header */}
-          <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+          <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
             <div className="flex items-start justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
@@ -162,7 +162,7 @@ export default async function ListingPage({ params }: Props) {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Contact Info */}
-          <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+          <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
             <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
               Contact
             </h2>
@@ -206,7 +206,7 @@ export default async function ListingPage({ params }: Props) {
 
           {/* Hours */}
           {hours && (
-            <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900">
+            <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
               <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
                 Hours
               </h2>
