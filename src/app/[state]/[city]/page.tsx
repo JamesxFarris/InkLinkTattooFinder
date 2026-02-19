@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ListingGrid } from "@/components/ListingGrid";
-import { JsonLd, breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd } from "@/components/JsonLd";
+import { JsonLd, breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd, faqJsonLd } from "@/components/JsonLd";
+import { generateCityFaqItems } from "@/lib/faq";
+import { CityFaq } from "@/components/CityFaq";
 import {
   getCityBySlug,
   getCategoriesForCity,
@@ -37,8 +39,17 @@ export default async function CityPage({ params }: Props) {
     getListingsByCity(city.id, 1, 12),
   ]);
 
+  const faqItems = generateCityFaqItems({
+    cityName: city.name,
+    stateName: city.state.name,
+    stateAbbreviation: city.state.abbreviation,
+    listingCount: listings.length,
+    categoryNames: categories.map((c) => c.name),
+  });
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={faqJsonLd(faqItems)} />
       <JsonLd data={breadcrumbJsonLd([
         { label: city.state.name, href: `/${city.state.slug}` },
         { label: city.name },
@@ -92,6 +103,14 @@ export default async function CityPage({ params }: Props) {
           All Shops in {city.name}
         </h2>
         <ListingGrid listings={listings} />
+      </section>
+
+      {/* FAQ */}
+      <section className="mt-10">
+        <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          Frequently Asked Questions
+        </h2>
+        <CityFaq items={faqItems} />
       </section>
     </div>
   );

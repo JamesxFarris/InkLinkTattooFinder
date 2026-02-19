@@ -99,9 +99,15 @@ export async function Header() {
         <div className="flex items-center gap-3">
           <Link
             href="/search"
-            className="rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20"
+            className="hidden rounded-full border border-stone-700 px-5 py-2 text-sm font-semibold text-stone-300 transition-all hover:border-teal-500 hover:text-white sm:inline-flex"
           >
             Find a Shop
+          </Link>
+          <Link
+            href="/list-your-shop"
+            className="rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20"
+          >
+            Add Your Shop
           </Link>
         </div>
       </div>
