@@ -1,3 +1,41 @@
+/**
+ * Color palette for each category — used by CategoryCard
+ * for themed icon backgrounds.
+ */
+export const categoryColors: Record<
+  string,
+  { from: string; to: string; accent: string }
+> = {
+  traditional:        { from: "#1e3a5f", to: "#2d1b0e", accent: "#c0392b" },
+  "neo-traditional":  { from: "#5a1a2a", to: "#2e3a1e", accent: "#9b2335" },
+  realism:            { from: "#1e293b", to: "#2a2518", accent: "#d97706" },
+  japanese:           { from: "#1e1b4b", to: "#2a0e0e", accent: "#dc2626" },
+  blackwork:          { from: "#171717", to: "#1c1c1c", accent: "#404040" },
+  watercolor:         { from: "#2e1065", to: "#0d3b3b", accent: "#ec4899" },
+  "fine-line":        { from: "#1a2e1a", to: "#2a2520", accent: "#6b8f71" },
+  tribal:             { from: "#1c1917", to: "#292524", accent: "#57534e" },
+  geometric:          { from: "#2a1f0a", to: "#0f172a", accent: "#d97706" },
+  minimalist:         { from: "#292524", to: "#1c1917", accent: "#78716c" },
+  dotwork:            { from: "#1e1b4b", to: "#1a1640", accent: "#4338ca" },
+  chicano:            { from: "#2a1a08", to: "#1c1208", accent: "#d97706" },
+  illustrative:       { from: "#042f2e", to: "#2a1508", accent: "#14b8a6" },
+  "script-lettering": { from: "#2e1065", to: "#1a0a30", accent: "#a855f7" },
+  "trash-polka":      { from: "#1c1917", to: "#2a0e0e", accent: "#dc2626" },
+  "new-school":       { from: "#2a1508", to: "#1c1208", accent: "#f97316" },
+  surrealism:         { from: "#2e1065", to: "#2a1f0a", accent: "#8b5cf6" },
+  "cover-up":         { from: "#1c1917", to: "#042f2e", accent: "#14b8a6" },
+  portrait:           { from: "#2a2518", to: "#1c1917", accent: "#fbbf24" },
+  biomechanical:      { from: "#0f172a", to: "#1c1917", accent: "#3b82f6" },
+  "color-specialist": { from: "#2a0e0e", to: "#0f172a", accent: "#ef4444" },
+  "black-and-grey":   { from: "#1c1917", to: "#292524", accent: "#a8a29e" },
+  "custom-design":    { from: "#2a1508", to: "#1c1917", accent: "#f97316" },
+  "flash-tattoos":    { from: "#2a1f0a", to: "#2a1508", accent: "#fbbf24" },
+  "tattoo-supplies":  { from: "#042f2e", to: "#1c1917", accent: "#14b8a6" },
+  "aftercare-products": { from: "#052e16", to: "#042f2e", accent: "#22c55e" },
+  "tattoo-removal":   { from: "#2a0e0e", to: "#1c1917", accent: "#ef4444" },
+  "piercing-studio":  { from: "#1c1917", to: "#042f2e", accent: "#14b8a6" },
+};
+
 const icons: Record<string, React.ReactNode> = {
   // — Tattoo Styles —
 
