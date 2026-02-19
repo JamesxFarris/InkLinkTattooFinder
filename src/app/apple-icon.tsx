@@ -18,47 +18,77 @@ export default function AppleIcon() {
         }}
       >
         <svg
-          viewBox="0 0 36 36"
-          width="120"
-          height="120"
+          viewBox="0 0 48 48"
+          width="130"
+          height="130"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Diamond frame */}
+          {/* Ink swirl */}
           <path
-            d="M18 3L33 18L18 33L3 18Z"
+            d="M38 18c2 6 1 13-4 18s-13 6-19 3"
             stroke="#14B8A6"
-            strokeWidth="1.5"
+            strokeWidth="2.5"
+            strokeLinecap="round"
             fill="none"
           />
-          {/* Inner diamond */}
           <path
-            d="M18 9L27 18L18 27L9 18Z"
+            d="M10 30c-2-6-1-13 4-18s13-6 19-3"
             stroke="#14B8A6"
-            strokeWidth="0.75"
+            strokeWidth="2"
+            strokeLinecap="round"
             fill="none"
-            opacity="0.4"
+            opacity="0.6"
           />
-          {/* Needle diagonal */}
-          <line
-            x1="11"
-            y1="11"
-            x2="25"
-            y2="25"
+          {/* Splash accents */}
+          <path
+            d="M37 14c1-2 3-3 4-2"
             stroke="#14B8A6"
             strokeWidth="1.5"
             strokeLinecap="round"
+            fill="none"
+            opacity="0.5"
           />
-          {/* Ink drop tip */}
-          <circle cx="25.5" cy="25.5" r="2" fill="#14B8A6" />
-          {/* Grip lines */}
-          <line x1="14" y1="16" x2="16" y2="14" stroke="#14B8A6" strokeWidth="0.75" opacity="0.5" />
-          <line x1="16" y1="18" x2="18" y2="16" stroke="#14B8A6" strokeWidth="0.75" opacity="0.5" />
-          <line x1="18" y1="20" x2="20" y2="18" stroke="#14B8A6" strokeWidth="0.75" opacity="0.5" />
-          {/* Corner dots */}
-          <circle cx="18" cy="3" r="1" fill="#14B8A6" />
-          <circle cx="33" cy="18" r="1" fill="#14B8A6" />
-          <circle cx="18" cy="33" r="1" fill="#14B8A6" />
-          <circle cx="3" cy="18" r="1" fill="#14B8A6" />
+          <path
+            d="M8 35c-1 1-2 3-1 4"
+            stroke="#14B8A6"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.4"
+          />
+          {/* Splatter dots */}
+          <circle cx="40" cy="11" r="1.2" fill="#14B8A6" opacity="0.5" />
+          <circle cx="42" cy="15" r="0.8" fill="#14B8A6" opacity="0.4" />
+          <circle cx="6" cy="37" r="1" fill="#14B8A6" opacity="0.4" />
+          {/* Pen body */}
+          <rect
+            x="17.5"
+            y="8"
+            width="6"
+            height="18"
+            rx="1.5"
+            transform="rotate(35 20.5 17)"
+            fill="#6b7280"
+          />
+          {/* Grip bands */}
+          <line x1="18" y1="18" x2="22" y2="15" stroke="#9ca3af" strokeWidth="0.8" opacity="0.6" />
+          <line x1="19" y1="20" x2="23" y2="17" stroke="#9ca3af" strokeWidth="0.8" opacity="0.6" />
+          <line x1="20" y1="22" x2="24" y2="19" stroke="#9ca3af" strokeWidth="0.8" opacity="0.6" />
+          {/* Needle */}
+          <line
+            x1="26"
+            y1="28"
+            x2="30"
+            y2="34"
+            stroke="#9ca3af"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          {/* Ink drop */}
+          <circle cx="31" cy="35.5" r="1.8" fill="#14B8A6" />
+          {/* Pen top */}
+          <circle cx="14.5" cy="11" r="0.8" fill="#9ca3af" />
+          <circle cx="16" cy="9.5" r="0.8" fill="#9ca3af" />
         </svg>
       </div>
     ),

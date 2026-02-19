@@ -32,38 +32,52 @@ export default function OpenGraphImage() {
         {/* Logo mark + Brand */}
         <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
           <svg
-            viewBox="0 0 36 36"
-            width="72"
-            height="72"
+            viewBox="0 0 48 48"
+            width="80"
+            height="80"
             xmlns="http://www.w3.org/2000/svg"
           >
+            {/* Ink swirl */}
             <path
-              d="M18 3L33 18L18 33L3 18Z"
+              d="M38 18c2 6 1 13-4 18s-13 6-19 3"
               stroke="#14B8A6"
-              strokeWidth="1.5"
+              strokeWidth="2.5"
+              strokeLinecap="round"
               fill="none"
             />
             <path
-              d="M18 9L27 18L18 27L9 18Z"
+              d="M10 30c-2-6-1-13 4-18s13-6 19-3"
               stroke="#14B8A6"
-              strokeWidth="0.75"
+              strokeWidth="2"
+              strokeLinecap="round"
               fill="none"
-              opacity="0.4"
+              opacity="0.6"
             />
+            {/* Splatter dots */}
+            <circle cx="40" cy="11" r="1.2" fill="#14B8A6" opacity="0.5" />
+            <circle cx="6" cy="37" r="1" fill="#14B8A6" opacity="0.4" />
+            {/* Pen body */}
+            <rect
+              x="17.5"
+              y="8"
+              width="6"
+              height="18"
+              rx="1.5"
+              transform="rotate(35 20.5 17)"
+              fill="#6b7280"
+            />
+            {/* Needle */}
             <line
-              x1="11"
-              y1="11"
-              x2="25"
-              y2="25"
-              stroke="#14B8A6"
+              x1="26"
+              y1="28"
+              x2="30"
+              y2="34"
+              stroke="#9ca3af"
               strokeWidth="1.5"
               strokeLinecap="round"
             />
-            <circle cx="25.5" cy="25.5" r="2" fill="#14B8A6" />
-            <circle cx="18" cy="3" r="1" fill="#14B8A6" />
-            <circle cx="33" cy="18" r="1" fill="#14B8A6" />
-            <circle cx="18" cy="33" r="1" fill="#14B8A6" />
-            <circle cx="3" cy="18" r="1" fill="#14B8A6" />
+            {/* Ink drop */}
+            <circle cx="31" cy="35.5" r="1.8" fill="#14B8A6" />
           </svg>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "14px" }}>

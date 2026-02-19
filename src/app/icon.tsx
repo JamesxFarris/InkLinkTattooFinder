@@ -13,39 +13,54 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "transparent",
+          background: "#0F1117",
+          borderRadius: "6px",
         }}
       >
         <svg
-          viewBox="0 0 36 36"
-          width="32"
-          height="32"
+          viewBox="0 0 48 48"
+          width="28"
+          height="28"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Diamond frame */}
+          {/* Ink swirl */}
           <path
-            d="M18 3L33 18L18 33L3 18Z"
+            d="M38 18c2 6 1 13-4 18s-13 6-19 3"
             stroke="#14B8A6"
-            strokeWidth="2"
+            strokeWidth="3"
+            strokeLinecap="round"
             fill="none"
           />
-          {/* Needle diagonal */}
-          <line
-            x1="11"
-            y1="11"
-            x2="25"
-            y2="25"
+          <path
+            d="M10 30c-2-6-1-13 4-18s13-6 19-3"
             stroke="#14B8A6"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.5"
+          />
+          {/* Pen body */}
+          <rect
+            x="17.5"
+            y="8"
+            width="6"
+            height="18"
+            rx="1.5"
+            transform="rotate(35 20.5 17)"
+            fill="#9ca3af"
+          />
+          {/* Needle */}
+          <line
+            x1="26"
+            y1="28"
+            x2="30"
+            y2="34"
+            stroke="#d1d5db"
             strokeWidth="2"
             strokeLinecap="round"
           />
-          {/* Ink drop tip */}
-          <circle cx="25.5" cy="25.5" r="2.5" fill="#14B8A6" />
-          {/* Corner dots */}
-          <circle cx="18" cy="3" r="1.5" fill="#14B8A6" />
-          <circle cx="33" cy="18" r="1.5" fill="#14B8A6" />
-          <circle cx="18" cy="33" r="1.5" fill="#14B8A6" />
-          <circle cx="3" cy="18" r="1.5" fill="#14B8A6" />
+          {/* Ink drop */}
+          <circle cx="31" cy="35.5" r="2.2" fill="#14B8A6" />
         </svg>
       </div>
     ),
