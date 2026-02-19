@@ -15,29 +15,133 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0F1117",
+          background: "linear-gradient(145deg, #0F1117 0%, #1A1D27 40%, #0F1117 100%)",
           fontFamily: "Georgia, serif",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        {/* Subtle ornamental border */}
+        {/* Large background accent glow — top right */}
         <div
           style={{
             position: "absolute",
-            inset: "20px",
-            border: "1px solid rgba(20, 184, 166, 0.2)",
-            borderRadius: "8px",
+            top: "-120px",
+            right: "-80px",
+            width: "500px",
+            height: "500px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(20, 184, 166, 0.12) 0%, transparent 70%)",
           }}
         />
 
-        {/* Logo mark + Brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+        {/* Secondary glow — bottom left */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-100px",
+            left: "-60px",
+            width: "400px",
+            height: "400px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(20, 184, 166, 0.08) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Ornamental border with rounded corners */}
+        <div
+          style={{
+            position: "absolute",
+            top: "24px",
+            left: "24px",
+            right: "24px",
+            bottom: "24px",
+            border: "1px solid rgba(20, 184, 166, 0.15)",
+            borderRadius: "16px",
+          }}
+        />
+
+        {/* Inner ornamental border */}
+        <div
+          style={{
+            position: "absolute",
+            top: "32px",
+            left: "32px",
+            right: "32px",
+            bottom: "32px",
+            border: "1px solid rgba(255, 255, 255, 0.04)",
+            borderRadius: "12px",
+          }}
+        />
+
+        {/* Decorative corner elements — top left */}
+        <svg
+          viewBox="0 0 80 80"
+          width="80"
+          height="80"
+          style={{ position: "absolute", top: "16px", left: "16px", opacity: 0.15 }}
+        >
+          <path d="M0 40 Q0 0 40 0" stroke="#14B8A6" strokeWidth="1.5" fill="none" />
+          <path d="M0 24 Q0 0 24 0" stroke="#14B8A6" strokeWidth="1" fill="none" />
+          <circle cx="40" cy="0" r="2" fill="#14B8A6" />
+          <circle cx="0" cy="40" r="2" fill="#14B8A6" />
+        </svg>
+
+        {/* Decorative corner — top right */}
+        <svg
+          viewBox="0 0 80 80"
+          width="80"
+          height="80"
+          style={{ position: "absolute", top: "16px", right: "16px", opacity: 0.15, transform: "scaleX(-1)" }}
+        >
+          <path d="M0 40 Q0 0 40 0" stroke="#14B8A6" strokeWidth="1.5" fill="none" />
+          <path d="M0 24 Q0 0 24 0" stroke="#14B8A6" strokeWidth="1" fill="none" />
+          <circle cx="40" cy="0" r="2" fill="#14B8A6" />
+          <circle cx="0" cy="40" r="2" fill="#14B8A6" />
+        </svg>
+
+        {/* Decorative corner — bottom left */}
+        <svg
+          viewBox="0 0 80 80"
+          width="80"
+          height="80"
+          style={{ position: "absolute", bottom: "16px", left: "16px", opacity: 0.15, transform: "scaleY(-1)" }}
+        >
+          <path d="M0 40 Q0 0 40 0" stroke="#14B8A6" strokeWidth="1.5" fill="none" />
+          <path d="M0 24 Q0 0 24 0" stroke="#14B8A6" strokeWidth="1" fill="none" />
+          <circle cx="40" cy="0" r="2" fill="#14B8A6" />
+          <circle cx="0" cy="40" r="2" fill="#14B8A6" />
+        </svg>
+
+        {/* Decorative corner — bottom right */}
+        <svg
+          viewBox="0 0 80 80"
+          width="80"
+          height="80"
+          style={{ position: "absolute", bottom: "16px", right: "16px", opacity: 0.15, transform: "scale(-1, -1)" }}
+        >
+          <path d="M0 40 Q0 0 40 0" stroke="#14B8A6" strokeWidth="1.5" fill="none" />
+          <path d="M0 24 Q0 0 24 0" stroke="#14B8A6" strokeWidth="1" fill="none" />
+          <circle cx="40" cy="0" r="2" fill="#14B8A6" />
+          <circle cx="0" cy="40" r="2" fill="#14B8A6" />
+        </svg>
+
+        {/* Main content */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "0px",
+          }}
+        >
+          {/* Logo mark */}
           <svg
             viewBox="0 0 48 48"
-            width="80"
-            height="80"
+            width="72"
+            height="72"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Ink swirl */}
             <path
               d="M38 18c2 6 1 13-4 18s-13 6-19 3"
               stroke="#14B8A6"
@@ -53,10 +157,8 @@ export default function OpenGraphImage() {
               fill="none"
               opacity="0.6"
             />
-            {/* Splatter dots */}
             <circle cx="40" cy="11" r="1.2" fill="#14B8A6" opacity="0.5" />
             <circle cx="6" cy="37" r="1" fill="#14B8A6" opacity="0.4" />
-            {/* Pen body */}
             <rect
               x="17.5"
               y="8"
@@ -66,7 +168,6 @@ export default function OpenGraphImage() {
               transform="rotate(35 20.5 17)"
               fill="#6b7280"
             />
-            {/* Needle */}
             <line
               x1="26"
               y1="28"
@@ -76,37 +177,124 @@ export default function OpenGraphImage() {
               strokeWidth="1.5"
               strokeLinecap="round"
             />
-            {/* Ink drop */}
             <circle cx="31" cy="35.5" r="1.8" fill="#14B8A6" />
           </svg>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "14px" }}>
-              <span style={{ fontSize: "68px", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.02em" }}>
-                Ink<span style={{ color: "#14B8A6" }}>Link</span>
-              </span>
-            </div>
-            <span style={{ fontSize: "18px", fontWeight: 400, color: "#94A3B8", letterSpacing: "0.2em", textTransform: "uppercase" as const }}>
-              Tattoo Finder
+
+          {/* Brand name — large and bold */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              marginTop: "20px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "88px",
+                fontWeight: 700,
+                color: "#F1F5F9",
+                letterSpacing: "-0.03em",
+                lineHeight: 1,
+              }}
+            >
+              Ink
             </span>
+            <span
+              style={{
+                fontSize: "88px",
+                fontWeight: 700,
+                color: "#14B8A6",
+                letterSpacing: "-0.03em",
+                lineHeight: 1,
+              }}
+            >
+              Link
+            </span>
+          </div>
+
+          {/* Subtitle */}
+          <span
+            style={{
+              fontSize: "20px",
+              fontWeight: 400,
+              color: "#64748B",
+              letterSpacing: "0.35em",
+              textTransform: "uppercase" as const,
+              marginTop: "8px",
+            }}
+          >
+            Tattoo Finder
+          </span>
+
+          {/* Divider line */}
+          <div
+            style={{
+              width: "80px",
+              height: "2px",
+              background: "linear-gradient(90deg, transparent, #14B8A6, transparent)",
+              marginTop: "32px",
+            }}
+          />
+
+          {/* Tagline */}
+          <p
+            style={{
+              marginTop: "28px",
+              fontSize: "28px",
+              color: "#CBD5E1",
+              textAlign: "center",
+              maxWidth: "700px",
+              lineHeight: 1.4,
+              fontWeight: 400,
+            }}
+          >
+            Find the Best Tattoo Artists & Shops Near You
+          </p>
+
+          {/* Feature pills */}
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              marginTop: "32px",
+            }}
+          >
+            {["Browse by Style", "Read Reviews", "Nationwide"].map((text) => (
+              <div
+                key={text}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 20px",
+                  borderRadius: "100px",
+                  background: "rgba(20, 184, 166, 0.08)",
+                  border: "1px solid rgba(20, 184, 166, 0.2)",
+                }}
+              >
+                <div
+                  style={{
+                    width: "6px",
+                    height: "6px",
+                    borderRadius: "50%",
+                    background: "#14B8A6",
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: "16px",
+                    color: "#94A3B8",
+                    fontFamily: "system-ui, sans-serif",
+                  }}
+                >
+                  {text}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Tagline */}
-        <p
-          style={{
-            marginTop: "36px",
-            fontSize: "26px",
-            color: "#94A3B8",
-            textAlign: "center",
-            maxWidth: "600px",
-            lineHeight: 1.5,
-          }}
-        >
-          Find the best tattoo artists and shops near you.
-          Browse by style, city, and reviews.
-        </p>
-
-        {/* Bottom accent line */}
+        {/* Bottom accent bar */}
         <div
           style={{
             position: "absolute",
@@ -114,9 +302,23 @@ export default function OpenGraphImage() {
             left: 0,
             right: 0,
             height: "4px",
-            background: "#14B8A6",
+            background: "linear-gradient(90deg, transparent, #14B8A6, transparent)",
           }}
         />
+
+        {/* URL at bottom */}
+        <span
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            fontSize: "14px",
+            color: "#475569",
+            letterSpacing: "0.1em",
+            fontFamily: "system-ui, sans-serif",
+          }}
+        >
+          inklinktattoofinder.com
+        </span>
       </div>
     ),
     { ...size }
