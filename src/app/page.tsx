@@ -2,24 +2,23 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
-import { ListingGrid } from "@/components/ListingGrid";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CityCard } from "@/components/CityCard";
-import { JsonLd, websiteJsonLd } from "@/components/JsonLd";
+import { JsonLd, websiteJsonLd, organizationJsonLd } from "@/components/JsonLd";
 import { HERO_IMAGE } from "@/lib/images";
-import { getAllCategories, getTopCities, getFeaturedListings, getRecentListings } from "@/lib/queries";
+import { getAllCategories, getTopCities, getAllStates } from "@/lib/queries";
 
 export default async function HomePage() {
-  const [categories, cities, featured, recent] = await Promise.all([
+  const [categories, cities, states] = await Promise.all([
     getAllCategories(),
     getTopCities(12),
-    getFeaturedListings(6),
-    getRecentListings(6),
+    getAllStates(),
   ]);
 
   return (
     <>
       <JsonLd data={websiteJsonLd()} />
+      <JsonLd data={organizationJsonLd()} />
 
       {/* Hero — immersive background image with search */}
       <section className="relative min-h-[480px] overflow-hidden">
@@ -87,21 +86,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Listings */}
-      {featured.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="mb-10">
-            <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
-              Featured Shops
-            </h2>
-            <p className="mt-4 text-stone-500 dark:text-stone-400">
-              Hand-picked tattoo shops with outstanding artists and reviews.
-            </p>
-          </div>
-          <ListingGrid listings={featured} />
-        </section>
-      )}
-
       {/* Popular Styles */}
       <section className="border-y border-stone-200/60 bg-stone-100/40 dark:border-stone-800/40 dark:bg-stone-900/30">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -142,22 +126,35 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Recent Listings */}
-      {recent.length > 0 && (
-        <section className="border-t border-stone-200/60 bg-stone-100/40 dark:border-stone-800/40 dark:bg-stone-900/30">
-          <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-            <div className="mb-10">
-              <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
-                Recently Added
-              </h2>
-              <p className="mt-4 text-stone-500 dark:text-stone-400">
-                The latest tattoo shops and artists added to our directory.
-              </p>
-            </div>
-            <ListingGrid listings={recent} />
+      {/* Browse by State */}
+      <section className="border-t border-stone-200/60 bg-stone-100/40 dark:border-stone-800/40 dark:bg-stone-900/30">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
+              Browse by State
+            </h2>
+            <p className="mt-4 text-stone-500 dark:text-stone-400">
+              Find tattoo shops and artists in every state across the US.
+            </p>
           </div>
-        </section>
-      )}
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+            {states.map((state) => (
+              <Link
+                key={state.id}
+                href={`/${state.slug}`}
+                className="group rounded-lg border border-stone-200/60 bg-white px-4 py-3 transition-all hover:border-teal-500/40 hover:shadow-md dark:border-stone-700/60 dark:bg-stone-800/50 dark:hover:border-teal-500/40"
+              >
+                <span className="block text-sm font-medium text-stone-800 transition-colors group-hover:text-teal-500 dark:text-stone-200 dark:group-hover:text-teal-400">
+                  {state.name}
+                </span>
+                <span className="text-xs text-stone-400 dark:text-stone-500">
+                  {state._count.listings} {state._count.listings === 1 ? "shop" : "shops"}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="bg-stone-900">

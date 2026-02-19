@@ -1,4 +1,5 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,6 +11,13 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={breadcrumbJsonLd([{ label: "About" }])} />
+      <JsonLd data={webPageJsonLd({
+        name: "About InkLink Tattoo Finder",
+        description: "InkLink Tattoo Finder helps you discover the best tattoo artists and shops near you.",
+        url: "/about",
+        type: "AboutPage",
+      })} />
       <Breadcrumbs items={[{ label: "About" }]} />
 
       <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">

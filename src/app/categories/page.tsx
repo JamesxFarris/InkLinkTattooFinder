@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { CategoryCard } from "@/components/CategoryCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { JsonLd, breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { getAllCategories } from "@/lib/queries";
 import { categoriesPageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -20,6 +21,17 @@ export default async function CategoriesPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={breadcrumbJsonLd([{ label: "Styles & Categories" }])} />
+      <JsonLd data={collectionPageJsonLd({
+        name: "Tattoo Styles & Categories",
+        description: "Browse all tattoo styles and find artists who specialize in your preferred look.",
+        url: "/categories",
+      })} />
+      <JsonLd data={itemListJsonLd(categories.map((c, i) => ({
+        name: c.name,
+        url: `https://inklinktattoofinder.com/categories/${c.slug}`,
+        position: i + 1,
+      })))} />
       <Breadcrumbs items={[{ label: "Styles & Categories" }]} />
 
       <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">

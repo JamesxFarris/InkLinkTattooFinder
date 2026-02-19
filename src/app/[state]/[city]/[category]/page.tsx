@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ListingGrid } from "@/components/ListingGrid";
 import { Pagination } from "@/components/Pagination";
-import { JsonLd, itemListJsonLd } from "@/components/JsonLd";
+import { JsonLd, itemListJsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
 import {
   getCityBySlug,
   getCategoryBySlug,
@@ -62,6 +62,11 @@ export default async function CityCategoryPage({ params, searchParams }: Props) 
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={breadcrumbJsonLd([
+        { label: city.state.name, href: `/${stateSlug}` },
+        { label: city.name, href: `/${stateSlug}/${citySlug}` },
+        { label: category.name },
+      ])} />
       <JsonLd data={itemListJsonLd(jsonLdItems)} />
 
       <Breadcrumbs

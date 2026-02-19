@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ListingGrid } from "@/components/ListingGrid";
 import { Pagination } from "@/components/Pagination";
+import { JsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { getCategoryBySlug, getListingsByCategoryNational } from "@/lib/queries";
 import { categoryPageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -40,6 +41,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={breadcrumbJsonLd([
+        { label: "Styles", href: "/categories" },
+        { label: category.name },
+      ])} />
+      <JsonLd data={itemListJsonLd(listings.map((l, i) => ({
+        name: l.name,
+        url: `https://inklinktattoofinder.com/listing/${l.slug}`,
+        position: i + 1,
+      })))} />
       <Breadcrumbs
         items={[
           { label: "Styles", href: "/categories" },

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { StatesDropdown } from "./StatesDropdown";
+import { getAllStates } from "@/lib/queries";
 
 function LogoMark({ className }: { className?: string }) {
   return (
@@ -49,7 +51,13 @@ function LogoMark({ className }: { className?: string }) {
   );
 }
 
-export function Header() {
+export async function Header() {
+  let states: Awaited<ReturnType<typeof getAllStates>> = [];
+  try {
+    states = await getAllStates();
+  } catch {
+    // DB unavailable during static pre-rendering
+  }
   return (
     <header className="sticky top-0 z-50 border-b border-stone-200/60 bg-stone-950/95 backdrop-blur-lg dark:border-stone-800/40 dark:bg-stone-950/95">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -66,6 +74,12 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
+          <StatesDropdown states={states.map((s) => ({
+            name: s.name,
+            slug: s.slug,
+            abbreviation: s.abbreviation,
+            _count: { listings: s._count.listings },
+          }))} />
           {[
             { href: "/categories", label: "Styles" },
             { href: "/search", label: "Search" },

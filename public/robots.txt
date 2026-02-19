@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://inkfinder.com/sitemap.xml
+Sitemap: https://inklinktattoofinder.com/sitemap.xml

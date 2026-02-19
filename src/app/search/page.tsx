@@ -4,6 +4,7 @@ import { ListingGrid } from "@/components/ListingGrid";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Pagination } from "@/components/Pagination";
 import { SearchBar } from "@/components/SearchBar";
+import { JsonLd, breadcrumbJsonLd, searchResultsPageJsonLd } from "@/components/JsonLd";
 import { searchListings, getAllCategories } from "@/lib/queries";
 import { searchPageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -93,8 +94,12 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
 }
 
 export default async function SearchPage({ searchParams }: Props) {
+  const { q } = await searchParams;
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={breadcrumbJsonLd([{ label: "Search" }])} />
+      <JsonLd data={searchResultsPageJsonLd(q)} />
       <Breadcrumbs items={[{ label: "Search" }]} />
 
       <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">

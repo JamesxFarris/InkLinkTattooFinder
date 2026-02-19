@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ListingGrid } from "@/components/ListingGrid";
+import { JsonLd, breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import {
   getCityBySlug,
   getCategoriesForCity,
@@ -38,6 +39,20 @@ export default async function CityPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={breadcrumbJsonLd([
+        { label: city.state.name, href: `/${city.state.slug}` },
+        { label: city.name },
+      ])} />
+      <JsonLd data={collectionPageJsonLd({
+        name: `Tattoo Shops in ${city.name}, ${city.state.abbreviation}`,
+        description: `Find the best tattoo artists and shops in ${city.name}, ${city.state.name}.`,
+        url: `/${stateSlug}/${citySlug}`,
+      })} />
+      <JsonLd data={itemListJsonLd(listings.map((l, i) => ({
+        name: l.name,
+        url: `https://inklinktattoofinder.com/listing/${l.slug}`,
+        position: i + 1,
+      })))} />
       <Breadcrumbs
         items={[
           { label: city.state.name, href: `/${city.state.slug}` },

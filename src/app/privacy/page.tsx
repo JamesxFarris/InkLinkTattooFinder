@@ -1,4 +1,5 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,6 +10,13 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd data={breadcrumbJsonLd([{ label: "Privacy Policy" }])} />
+      <JsonLd data={webPageJsonLd({
+        name: "Privacy Policy",
+        description: "InkLink Tattoo Finder privacy policy — how we collect, use, and protect your information.",
+        url: "/privacy",
+        type: "WebPage",
+      })} />
       <Breadcrumbs items={[{ label: "Privacy Policy" }]} />
 
       <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">

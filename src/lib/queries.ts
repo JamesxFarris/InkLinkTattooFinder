@@ -190,6 +190,19 @@ export async function getFeaturedListings(limit = 6) {
   });
 }
 
+export async function getFeaturedListingsByState(stateId: number, limit = 6) {
+  return prisma.listing.findMany({
+    where: { stateId, status: "active", featured: true },
+    include: {
+      city: { include: { state: true } },
+      state: true,
+      categories: { include: { category: true } },
+    },
+    orderBy: { googleRating: "desc" },
+    take: limit,
+  });
+}
+
 export async function getRecentListings(limit = 6) {
   return prisma.listing.findMany({
     where: { status: "active" },

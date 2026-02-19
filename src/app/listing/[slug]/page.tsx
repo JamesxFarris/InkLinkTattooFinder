@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
-import { JsonLd, localBusinessJsonLd } from "@/components/JsonLd";
+import { JsonLd, localBusinessJsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
 import { getListingBySlug } from "@/lib/queries";
 import { listingPageMeta } from "@/lib/seo";
 import { formatPhone } from "@/lib/utils";
@@ -43,19 +43,31 @@ export default async function ListingPage({ params }: Props) {
       <JsonLd
         data={localBusinessJsonLd({
           name: listing.name,
+          slug: listing.slug,
           description: listing.description,
           address: listing.address,
           city: listing.city.name,
           state: listing.city.state.abbreviation,
           zipCode: listing.zipCode,
           phone: listing.phone,
+          email: listing.email,
           website: listing.website,
           latitude: listing.latitude,
           longitude: listing.longitude,
           googleRating: listing.googleRating,
           googleReviewCount: listing.googleReviewCount,
           hours,
+          priceRange: listing.priceRange,
+          photos: listing.photos as string[] | null,
+          categories: listing.categories.map(({ category }) => category.name),
         })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { label: listing.city.state.name, href: `/${stateSlug}` },
+          { label: listing.city.name, href: `/${stateSlug}/${citySlug}` },
+          { label: listing.name },
+        ])}
       />
 
       <Breadcrumbs
