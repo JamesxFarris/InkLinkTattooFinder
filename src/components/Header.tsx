@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { StatesDropdown } from "./StatesDropdown";
+import { NavSearch } from "./NavSearch";
 import { UserMenu } from "./UserMenu";
 import { getAllStates } from "@/lib/queries";
 
@@ -116,7 +117,6 @@ export async function Header() {
           }))} />
           {[
             { href: "/categories", label: "Styles" },
-            { href: "/about", label: "About" },
             { href: "/contact", label: "Contact" },
           ].map((link) => (
             <Link
@@ -130,6 +130,7 @@ export async function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <NavSearch />
           <UserMenu />
           <Link
             href="/list-your-shop"

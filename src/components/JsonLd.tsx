@@ -77,6 +77,8 @@ export function organizationJsonLd() {
     name: SITE_NAME,
     url: SITE_URL,
     email: "inklinktattoofinder@gmail.com",
+    logo: `${SITE_URL}/icon`,
+    image: `${SITE_URL}/opengraph-image`,
     description:
       "InkLink Tattoo Finder is the premier directory for finding tattoo artists and shops across the United States.",
   };
