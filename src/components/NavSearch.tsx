@@ -43,7 +43,7 @@ export function NavSearch() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search shops..."
           aria-label="Search tattoo shops"
-          className="w-36 bg-transparent px-2.5 py-1.5 text-sm text-stone-200 outline-none placeholder:text-stone-500 lg:w-44"
+          className="w-36 bg-transparent py-1.5 pl-2.5 pr-3.5 text-sm text-stone-200 outline-none placeholder:text-stone-500 lg:w-44"
         />
       </div>
     </form>
