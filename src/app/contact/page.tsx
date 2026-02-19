@@ -35,7 +35,7 @@ export default function ContactPage() {
                 Email us at{" "}
                 <a
                   href="mailto:inklinktattoofinder@gmail.com"
-                  className="text-red-600 hover:underline"
+                  className="text-teal-500 hover:underline"
                 >
                   inklinktattoofinder@gmail.com
                 </a>
@@ -49,7 +49,7 @@ export default function ContactPage() {
                 Want to add or claim your tattoo shop listing? Email{" "}
                 <a
                   href="mailto:inklinktattoofinder@gmail.com"
-                  className="text-red-600 hover:underline"
+                  className="text-teal-500 hover:underline"
                 >
                   inklinktattoofinder@gmail.com
                 </a>
@@ -63,7 +63,7 @@ export default function ContactPage() {
                 Found incorrect information? Let us know at{" "}
                 <a
                   href="mailto:inklinktattoofinder@gmail.com"
-                  className="text-red-600 hover:underline"
+                  className="text-teal-500 hover:underline"
                 >
                   inklinktattoofinder@gmail.com
                 </a>

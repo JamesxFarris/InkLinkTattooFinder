@@ -50,7 +50,7 @@ export default function AboutPage() {
         <p>
           If you own a tattoo shop and want to update your listing or get
           featured on InkLink Tattoo Finder, reach out through our{" "}
-          <a href="/contact" className="text-red-600 hover:underline">
+          <a href="/contact" className="text-teal-500 hover:underline">
             contact page
           </a>
           .

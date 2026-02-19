@@ -74,7 +74,7 @@ export function FilterSidebar({
             onClick={() => updateParam("category", null)}
             className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
               !currentCategory
-                ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
+                ? "bg-teal-50 font-medium text-teal-600 dark:bg-teal-950 dark:text-teal-300"
                 : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
             }`}
           >
@@ -86,7 +86,7 @@ export function FilterSidebar({
               onClick={() => updateParam("category", cat.slug)}
               className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
                 currentCategory === cat.slug
-                  ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
+                  ? "bg-teal-50 font-medium text-teal-600 dark:bg-teal-950 dark:text-teal-300"
                   : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
               }`}
             >
@@ -105,7 +105,7 @@ export function FilterSidebar({
             onClick={() => updateParam("price", null)}
             className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
               !currentPrice
-                ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
+                ? "bg-teal-50 font-medium text-teal-600 dark:bg-teal-950 dark:text-teal-300"
                 : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
             }`}
           >
@@ -117,7 +117,7 @@ export function FilterSidebar({
               onClick={() => updateParam("price", opt.value)}
               className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
                 currentPrice === opt.value
-                  ? "bg-red-50 font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
+                  ? "bg-teal-50 font-medium text-teal-600 dark:bg-teal-950 dark:text-teal-300"
                   : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
               }`}
             >
@@ -138,7 +138,7 @@ export function FilterSidebar({
             onChange={(e) =>
               updateParam("walkIns", e.target.checked ? "true" : null)
             }
-            className="rounded border-stone-300 text-red-600 focus:ring-red-500"
+            className="rounded border-stone-300 text-teal-500 focus:ring-teal-500"
           />
           <span className="text-sm text-stone-700 dark:text-stone-300">
             Walk-ins Welcome

@@ -2,13 +2,13 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-stone-200 bg-cream dark:border-stone-800 dark:bg-stone-950" role="contentinfo">
+    <footer className="border-t border-stone-200 bg-stone-950 dark:border-stone-800 dark:bg-stone-950" role="contentinfo">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:pr-8">
             <Link href="/" className="inline-flex items-baseline gap-1.5" aria-label="InkLink Tattoo Finder">
-              <span className="text-xl font-bold text-red-600">InkLink</span>
+              <span className="text-xl font-bold text-teal-500">InkLink</span>
               <span className="text-xs font-medium text-stone-400 dark:text-stone-500">
                 Tattoo Finder
               </span>
@@ -35,7 +35,7 @@ export function Footer() {
                 <li key={style.slug}>
                   <Link
                     href={`/categories/${style.slug}`}
-                    className="text-sm text-stone-500 transition-colors hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
+                    className="text-sm text-stone-500 transition-colors hover:text-teal-500 dark:text-stone-400 dark:hover:text-teal-400"
                   >
                     {style.name}
                   </Link>
@@ -60,7 +60,7 @@ export function Footer() {
                 <li key={city.path}>
                   <Link
                     href={city.path}
-                    className="text-sm text-stone-500 transition-colors hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
+                    className="text-sm text-stone-500 transition-colors hover:text-teal-500 dark:text-stone-400 dark:hover:text-teal-400"
                   >
                     {city.name}
                   </Link>
@@ -83,7 +83,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-stone-500 transition-colors hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
+                    className="text-sm text-stone-500 transition-colors hover:text-teal-500 dark:text-stone-400 dark:hover:text-teal-400"
                   >
                     {link.name}
                   </Link>

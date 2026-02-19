@@ -45,7 +45,7 @@ export function SearchBar({ className, size = "default" }: { className?: string;
         </div>
         <button
           type="submit"
-          className={`bg-red-600 font-semibold text-white transition-colors hover:bg-red-700 ${isLarge ? "px-10 text-lg" : "px-6 text-sm"}`}
+          className={`bg-teal-500 font-semibold text-white transition-colors hover:bg-teal-600 ${isLarge ? "px-10 text-lg" : "px-6 text-sm"}`}
         >
           Search
         </button>

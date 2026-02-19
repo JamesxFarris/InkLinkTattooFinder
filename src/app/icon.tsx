@@ -25,7 +25,7 @@ export default function Icon() {
           {/* Diamond frame */}
           <path
             d="M18 3L33 18L18 33L3 18Z"
-            stroke="#C0392B"
+            stroke="#14B8A6"
             strokeWidth="2"
             fill="none"
           />
@@ -35,17 +35,17 @@ export default function Icon() {
             y1="11"
             x2="25"
             y2="25"
-            stroke="#C0392B"
+            stroke="#14B8A6"
             strokeWidth="2"
             strokeLinecap="round"
           />
           {/* Ink drop tip */}
-          <circle cx="25.5" cy="25.5" r="2.5" fill="#C0392B" />
+          <circle cx="25.5" cy="25.5" r="2.5" fill="#14B8A6" />
           {/* Corner dots */}
-          <circle cx="18" cy="3" r="1.5" fill="#C0392B" />
-          <circle cx="33" cy="18" r="1.5" fill="#C0392B" />
-          <circle cx="18" cy="33" r="1.5" fill="#C0392B" />
-          <circle cx="3" cy="18" r="1.5" fill="#C0392B" />
+          <circle cx="18" cy="3" r="1.5" fill="#14B8A6" />
+          <circle cx="33" cy="18" r="1.5" fill="#14B8A6" />
+          <circle cx="18" cy="33" r="1.5" fill="#14B8A6" />
+          <circle cx="3" cy="18" r="1.5" fill="#14B8A6" />
         </svg>
       </div>
     ),

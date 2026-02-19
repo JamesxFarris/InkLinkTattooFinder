@@ -1,48 +1,13 @@
 @import "tailwindcss";
 
+/* Force class-based dark mode (always-on via class="dark" on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* ═══════════════════════════════════════════════════════
-     Classic Americana Palette
-     Inspired by Shamrock Social Club & Traditional Flash
+     Midnight Ink Palette
+     Dark-first design for premium tattoo directory
      ═══════════════════════════════════════════════════════ */
-
-  /* Tattoo Red — Primary CTAs, links, active states (#C0392B) */
-  --color-red-50: #FDF0EE;
-  --color-red-100: #FBDBD7;
-  --color-red-200: #F5ADA5;
-  --color-red-300: #E8796D;
-  --color-red-400: #D95548;
-  --color-red-500: #CF4436;
-  --color-red-600: #C0392B;
-  --color-red-700: #A32F22;
-  --color-red-800: #861F18;
-  --color-red-900: #5C1512;
-  --color-red-950: #3D0F0A;
-
-  /* Shamrock Green — Secondary actions, badges, walk-ins (#2E7D32) */
-  --color-emerald-50: #E8F5E9;
-  --color-emerald-100: #C8E6C9;
-  --color-emerald-200: #A5D6A7;
-  --color-emerald-300: #81C784;
-  --color-emerald-400: #66BB6A;
-  --color-emerald-500: #4CAF50;
-  --color-emerald-600: #2E7D32;
-  --color-emerald-700: #256828;
-  --color-emerald-800: #1B5E20;
-  --color-emerald-900: #0E3E12;
-  --color-emerald-950: #071F09;
-
-  --color-green-50: #E8F5E9;
-  --color-green-100: #C8E6C9;
-  --color-green-200: #A5D6A7;
-  --color-green-300: #81C784;
-  --color-green-400: #66BB6A;
-  --color-green-500: #4CAF50;
-  --color-green-600: #388E3C;
-  --color-green-700: #2E7D32;
-  --color-green-800: #1B5E20;
-  --color-green-900: #0E3E12;
-  --color-green-950: #071F09;
 
   /* Antique Gold — Stars, ratings, premium indicators (#D4A843) */
   --color-amber-50: #FBF3E0;
@@ -59,51 +24,33 @@
 
   --color-yellow-500: #D4A843;
 
-  /* Warm Neutrals — Cream (#FDF6E3) through Deep Black (#1A1A1A) */
-  --color-stone-50: #FDF6E3;
-  --color-stone-100: #F5EDD6;
-  --color-stone-200: #E6DCC8;
-  --color-stone-300: #D4C9B5;
-  --color-stone-400: #A89B8A;
-  --color-stone-500: #7D7265;
-  --color-stone-600: #5C5349;
-  --color-stone-700: #443D35;
-  --color-stone-800: #2A2520;
-  --color-stone-900: #1A1A1A;
-  --color-stone-950: #0F0E0D;
-
-  /* Standalone cream for explicit usage (header, footer) */
-  --color-cream: #FDF6E3;
+  /* Cool Dark Neutrals — Deep Charcoal through Off-White */
+  --color-stone-50: #F8FAFC;
+  --color-stone-100: #F1F5F9;
+  --color-stone-200: #E2E8F0;
+  --color-stone-300: #CBD5E1;
+  --color-stone-400: #94A3B8;
+  --color-stone-500: #64748B;
+  --color-stone-600: #475569;
+  --color-stone-700: #374151;
+  --color-stone-800: #2A2F3C;
+  --color-stone-900: #1A1D27;
+  --color-stone-950: #0F1117;
 }
 
 :root {
-  --background: #FDF6E3;
-  --foreground: #1A1A1A;
-  --muted: #F5EDD6;
-  --muted-foreground: #7D7265;
-  --border: #E6DCC8;
-  --primary: #C0392B;
+  color-scheme: dark;
+  --background: #0F1117;
+  --foreground: #F1F5F9;
+  --muted: #1A1D27;
+  --muted-foreground: #94A3B8;
+  --border: #2A2F3C;
+  --primary: #14B8A6;
   --primary-foreground: #ffffff;
-  --accent: #1A1A1A;
-  --accent-foreground: #ffffff;
-  --card-shadow: 0 1px 3px rgba(42, 37, 32, 0.08), 0 1px 2px rgba(42, 37, 32, 0.06);
-  --card-shadow-hover: 0 20px 40px -15px rgba(42, 37, 32, 0.2), 0 8px 16px -8px rgba(42, 37, 32, 0.12);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0F0E0D;
-    --foreground: #F5EDD6;
-    --muted: #1A1A1A;
-    --muted-foreground: #A89B8A;
-    --border: #2A2520;
-    --primary: #D95548;
-    --primary-foreground: #ffffff;
-    --accent: #F5EDD6;
-    --accent-foreground: #1A1A1A;
-    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-    --card-shadow-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
-  }
+  --accent: #F1F5F9;
+  --accent-foreground: #0F1117;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
 }
 
 body {

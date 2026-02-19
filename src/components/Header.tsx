@@ -51,13 +51,13 @@ function LogoMark({ className }: { className?: string }) {
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-stone-200/60 bg-cream/95 backdrop-blur-lg dark:border-stone-800/40 dark:bg-stone-950/95">
+    <header className="sticky top-0 z-50 border-b border-stone-200/60 bg-stone-950/95 backdrop-blur-lg dark:border-stone-800/40 dark:bg-stone-950/95">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2.5" aria-label="InkLink Tattoo Finder — Home">
-          <LogoMark className="h-8 w-8 text-red-600 dark:text-red-500" />
+          <LogoMark className="h-8 w-8 text-teal-500 dark:text-teal-500" />
           <div className="flex items-baseline gap-1.5">
             <span className="font-display text-xl font-bold tracking-tight text-stone-900 dark:text-stone-100">
-              Ink<span className="text-red-600 dark:text-red-500">Link</span>
+              Ink<span className="text-teal-500 dark:text-teal-500">Link</span>
             </span>
             <span className="hidden text-xs font-medium uppercase tracking-widest text-stone-400 sm:inline dark:text-stone-500">
               Tattoo Finder
@@ -75,7 +75,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-stone-500 transition-colors hover:text-red-600 dark:text-stone-400 dark:hover:text-red-400"
+              className="text-sm font-medium text-stone-500 transition-colors hover:text-teal-500 dark:text-stone-400 dark:hover:text-teal-400"
             >
               {link.label}
             </Link>
@@ -85,7 +85,7 @@ export function Header() {
         <div className="flex items-center gap-3">
           <Link
             href="/search"
-            className="rounded-full border border-red-600 bg-red-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:shadow-red-600/20"
+            className="rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20"
           >
             Find a Shop
           </Link>

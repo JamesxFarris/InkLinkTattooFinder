@@ -33,7 +33,7 @@ export default async function HomePage() {
         <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-16 text-center sm:pb-28 sm:pt-24">
           <h1 className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
             Find the Best{" "}
-            <span className="text-red-400">Tattoo Artists</span>{" "}
+            <span className="text-teal-400">Tattoo Artists</span>{" "}
             Near You
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-stone-300">
@@ -58,7 +58,7 @@ export default async function HomePage() {
               Real reviews
             </span>
             <span className="flex items-center gap-1.5">
-              <svg className="h-4 w-4 text-red-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <svg className="h-4 w-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
               </svg>
               Nationwide
@@ -160,7 +160,7 @@ export default async function HomePage() {
       )}
 
       {/* CTA Section */}
-      <section className="bg-stone-900 dark:bg-stone-950">
+      <section className="bg-stone-900">
         <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
           <h2 className="font-display text-3xl font-bold text-white">
             Own a tattoo shop?
@@ -171,7 +171,7 @@ export default async function HomePage() {
           </p>
           <a
             href="/contact"
-            className="mt-8 inline-flex rounded-full bg-red-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-600/25 transition-all hover:bg-red-700 hover:shadow-xl hover:shadow-red-600/30"
+            className="mt-8 inline-flex rounded-full bg-teal-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:bg-teal-600 hover:shadow-xl hover:shadow-teal-500/30"
           >
             List Your Shop
           </a>

@@ -15,7 +15,7 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "#1A1A1A",
+          background: "#0F1117",
           fontFamily: "Georgia, serif",
         }}
       >
@@ -24,7 +24,7 @@ export default function OpenGraphImage() {
           style={{
             position: "absolute",
             inset: "20px",
-            border: "1px solid rgba(220, 38, 38, 0.2)",
+            border: "1px solid rgba(20, 184, 166, 0.2)",
             borderRadius: "8px",
           }}
         />
@@ -39,13 +39,13 @@ export default function OpenGraphImage() {
           >
             <path
               d="M18 3L33 18L18 33L3 18Z"
-              stroke="#C0392B"
+              stroke="#14B8A6"
               strokeWidth="1.5"
               fill="none"
             />
             <path
               d="M18 9L27 18L18 27L9 18Z"
-              stroke="#C0392B"
+              stroke="#14B8A6"
               strokeWidth="0.75"
               fill="none"
               opacity="0.4"
@@ -55,23 +55,23 @@ export default function OpenGraphImage() {
               y1="11"
               x2="25"
               y2="25"
-              stroke="#C0392B"
+              stroke="#14B8A6"
               strokeWidth="1.5"
               strokeLinecap="round"
             />
-            <circle cx="25.5" cy="25.5" r="2" fill="#C0392B" />
-            <circle cx="18" cy="3" r="1" fill="#C0392B" />
-            <circle cx="33" cy="18" r="1" fill="#C0392B" />
-            <circle cx="18" cy="33" r="1" fill="#C0392B" />
-            <circle cx="3" cy="18" r="1" fill="#C0392B" />
+            <circle cx="25.5" cy="25.5" r="2" fill="#14B8A6" />
+            <circle cx="18" cy="3" r="1" fill="#14B8A6" />
+            <circle cx="33" cy="18" r="1" fill="#14B8A6" />
+            <circle cx="18" cy="33" r="1" fill="#14B8A6" />
+            <circle cx="3" cy="18" r="1" fill="#14B8A6" />
           </svg>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "14px" }}>
-              <span style={{ fontSize: "68px", fontWeight: 700, color: "#FDF6E3", letterSpacing: "-0.02em" }}>
-                Ink<span style={{ color: "#C0392B" }}>Link</span>
+              <span style={{ fontSize: "68px", fontWeight: 700, color: "#F1F5F9", letterSpacing: "-0.02em" }}>
+                Ink<span style={{ color: "#14B8A6" }}>Link</span>
               </span>
             </div>
-            <span style={{ fontSize: "18px", fontWeight: 400, color: "#7D7265", letterSpacing: "0.2em", textTransform: "uppercase" as const }}>
+            <span style={{ fontSize: "18px", fontWeight: 400, color: "#94A3B8", letterSpacing: "0.2em", textTransform: "uppercase" as const }}>
               Tattoo Finder
             </span>
           </div>
@@ -82,7 +82,7 @@ export default function OpenGraphImage() {
           style={{
             marginTop: "36px",
             fontSize: "26px",
-            color: "#A89B8A",
+            color: "#94A3B8",
             textAlign: "center",
             maxWidth: "600px",
             lineHeight: 1.5,
@@ -100,7 +100,7 @@ export default function OpenGraphImage() {
             left: 0,
             right: 0,
             height: "4px",
-            background: "#C0392B",
+            background: "#14B8A6",
           }}
         />
       </div>

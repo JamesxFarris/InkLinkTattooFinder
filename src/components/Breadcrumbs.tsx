@@ -8,7 +8,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         <li>
           <Link
             href="/"
-            className="hover:text-red-600 dark:hover:text-red-400"
+            className="hover:text-teal-500 dark:hover:text-teal-400"
           >
             Home
           </Link>
@@ -19,7 +19,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
             {item.href ? (
               <Link
                 href={item.href}
-                className="hover:text-red-600 dark:hover:text-red-400"
+                className="hover:text-teal-500 dark:hover:text-teal-400"
               >
                 {item.label}
               </Link>

@@ -17,7 +17,7 @@ export function CategoryCard({
         {category.icon || "🎨"}
       </span>
       <div className="min-w-0 flex-1">
-        <h3 className="font-semibold text-stone-900 transition-colors group-hover:text-red-600 dark:text-stone-100 dark:group-hover:text-red-400">
+        <h3 className="font-semibold text-stone-900 transition-colors group-hover:text-teal-500 dark:text-stone-100 dark:group-hover:text-teal-400">
           {category.name}
         </h3>
         <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
@@ -25,7 +25,7 @@ export function CategoryCard({
           {category._count.listings === 1 ? "listing" : "listings"}
         </p>
       </div>
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-stone-100 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white dark:bg-stone-800 dark:group-hover:bg-red-600">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-stone-100 transition-all duration-300 group-hover:bg-teal-500 group-hover:text-white dark:bg-stone-800 dark:group-hover:bg-teal-500">
         <svg
           className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
           fill="none"

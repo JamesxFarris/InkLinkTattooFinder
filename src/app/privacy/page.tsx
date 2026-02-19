@@ -61,7 +61,7 @@ export default function PrivacyPage() {
           For privacy-related questions, please contact us at{" "}
           <a
             href="mailto:inklinktattoofinder@gmail.com"
-            className="text-red-600 hover:underline"
+            className="text-teal-500 hover:underline"
           >
             inklinktattoofinder@gmail.com
           </a>
