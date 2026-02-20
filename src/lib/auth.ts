@@ -1,11 +1,16 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/db";
-import { authConfig } from "./auth.config";
+import { prisma } from "./db";
+
+// Emails that are always admin, regardless of how they registered.
+// This survives redeploys, database resets, and normal registration.
+const ADMIN_EMAILS = [
+  "jafarris.exe@gmail.com",
+  ...(process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : []),
+];
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -21,11 +26,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!user) return null;
 
-        const valid = await bcrypt.compare(
+        const isValid = await bcrypt.compare(
           credentials.password as string,
-          user.password,
+          user.passwordHash
         );
-        if (!valid) return null;
+
+        if (!isValid) return null;
+
+        // Auto-promote hardcoded admin emails on login
+        const isHardcodedAdmin = ADMIN_EMAILS.includes(user.email.toLowerCase());
+        if (isHardcodedAdmin && user.role !== "admin") {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { role: "admin" },
+          });
+          user.role = "admin";
+        }
 
         return {
           id: String(user.id),
@@ -36,4 +52,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  session: { strategy: "jwt" },
+  pages: {
+    signIn: "/login",
+  },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id!;
+        token.role = user.role;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      session.user.id = token.id;
+      session.user.role = token.role;
+      return session;
+    },
+  },
 });

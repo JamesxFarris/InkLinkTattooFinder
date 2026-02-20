@@ -9,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
+    { url: `${baseUrl}/tattoo-shops`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/categories`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/search`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
@@ -19,10 +20,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // State pages
   const states = await prisma.state.findMany({ select: { slug: true } });
   const statePages: MetadataRoute.Sitemap = states.map((s) => ({
-    url: `${baseUrl}/${s.slug}`,
+    url: `${baseUrl}/tattoo-shops/${s.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
-    priority: 0.7,
+    priority: 0.8,
   }));
 
   // City pages
@@ -30,39 +31,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     select: { slug: true, state: { select: { slug: true } } },
   });
   const cityPages: MetadataRoute.Sitemap = cities.map((c) => ({
-    url: `${baseUrl}/${c.state.slug}/${c.slug}`,
+    url: `${baseUrl}/tattoo-shops/${c.state.slug}/${c.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
-    priority: 0.8,
+    priority: 0.9,
   }));
-
-  // City + Category pages
-  const cityCategoryPages: MetadataRoute.Sitemap = [];
-  const listingCategories = await prisma.listingCategory.findMany({
-    select: {
-      listing: {
-        select: {
-          city: { select: { slug: true, state: { select: { slug: true } } } },
-        },
-      },
-      category: { select: { slug: true } },
-    },
-    distinct: ["categoryId"],
-  });
-
-  const seen = new Set<string>();
-  for (const lc of listingCategories) {
-    const key = `${lc.listing.city.state.slug}/${lc.listing.city.slug}/${lc.category.slug}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      cityCategoryPages.push({
-        url: `${baseUrl}/${key}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: 0.9,
-      });
-    }
-  }
 
   // Category pages
   const categories = await prisma.category.findMany({ select: { slug: true } });
@@ -89,7 +62,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...statePages,
     ...cityPages,
-    ...cityCategoryPages,
     ...categoryPages,
     ...listingPages,
   ];

@@ -8,7 +8,7 @@ export function CityCard({ city }: { city: CityWithCount }) {
 
   return (
     <Link
-      href={`/${city.state.slug}/${city.slug}`}
+      href={`/tattoo-shops/${city.state.slug}/${city.slug}`}
       className="group relative block h-48 overflow-hidden rounded-2xl shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:ring-stone-700"
     >
       {/* Background image */}
