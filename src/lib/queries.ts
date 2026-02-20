@@ -206,6 +206,70 @@ export async function getNonFeaturedListingsByCity(
   return { listings, total, totalPages: Math.ceil(total / perPage) };
 }
 
+export async function getFilteredCityListings(params: {
+  cityId: number;
+  categorySlug?: string;
+  price?: string;
+  walkIns?: string;
+  sort?: string;
+  page?: number;
+  perPage?: number;
+}) {
+  const { cityId, categorySlug, price, walkIns, sort, page = 1, perPage = ITEMS_PER_PAGE } = params;
+
+  const where: Record<string, unknown> = { cityId, status: "active" as ListingStatus };
+
+  if (categorySlug) {
+    const slugs = categorySlug.split(",").filter(Boolean);
+    if (slugs.length === 1) {
+      const category = await prisma.category.findUnique({ where: { slug: slugs[0] } });
+      if (category) {
+        where.categories = { some: { categoryId: category.id } };
+      }
+    } else if (slugs.length > 1) {
+      const categories = await prisma.category.findMany({
+        where: { slug: { in: slugs } },
+        select: { id: true },
+      });
+      if (categories.length > 0) {
+        where.categories = {
+          some: { categoryId: { in: categories.map((c) => c.id) } },
+        };
+      }
+    }
+  }
+
+  if (price) {
+    where.priceRange = price as PriceRange;
+  }
+
+  if (walkIns === "true") {
+    where.acceptsWalkIns = true;
+  }
+
+  let orderBy: Record<string, string>[] = [{ featured: "desc" }, { googleRating: "desc" }];
+  if (sort === "name") orderBy = [{ name: "asc" }];
+  if (sort === "rating") orderBy = [{ googleRating: "desc" }];
+  if (sort === "newest") orderBy = [{ createdAt: "desc" }];
+
+  const [listings, total] = await Promise.all([
+    prisma.listing.findMany({
+      where,
+      include: {
+        city: { include: { state: true } },
+        state: true,
+        categories: { include: { category: true } },
+      },
+      orderBy,
+      skip: (page - 1) * perPage,
+      take: perPage,
+    }),
+    prisma.listing.count({ where }),
+  ]);
+
+  return { listings, total, totalPages: Math.ceil(total / perPage) };
+}
+
 export async function getListingsByCityAndCategory(
   cityId: number,
   categoryId: number,
@@ -288,10 +352,16 @@ export async function searchListings(params: {
   const where: Record<string, unknown> = { status: "active" as ListingStatus };
 
   if (q) {
-    where.OR = [
-      { name: { contains: q, mode: "insensitive" } },
-      { description: { contains: q, mode: "insensitive" } },
-    ];
+    const isZipCode = /^\d{5}$/.test(q.trim());
+    if (isZipCode) {
+      where.zipCode = q.trim();
+    } else {
+      where.OR = [
+        { name: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+        { zipCode: q.trim() },
+      ];
+    }
   }
 
   if (citySlug) {
