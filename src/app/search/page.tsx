@@ -10,6 +10,7 @@ import { searchListings, searchListingsNearby, getAllCategories } from "@/lib/qu
 import { isZipCode, geocodeZip } from "@/lib/geo";
 import { searchPageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
+import type { ListingWithRelations } from "@/types";
 
 type Props = {
   searchParams: Promise<{
@@ -47,29 +48,12 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
 
   // Check if the query is a zip code
   const isZip = isZipCode(query);
-  let geoResult = null;
-  let listings: Array<{
-    id: number;
-    name: string;
-    slug: string;
-    description: string | null;
-    city: { name: string; state: { name: string; abbreviation: string; slug: string }; slug: string };
-    state: { name: string; abbreviation: string; slug: string };
-    categories: Array<{ category: { name: string; slug: string } }>;
-    googleRating: number | null;
-    googleReviewCount: number | null;
-    priceRange: string | null;
-    acceptsWalkIns: boolean;
-    featured: boolean;
-    address: string | null;
-    phone: string | null;
-    hours: unknown;
-    distance?: number;
-    [key: string]: unknown;
-  }> = [];
+  let geoResult: { latitude: number; longitude: number; place?: string; state?: string } | null = null;
+  let listings: ListingWithRelations[] = [];
   let total = 0;
   let totalPages = 0;
-  let nearestCities: Array<{ id: number; name: string; distance: number }> = [];
+  let nearestCities: { id: number; name: string; distance: number }[] = [];
+  let distances: Record<number, number> = {};
 
   if (isZip) {
     // Geocode zip code and do proximity search
@@ -86,6 +70,7 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
         page,
       });
       listings = result.listings;
+      distances = result.distances;
       total = result.total;
       totalPages = result.totalPages;
       nearestCities = result.nearestCities;
@@ -149,19 +134,27 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
 
             {/* Radius controls */}
             <div className="mt-3 flex flex-wrap gap-2">
-              {[25, 50, 100, 200].map((r) => (
-                <a
-                  key={r}
-                  href={`/search?q=${query}&radius=${r}${params.category ? `&category=${params.category}` : ""}${params.price ? `&price=${params.price}` : ""}${params.walkIns ? `&walkIns=${params.walkIns}` : ""}`}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                    r === radius
-                      ? "bg-teal-600 text-white"
-                      : "bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800"
-                  }`}
-                >
-                  {r} miles
-                </a>
-              ))}
+              {[25, 50, 100, 200].map((r) => {
+                const radiusParams = new URLSearchParams();
+                radiusParams.set("q", query);
+                radiusParams.set("radius", String(r));
+                if (params.category) radiusParams.set("category", params.category);
+                if (params.price) radiusParams.set("price", params.price);
+                if (params.walkIns) radiusParams.set("walkIns", params.walkIns);
+                return (
+                  <a
+                    key={r}
+                    href={`/search?${radiusParams.toString()}`}
+                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                      r === radius
+                        ? "bg-teal-600 text-white"
+                        : "bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800"
+                    }`}
+                  >
+                    {r} miles
+                  </a>
+                );
+              })}
             </div>
           </div>
         )}
@@ -188,18 +181,19 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
         {/* Listings with distance badges for zip searches */}
         {isZip && listings.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {listings.map((listing) => (
-              <div key={listing.id} className="relative">
-                {listing.distance != null && (
-                  <span className="absolute -top-2 -right-2 z-10 rounded-full bg-teal-600 px-2 py-0.5 text-xs font-bold text-white shadow-md">
-                    {listing.distance < 1
-                      ? "< 1 mi"
-                      : `${Math.round(listing.distance)} mi`}
-                  </span>
-                )}
-                <ListingGrid listings={[listing]} />
-              </div>
-            ))}
+            {listings.map((listing) => {
+              const dist = distances[listing.id];
+              return (
+                <div key={listing.id} className="relative">
+                  {dist != null && (
+                    <span className="absolute -top-2 -right-2 z-10 rounded-full bg-teal-600 px-2 py-0.5 text-xs font-bold text-white shadow-md">
+                      {dist < 1 ? "< 1 mi" : `${Math.round(dist)} mi`}
+                    </span>
+                  )}
+                  <ListingGrid listings={[listing]} />
+                </div>
+              );
+            })}
           </div>
         ) : (
           <ListingGrid listings={listings} />

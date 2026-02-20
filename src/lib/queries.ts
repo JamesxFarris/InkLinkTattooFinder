@@ -517,23 +517,33 @@ export async function searchListingsNearby(params: {
     prisma.listing.count({ where }),
   ]);
 
+  // Build a distance map keyed by listing id
+  const listingDistances = new Map<number, number>();
+  for (const listing of allListings) {
+    listingDistances.set(listing.id, cityDistanceMap.get(listing.cityId) ?? 999);
+  }
+
   // Sort by distance from search point, then by rating
-  const listingsWithDistance = allListings
-    .map((listing) => ({
-      ...listing,
-      distance: cityDistanceMap.get(listing.cityId) ?? 999,
-    }))
-    .sort((a, b) => {
-      if (a.distance !== b.distance) return a.distance - b.distance;
-      return (b.googleRating ?? 0) - (a.googleRating ?? 0);
-    });
+  const sortedListings = [...allListings].sort((a, b) => {
+    const distA = listingDistances.get(a.id) ?? 999;
+    const distB = listingDistances.get(b.id) ?? 999;
+    if (distA !== distB) return distA - distB;
+    return (b.googleRating ?? 0) - (a.googleRating ?? 0);
+  });
 
   // Paginate
   const start = (page - 1) * perPage;
-  const paginatedListings = listingsWithDistance.slice(start, start + perPage);
+  const paginatedListings = sortedListings.slice(start, start + perPage);
+
+  // Return distances as a separate map (listing id -> miles)
+  const distances: Record<number, number> = {};
+  for (const listing of paginatedListings) {
+    distances[listing.id] = Math.round((listingDistances.get(listing.id) ?? 999) * 10) / 10;
+  }
 
   return {
     listings: paginatedListings,
+    distances,
     total,
     totalPages: Math.ceil(total / perPage),
     nearestCities: citiesWithDistance.slice(0, 5).map((c) => ({
