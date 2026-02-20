@@ -169,8 +169,10 @@ function MobilePriceTiers({
 
 export function FilterSidebar({
   categories,
+  basePath = "/search",
 }: {
   categories: { name: string; slug: string }[];
+  basePath?: string;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -184,9 +186,9 @@ export function FilterSidebar({
         params.delete(key);
       }
       params.delete("page");
-      router.push(`/search?${params.toString()}`);
+      router.push(`${basePath}?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams, basePath]
   );
 
   const currentCategory = searchParams.get("category") || "";
