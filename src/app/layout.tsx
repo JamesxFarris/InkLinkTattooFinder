@@ -30,6 +30,10 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: "InkLink Tattoo Finder",
   },
+  twitter: {
+    card: "summary_large_image",
+    site: "@InkLinkTattoo",
+  },
   robots: {
     index: true,
     follow: true,

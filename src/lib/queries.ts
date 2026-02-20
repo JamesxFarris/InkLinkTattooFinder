@@ -427,6 +427,156 @@ export async function getListingsByCategoryNational(
   return { listings, total, totalPages: Math.ceil(total / perPage) };
 }
 
+// ── Internal Linking Queries ─────────────────────────────
+
+export async function getRelatedListings(
+  listingId: number,
+  cityId: number,
+  categoryIds: number[],
+  limit = 6
+) {
+  return prisma.listing.findMany({
+    where: {
+      status: "active",
+      id: { not: listingId },
+      OR: [
+        { cityId },
+        ...(categoryIds.length > 0
+          ? [{ categories: { some: { categoryId: { in: categoryIds } } } }]
+          : []),
+      ],
+    },
+    include: {
+      city: { include: { state: true } },
+      state: true,
+      categories: { include: { category: true } },
+    },
+    orderBy: [{ cityId: "asc" }, { googleRating: "desc" }],
+    take: limit,
+  });
+}
+
+export async function getTopCitiesForCategory(categoryId: number, limit = 10) {
+  const cities = await prisma.city.findMany({
+    where: {
+      listings: {
+        some: {
+          status: "active",
+          categories: { some: { categoryId } },
+        },
+      },
+    },
+    include: {
+      state: true,
+      _count: {
+        select: {
+          listings: {
+            where: {
+              status: "active",
+              categories: { some: { categoryId } },
+            },
+          },
+        },
+      },
+    },
+    orderBy: { population: "desc" },
+    take: limit,
+  });
+  return cities;
+}
+
+export async function getPopularCategoriesInState(stateId: number, limit = 8) {
+  const categories = await prisma.category.findMany({
+    where: {
+      listings: {
+        some: {
+          listing: { stateId, status: "active" },
+        },
+      },
+    },
+    include: {
+      _count: {
+        select: {
+          listings: {
+            where: {
+              listing: { stateId, status: "active" },
+            },
+          },
+        },
+      },
+    },
+    orderBy: { sortOrder: "asc" },
+    take: limit,
+  });
+  return categories;
+}
+
+export async function getTopCitiesWithListings(limit = 10) {
+  return prisma.city.findMany({
+    where: {
+      listings: { some: { status: "active" } },
+    },
+    include: {
+      state: true,
+      _count: {
+        select: {
+          listings: { where: { status: "active" } },
+        },
+      },
+    },
+    orderBy: { population: "desc" },
+    take: limit,
+  });
+}
+
+export async function getTopStatesByListingCount(limit = 8) {
+  return prisma.state.findMany({
+    include: {
+      _count: { select: { listings: { where: { status: "active" } } } },
+    },
+    orderBy: { listings: { _count: "desc" } },
+    take: limit,
+  });
+}
+
+export async function getPopularSearchCombos(limit = 8) {
+  const combos = await prisma.listingCategory.findMany({
+    where: { listing: { status: "active" } },
+    select: {
+      category: { select: { name: true, slug: true } },
+      listing: {
+        select: {
+          city: {
+            select: {
+              name: true,
+              slug: true,
+              state: { select: { slug: true, abbreviation: true } },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  // Group by city+category and pick the most common combos
+  const comboMap = new Map<string, { label: string; href: string; count: number }>();
+  for (const c of combos) {
+    const key = `${c.listing.city.slug}-${c.category.slug}`;
+    if (!comboMap.has(key)) {
+      comboMap.set(key, {
+        label: `${c.category.name} tattoos in ${c.listing.city.name}, ${c.listing.city.state.abbreviation}`,
+        href: `/tattoo-shops/${c.listing.city.state.slug}/${c.listing.city.slug}?style=${c.category.slug}`,
+        count: 0,
+      });
+    }
+    comboMap.get(key)!.count++;
+  }
+
+  return [...comboMap.values()]
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit);
+}
+
 // ── Proximity / Zip Code Search ──────────────────────────
 
 /**

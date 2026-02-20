@@ -28,9 +28,9 @@ export async function registerUser(formData: FormData): Promise<RegisterResult> 
   await prisma.user.create({
     data: {
       email,
-      password: hashed,
+      passwordHash: hashed,
       name: name || null,
-      role: "business",
+      role: "owner",
     },
   });
 

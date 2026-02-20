@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { JsonLd, localBusinessJsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
-import { getListingBySlug } from "@/lib/queries";
+import { getListingBySlug, getRelatedListings, getCategoriesForCity } from "@/lib/queries";
 import { listingPageMeta } from "@/lib/seo";
 import { formatPhone } from "@/lib/utils";
 import { auth } from "@/lib/auth";
@@ -62,6 +62,12 @@ export default async function ListingPage({ params }: Props) {
   const citySlug = listing.city.slug;
   const hours = listing.hours as Record<string, string> | null;
 
+  const categoryIds = listing.categories.map((c) => c.category.id);
+  const [relatedListings, cityCategories] = await Promise.all([
+    getRelatedListings(listing.id, listing.cityId, categoryIds, 6),
+    getCategoriesForCity(listing.cityId),
+  ]);
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <JsonLd
@@ -88,8 +94,8 @@ export default async function ListingPage({ params }: Props) {
       />
       <JsonLd
         data={breadcrumbJsonLd([
-          { label: listing.city.state.name, href: `/${stateSlug}` },
-          { label: listing.city.name, href: `/${stateSlug}/${citySlug}` },
+          { label: listing.city.state.name, href: `/tattoo-shops/${stateSlug}` },
+          { label: listing.city.name, href: `/tattoo-shops/${stateSlug}/${citySlug}` },
           { label: listing.name },
         ])}
       />
@@ -279,6 +285,56 @@ export default async function ListingPage({ params }: Props) {
           )}
         </div>
       </div>
+
+      {/* Related Listings */}
+      {relatedListings.length > 0 && (
+        <section className="mt-12">
+          <h2 className="mb-4 text-xl font-bold text-stone-900 dark:text-stone-100">
+            Other Tattoo Shops in {listing.city.name}
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {relatedListings.map((related) => (
+              <Link
+                key={related.id}
+                href={`/listing/${related.slug}`}
+                className="rounded-xl border border-stone-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-stone-700 dark:bg-stone-900"
+              >
+                <h3 className="font-semibold text-stone-900 dark:text-stone-100">
+                  {related.name}
+                </h3>
+                <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+                  {related.city.name}, {related.city.state.abbreviation}
+                </p>
+                {related.googleRating && (
+                  <p className="mt-1 text-sm text-amber-500">
+                    {"★".repeat(Math.round(related.googleRating))} {related.googleRating}
+                  </p>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Popular Styles in City */}
+      {cityCategories.length > 0 && (
+        <section className="mt-12">
+          <h2 className="mb-4 text-xl font-bold text-stone-900 dark:text-stone-100">
+            Popular Styles in {listing.city.name}
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {cityCategories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/tattoo-shops/${stateSlug}/${citySlug}?style=${cat.slug}`}
+                className="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-teal-500 hover:text-teal-600 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:text-teal-400"
+              >
+                {cat.name} ({cat._count.listings})
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

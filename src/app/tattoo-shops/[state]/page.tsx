@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CityCard } from "@/components/CityCard";
 import { StatsBar } from "@/components/StatsBar";
@@ -15,6 +16,7 @@ import {
   getCitiesByState,
   getStateStats,
   getAllStates,
+  getPopularCategoriesInState,
 } from "@/lib/queries";
 import { statePageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -30,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     openGraph: { title: meta.title, description: meta.description },
+    alternates: { canonical: `/tattoo-shops/${stateSlug}` },
   };
 }
 
@@ -38,10 +41,11 @@ export default async function StatePillarPage({ params }: Props) {
   const state = await getStateBySlug(stateSlug);
   if (!state) notFound();
 
-  const [cities, stats, allStates] = await Promise.all([
+  const [cities, stats, allStates, popularCategories] = await Promise.all([
     getCitiesByState(state.id),
     getStateStats(state.id),
     getAllStates(),
+    getPopularCategoriesInState(state.id),
   ]);
 
   const sortedCities = [...cities].sort(
@@ -112,6 +116,32 @@ export default async function StatePillarPage({ params }: Props) {
           </p>
         )}
       </section>
+
+      {/* Popular Tattoo Styles */}
+      {popularCategories.length > 0 && (
+        <section className="mt-16">
+          <h2 className="mb-4 text-xl font-bold text-stone-900 dark:text-stone-100">
+            Popular Tattoo Styles in {state.name}
+          </h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {popularCategories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/categories/${cat.slug}`}
+                className="rounded-xl border border-stone-200 bg-white p-4 text-center transition-all hover:-translate-y-0.5 hover:border-teal-500/50 hover:shadow-lg dark:border-stone-700 dark:bg-stone-800 dark:hover:border-teal-500/40"
+              >
+                {cat.icon && <span className="text-2xl">{cat.icon}</span>}
+                <span className="mt-1 block text-sm font-semibold text-stone-800 dark:text-stone-200">
+                  {cat.name}
+                </span>
+                <span className="mt-0.5 block text-xs text-stone-500 dark:text-stone-400">
+                  {cat._count.listings} {cat._count.listings === 1 ? "shop" : "shops"}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="mt-16">
         <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-100">

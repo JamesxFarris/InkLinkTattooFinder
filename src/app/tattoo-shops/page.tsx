@@ -14,6 +14,7 @@ export function generateMetadata(): Metadata {
     title: meta.title,
     description: meta.description,
     openGraph: { title: meta.title, description: meta.description },
+    alternates: { canonical: "/tattoo-shops" },
   };
 }
 

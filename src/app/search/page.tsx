@@ -31,6 +31,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return {
     title: meta.title,
     description: meta.description,
+    alternates: { canonical: "/search" },
   };
 }
 

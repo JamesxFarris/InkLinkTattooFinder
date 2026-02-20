@@ -80,7 +80,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
         acceptsWalkIns,
         piercingServices,
         status: "pending",
-        userId: parseInt(session.user.id),
+        ownerId: parseInt(session.user.id),
       },
     });
 
