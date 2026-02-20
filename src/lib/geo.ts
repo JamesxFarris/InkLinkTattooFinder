@@ -32,9 +32,13 @@ export function isZipCode(query: string): boolean {
 /** Geocode a US zip code to lat/lng using zippopotam.us (free, no key needed) */
 export async function geocodeZip(zip: string): Promise<GeoResult | null> {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(`https://api.zippopotam.us/us/${zip}`, {
-      next: { revalidate: 86400 }, // cache for 24h
+      signal: controller.signal,
+      cache: "force-cache",
     });
+    clearTimeout(timeout);
     if (!res.ok) return null;
     const data = await res.json();
     const place = data.places?.[0];
