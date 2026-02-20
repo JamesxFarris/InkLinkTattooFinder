@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SignInForm } from "./SignInForm";
 
@@ -16,7 +17,9 @@ export default function SignInPage() {
         <p className="mb-8 text-center text-sm text-stone-400">
           Sign in to manage your listings
         </p>
-        <SignInForm />
+        <Suspense fallback={null}>
+          <SignInForm />
+        </Suspense>
       </div>
     </div>
   );

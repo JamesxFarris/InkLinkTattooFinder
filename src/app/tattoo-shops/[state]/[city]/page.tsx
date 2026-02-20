@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { StatsBar } from "@/components/StatsBar";
@@ -166,13 +167,15 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
             Filter by Style
           </h2>
-          <StyleFilter
-            categories={categories.map((c) => ({
-              id: c.id,
-              name: c.name,
-              slug: c.slug,
-            }))}
-          />
+          <Suspense fallback={null}>
+            <StyleFilter
+              categories={categories.map((c) => ({
+                id: c.id,
+                name: c.name,
+                slug: c.slug,
+              }))}
+            />
+          </Suspense>
         </div>
       )}
 
