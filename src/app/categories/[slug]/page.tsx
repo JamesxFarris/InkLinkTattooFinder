@@ -1,11 +1,12 @@
 export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ListingGrid } from "@/components/ListingGrid";
 import { Pagination } from "@/components/Pagination";
 import { JsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/components/JsonLd";
-import { getCategoryBySlug, getListingsByCategoryNational } from "@/lib/queries";
+import { getCategoryBySlug, getListingsByCategoryNational, getTopCitiesForCategory } from "@/lib/queries";
 import { categoryPageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -35,10 +36,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
-  const { listings, totalPages } = await getListingsByCategoryNational(
-    category.id,
-    page
-  );
+  const [{ listings, totalPages }, topCities] = await Promise.all([
+    getListingsByCategoryNational(category.id, page),
+    getTopCitiesForCategory(category.id, 10),
+  ]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -77,6 +78,31 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           basePath={`/categories/${slug}`}
         />
       </section>
+
+      {/* Top Cities for this Style */}
+      {topCities.length > 0 && (
+        <section className="mt-16">
+          <h2 className="mb-4 text-xl font-bold text-stone-900 dark:text-stone-100">
+            Top Cities for {category.name} Tattoos
+          </h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {topCities.map((city) => (
+              <Link
+                key={city.id}
+                href={`/tattoo-shops/${city.state.slug}/${city.slug}?style=${slug}`}
+                className="rounded-xl border border-stone-200 bg-white p-4 text-center transition-all hover:-translate-y-0.5 hover:border-teal-500/50 hover:shadow-lg dark:border-stone-700 dark:bg-stone-800 dark:hover:border-teal-500/40"
+              >
+                <span className="block text-sm font-semibold text-stone-800 dark:text-stone-200">
+                  {city.name}
+                </span>
+                <span className="mt-0.5 block text-xs text-stone-500 dark:text-stone-400">
+                  {city.state.abbreviation} &middot; {city._count.listings} {city._count.listings === 1 ? "shop" : "shops"}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

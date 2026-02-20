@@ -58,11 +58,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  // City + Category combo pages (long-tail SEO)
+  const cityCategoryCombos = await prisma.listingCategory.findMany({
+    where: { listing: { status: "active" } },
+    select: {
+      category: { select: { slug: true } },
+      listing: {
+        select: {
+          city: { select: { slug: true, state: { select: { slug: true } } } },
+        },
+      },
+    },
+  });
+
+  // Deduplicate by city+state+category combo
+  const comboSet = new Set<string>();
+  const cityCategoryPages: MetadataRoute.Sitemap = [];
+  for (const combo of cityCategoryCombos) {
+    const key = `${combo.listing.city.state.slug}/${combo.listing.city.slug}?style=${combo.category.slug}`;
+    if (!comboSet.has(key)) {
+      comboSet.add(key);
+      cityCategoryPages.push({
+        url: `${baseUrl}/tattoo-shops/${key}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      });
+    }
+  }
+
   return [
     ...staticPages,
     ...statePages,
     ...cityPages,
     ...categoryPages,
     ...listingPages,
+    ...cityCategoryPages,
   ];
 }

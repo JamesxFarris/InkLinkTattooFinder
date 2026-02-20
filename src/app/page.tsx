@@ -6,8 +6,13 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { CityCard } from "@/components/CityCard";
 import { JsonLd, websiteJsonLd, organizationJsonLd, faqJsonLd } from "@/components/JsonLd";
 import { HERO_IMAGE } from "@/lib/images";
-import { getAllCategories, getTopCities, getAllStates } from "@/lib/queries";
+import { getAllCategories, getTopCities, getAllStates, getPopularSearchCombos } from "@/lib/queries";
 import type { FaqItem } from "@/lib/faq";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const homepageFaq: FaqItem[] = [
   {
@@ -45,10 +50,11 @@ const homepageFaq: FaqItem[] = [
 ];
 
 export default async function HomePage() {
-  const [categories, cities, states] = await Promise.all([
+  const [categories, cities, states, popularSearches] = await Promise.all([
     getAllCategories(),
     getTopCities(12),
     getAllStates(),
+    getPopularSearchCombos(12),
   ]);
 
   return (
@@ -195,6 +201,31 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Popular Searches */}
+      {popularSearches.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <h2 className="section-heading font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
+              Popular Searches
+            </h2>
+            <p className="mt-4 text-stone-500 dark:text-stone-400">
+              Explore popular tattoo styles in cities across the US.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {popularSearches.map((combo) => (
+              <Link
+                key={combo.href}
+                href={combo.href}
+                className="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-all hover:-translate-y-0.5 hover:border-teal-500 hover:text-teal-600 hover:shadow-md dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:text-teal-400"
+              >
+                {combo.label}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* FAQ */}
       <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">

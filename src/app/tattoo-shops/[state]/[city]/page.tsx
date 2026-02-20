@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     openGraph: { title: meta.title, description: meta.description },
+    alternates: { canonical: `/tattoo-shops/${stateSlug}/${citySlug}` },
   };
 }
 
@@ -211,6 +212,26 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
       <div className="mt-16">
         <TattooTips />
       </div>
+
+      {/* Browse styles nationwide */}
+      {categories.length > 0 && (
+        <section className="mt-16">
+          <h2 className="mb-4 text-xl font-bold text-stone-900 dark:text-stone-100">
+            Browse Styles Nationwide
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/categories/${cat.slug}`}
+                className="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-teal-500 hover:text-teal-600 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:text-teal-400"
+              >
+                {cat.name} Nationwide
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Other cities */}
       {otherCities.length > 0 && (
