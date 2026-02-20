@@ -51,11 +51,11 @@ export function Footer() {
             </h4>
             <ul className="mt-4 space-y-3">
               {[
-                { name: "New York", path: "/new-york/new-york" },
-                { name: "Los Angeles", path: "/california/los-angeles" },
-                { name: "Chicago", path: "/illinois/chicago" },
-                { name: "Houston", path: "/texas/houston" },
-                { name: "Miami", path: "/florida/miami" },
+                { name: "New York", path: "/tattoo-shops/new-york/new-york" },
+                { name: "Los Angeles", path: "/tattoo-shops/california/los-angeles" },
+                { name: "Chicago", path: "/tattoo-shops/illinois/chicago" },
+                { name: "Houston", path: "/tattoo-shops/texas/houston" },
+                { name: "Miami", path: "/tattoo-shops/florida/miami" },
               ].map((city) => (
                 <li key={city.path}>
                   <Link
@@ -66,6 +66,14 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  href="/tattoo-shops"
+                  className="text-sm font-medium text-teal-500 transition-colors hover:text-teal-400"
+                >
+                  Browse All States
+                </Link>
+              </li>
             </ul>
           </div>
 

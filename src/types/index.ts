@@ -1,4 +1,4 @@
-import type { Listing, Category, City, State } from "@prisma/client";
+import type { Listing, Category, City, State, Claim, User } from "@prisma/client";
 
 export type ListingWithRelations = Listing & {
   city: City & { state: State };
@@ -33,4 +33,11 @@ export type SearchParams = {
 export type BreadcrumbItem = {
   label: string;
   href?: string;
+};
+
+export type ClaimWithRelations = Claim & {
+  user: Pick<User, "id" | "name" | "email">;
+  listing: Listing & {
+    city: City & { state: State };
+  };
 };

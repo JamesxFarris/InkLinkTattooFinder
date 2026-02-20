@@ -8,6 +8,9 @@ import { JsonLd, localBusinessJsonLd, breadcrumbJsonLd } from "@/components/Json
 import { getListingBySlug } from "@/lib/queries";
 import { listingPageMeta } from "@/lib/seo";
 import { formatPhone } from "@/lib/utils";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { ClaimButton } from "@/components/listing/ClaimButton";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -34,6 +37,26 @@ export default async function ListingPage({ params }: Props) {
   const { slug } = await params;
   const listing = await getListingBySlug(slug);
   if (!listing) notFound();
+
+  const session = await auth();
+
+  let existingClaimStatus: "pending" | "approved" | "denied" | null = null;
+  const isOwned = !!listing.ownerId && listing.ownerId === (session ? parseInt(session.user.id) : -1);
+
+  if (session) {
+    const existingClaim = await prisma.claim.findUnique({
+      where: {
+        userId_listingId: {
+          userId: parseInt(session.user.id),
+          listingId: listing.id,
+        },
+      },
+      select: { status: true },
+    });
+    if (existingClaim) {
+      existingClaimStatus = existingClaim.status;
+    }
+  }
 
   const stateSlug = listing.city.state.slug;
   const citySlug = listing.city.slug;
@@ -73,8 +96,9 @@ export default async function ListingPage({ params }: Props) {
 
       <Breadcrumbs
         items={[
-          { label: listing.city.state.name, href: `/${stateSlug}` },
-          { label: listing.city.name, href: `/${stateSlug}/${citySlug}` },
+          { label: "Tattoo Shops", href: "/tattoo-shops" },
+          { label: listing.city.state.name, href: `/tattoo-shops/${stateSlug}` },
+          { label: listing.city.name, href: `/tattoo-shops/${stateSlug}/${citySlug}` },
           { label: listing.name },
         ]}
       />
@@ -129,7 +153,7 @@ export default async function ListingPage({ params }: Props) {
               {listing.categories.map(({ category }) => (
                 <Link
                   key={category.id}
-                  href={`/${stateSlug}/${citySlug}/${category.slug}`}
+                  href={`/tattoo-shops/${stateSlug}/${citySlug}?style=${category.slug}`}
                 >
                   <Badge variant="default">{category.name}</Badge>
                 </Link>
@@ -216,6 +240,13 @@ export default async function ListingPage({ params }: Props) {
               )}
             </div>
           </div>
+
+          {/* Claim this Business */}
+          <ClaimButton
+            listingId={listing.id}
+            existingClaimStatus={existingClaimStatus}
+            isOwned={isOwned}
+          />
 
           {/* Hours */}
           {hours && (

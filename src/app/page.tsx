@@ -4,7 +4,6 @@ import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CityCard } from "@/components/CityCard";
-import { CityFaq } from "@/components/CityFaq";
 import { JsonLd, websiteJsonLd, organizationJsonLd, faqJsonLd } from "@/components/JsonLd";
 import { HERO_IMAGE } from "@/lib/images";
 import { getAllCategories, getTopCities, getAllStates } from "@/lib/queries";
@@ -207,7 +206,18 @@ export default async function HomePage() {
             Everything you need to know about finding and getting tattoos.
           </p>
         </div>
-        <CityFaq items={homepageFaq} />
+        <div className="space-y-6">
+          {homepageFaq.map((faq) => (
+            <div key={faq.question}>
+              <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
+                {faq.question}
+              </h3>
+              <p className="mt-2 leading-relaxed text-stone-600 dark:text-stone-400">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* CTA Section */}
@@ -221,10 +231,10 @@ export default async function HomePage() {
             looking for their next tattoo artist.
           </p>
           <a
-            href="/contact"
+            href="/register"
             className="mt-8 inline-flex rounded-full bg-teal-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:bg-teal-600 hover:shadow-xl hover:shadow-teal-500/30"
           >
-            List Your Shop
+            Claim Your Shop
           </a>
         </div>
       </section>

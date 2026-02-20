@@ -1,39 +1,33 @@
+import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export async function middleware(req: NextRequest) {
+export default auth((req) => {
   const { pathname } = req.nextUrl;
 
-  // Read the session token cookie (next-auth uses this name)
-  const token =
-    req.cookies.get("authjs.session-token")?.value ||
-    req.cookies.get("__Secure-authjs.session-token")?.value;
-
-  const isLoggedIn = !!token;
-
-  // Redirect auth pages to dashboard if already logged in
-  if ((pathname === "/sign-in" || pathname === "/sign-up") && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+  // Dashboard routes require login
+  if (pathname.startsWith("/dashboard")) {
+    if (!req.auth) {
+      const loginUrl = new URL("/login", req.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
-  // Protect routes that require authentication
-  if (
-    (pathname.startsWith("/dashboard") || pathname.startsWith("/list-your-shop")) &&
-    !isLoggedIn
-  ) {
-    const signInUrl = new URL("/sign-in", req.url);
-    signInUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(signInUrl);
+  // Admin routes require login + admin role
+  if (pathname.startsWith("/admin")) {
+    if (!req.auth) {
+      const loginUrl = new URL("/login", req.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    if (req.auth.user.role !== "admin") {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/list-your-shop/:path*",
-    "/sign-in",
-    "/sign-up",
-  ],
+  matcher: ["/dashboard/:path*", "/admin/:path*"],
 };

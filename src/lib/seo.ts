@@ -8,17 +8,27 @@ export function homePageMeta() {
   };
 }
 
-export function statePageMeta(stateName: string) {
+export function statesIndexMeta() {
   return {
-    title: `Tattoo Shops & Artists in ${stateName} | ${SITE_NAME}`,
-    description: `Find the best tattoo shops and artists in ${stateName}. Browse by city, style, and read reviews to find your perfect tattoo artist.`,
+    title: `Browse Tattoo Shops by State | ${SITE_NAME}`,
+    description:
+      "Browse tattoo shops and artists in every US state. Find top-rated tattoo parlors near you organized by state and city.",
   };
 }
 
-export function cityPageMeta(cityName: string, stateAbbr: string) {
+export function statePageMeta(stateName: string, listingCount?: number) {
+  const countStr = listingCount ? `${listingCount} ` : "";
   return {
-    title: `Best Tattoo Shops in ${cityName}, ${stateAbbr} | ${SITE_NAME}`,
-    description: `Discover top-rated tattoo shops and artists in ${cityName}, ${stateAbbr}. Browse portfolios, compare styles, and find your perfect tattoo artist.`,
+    title: `Best Tattoo Shops & Artists in ${stateName} | ${SITE_NAME}`,
+    description: `Discover ${countStr}top-rated tattoo shops and artists in ${stateName}. Browse by city, compare styles, read reviews, and find your perfect tattoo artist.`,
+  };
+}
+
+export function cityPageMeta(cityName: string, stateAbbr: string, count?: number) {
+  const countStr = count ? `${count} ` : "";
+  return {
+    title: `${countStr}Best Tattoo Shops in ${cityName}, ${stateAbbr} | ${SITE_NAME}`,
+    description: `Discover the ${countStr}best tattoo shops and artists in ${cityName}, ${stateAbbr}. View ratings, hours, walk-in availability, styles, and more.`,
   };
 }
 

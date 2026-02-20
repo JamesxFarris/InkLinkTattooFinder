@@ -1,98 +1,59 @@
 import Link from "next/link";
-import { StatesDropdown } from "./StatesDropdown";
-import { NavSearch } from "./NavSearch";
-import { UserMenu } from "./UserMenu";
-import { getAllStates } from "@/lib/queries";
+import { auth } from "@/lib/auth";
+import { UserMenu } from "@/components/auth/UserMenu";
 
 function LogoMark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 48 48"
+      viewBox="0 0 36 36"
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* Ink swirl circle */}
+      {/* Ornate diamond frame */}
       <path
-        d="M38 18c2 6 1 13-4 18s-13 6-19 3"
-        stroke="#14B8A6"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M10 30c-2-6-1-13 4-18s13-6 19-3"
-        stroke="#14B8A6"
-        strokeWidth="2"
-        strokeLinecap="round"
-        fill="none"
-        opacity="0.6"
-      />
-      {/* Splash accents */}
-      <path
-        d="M37 14c1-2 3-3 4-2"
-        stroke="#14B8A6"
+        d="M18 3L33 18L18 33L3 18Z"
+        stroke="currentColor"
         strokeWidth="1.5"
-        strokeLinecap="round"
         fill="none"
-        opacity="0.5"
       />
+      {/* Inner diamond */}
       <path
-        d="M8 35c-1 1-2 3-1 4"
-        stroke="#14B8A6"
-        strokeWidth="1.5"
-        strokeLinecap="round"
+        d="M18 9L27 18L18 27L9 18Z"
+        stroke="currentColor"
+        strokeWidth="0.75"
         fill="none"
         opacity="0.4"
       />
-      {/* Ink splatter dots */}
-      <circle cx="40" cy="11" r="1.2" fill="#14B8A6" opacity="0.5" />
-      <circle cx="42" cy="15" r="0.8" fill="#14B8A6" opacity="0.4" />
-      <circle cx="6" cy="37" r="1" fill="#14B8A6" opacity="0.4" />
-      <circle cx="4" cy="33" r="0.7" fill="#14B8A6" opacity="0.3" />
-      {/* Tattoo pen body */}
-      <rect
-        x="17.5"
-        y="8"
-        width="6"
-        height="18"
-        rx="1.5"
-        transform="rotate(35 20.5 17)"
-        fill="#374151"
-        stroke="#1f2937"
-        strokeWidth="0.5"
-      />
-      {/* Pen grip bands */}
-      <line x1="18" y1="18" x2="22" y2="15" stroke="#6b7280" strokeWidth="0.8" opacity="0.6" />
-      <line x1="19" y1="20" x2="23" y2="17" stroke="#6b7280" strokeWidth="0.8" opacity="0.6" />
-      <line x1="20" y1="22" x2="24" y2="19" stroke="#6b7280" strokeWidth="0.8" opacity="0.6" />
-      {/* Pen tip / needle */}
+      {/* Tattoo needle — diagonal through center */}
       <line
-        x1="26"
-        y1="28"
-        x2="30"
-        y2="34"
-        stroke="#1f2937"
+        x1="11"
+        y1="11"
+        x2="25"
+        y2="25"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
-      {/* Ink drop at tip */}
-      <circle cx="31" cy="35.5" r="1.8" fill="#14B8A6" />
-      {/* Pen top detail */}
-      <circle cx="14.5" cy="11" r="0.8" fill="#6b7280" />
-      <circle cx="16" cy="9.5" r="0.8" fill="#6b7280" />
+      {/* Needle tip (ink drop) */}
+      <circle cx="25.5" cy="25.5" r="2" fill="currentColor" />
+      {/* Grip detail lines */}
+      <line x1="14" y1="16" x2="16" y2="14" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
+      <line x1="16" y1="18" x2="18" y2="16" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
+      <line x1="18" y1="20" x2="20" y2="18" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
+      {/* Corner ornaments */}
+      <circle cx="18" cy="3" r="1" fill="currentColor" />
+      <circle cx="33" cy="18" r="1" fill="currentColor" />
+      <circle cx="18" cy="33" r="1" fill="currentColor" />
+      <circle cx="3" cy="18" r="1" fill="currentColor" />
     </svg>
   );
 }
 
 export async function Header() {
-  let states: Awaited<ReturnType<typeof getAllStates>> = [];
-  try {
-    states = await getAllStates();
-  } catch {
-    // DB unavailable during static pre-rendering
-  }
+  const session = await auth();
+
   return (
     <header className="sticky top-0 z-50 border-b border-stone-200/60 bg-stone-950/95 backdrop-blur-lg dark:border-stone-800/40 dark:bg-stone-950/95">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -109,15 +70,11 @@ export async function Header() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
-          <StatesDropdown states={states.map((s) => ({
-            name: s.name,
-            slug: s.slug,
-            abbreviation: s.abbreviation,
-            _count: { listings: s._count.listings },
-          }))} />
           {[
+            { href: "/tattoo-shops", label: "Browse States" },
             { href: "/categories", label: "Styles" },
-            { href: "/contact", label: "Contact" },
+            { href: "/search", label: "Search" },
+            { href: "/about", label: "About" },
           ].map((link) => (
             <Link
               key={link.href}
@@ -130,13 +87,21 @@ export async function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <NavSearch />
-          <UserMenu />
+          {session ? (
+            <UserMenu />
+          ) : (
+            <Link
+              href="/login"
+              className="text-sm font-medium text-stone-400 transition-colors hover:text-teal-400"
+            >
+              Sign In
+            </Link>
+          )}
           <Link
-            href="/list-your-shop"
+            href="/search"
             className="rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20"
           >
-            Add Your Shop
+            Find a Shop
           </Link>
         </div>
       </div>

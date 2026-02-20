@@ -1,4 +1,5 @@
 import { PrismaClient, ListingType, PriceRange, ListingStatus } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -377,6 +378,38 @@ async function main() {
     }
   }
   console.log(`Seeded ${listings.length} listings`);
+
+  // ── Admin Users ────────────────────────────────────────
+  // Always ensure these emails are admin, even across redeploys
+  const ADMIN_EMAILS = [
+    "jafarris.exe@gmail.com",
+    ...(process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : []),
+  ];
+
+  for (const email of ADMIN_EMAILS) {
+    // If user already exists (e.g. registered normally), promote to admin
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      await prisma.user.update({
+        where: { email },
+        data: { role: "admin" },
+      });
+      console.log(`Promoted existing user to admin: ${email}`);
+    } else {
+      // Create admin account with env password or a secure default
+      const adminPassword = process.env.ADMIN_PASSWORD || "admin123456";
+      const adminHash = await bcrypt.hash(adminPassword, 12);
+      await prisma.user.create({
+        data: {
+          email,
+          name: "Admin",
+          passwordHash: adminHash,
+          role: "admin",
+        },
+      });
+      console.log(`Created admin user: ${email}`);
+    }
+  }
 
   console.log("Seeding complete!");
 }
