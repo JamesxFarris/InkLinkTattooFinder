@@ -5,19 +5,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 type FilterOption = { label: string; value: string };
 
-const priceOptions: FilterOption[] = [
-  { label: "$ Budget", value: "budget" },
-  { label: "$$ Moderate", value: "moderate" },
-  { label: "$$$ Premium", value: "premium" },
-  { label: "$$$$ Luxury", value: "luxury" },
-];
-
-const priceSteps = [
-  { label: "Any", value: "" },
-  { label: "$", value: "budget" },
-  { label: "$$", value: "moderate" },
-  { label: "$$$", value: "premium" },
-  { label: "$$$$", value: "luxury" },
+const priceTiers = [
+  { symbol: "$", label: "Budget", desc: "$80–150/hr", value: "budget" },
+  { symbol: "$$", label: "Moderate", desc: "$150–250/hr", value: "moderate" },
+  { symbol: "$$$", label: "Premium", desc: "$250–400/hr", value: "premium" },
+  { symbol: "$$$$", label: "Luxury", desc: "$400+/hr", value: "luxury" },
 ];
 
 const sortOptions: FilterOption[] = [
@@ -118,43 +110,57 @@ function MobileStyleDropdown({
   );
 }
 
-// ── Price Range Slider (mobile) ───────────────────────────
+// ── Price Tier Buttons (mobile) ───────────────────────────
 
-function MobilePriceSlider({
+function MobilePriceTiers({
   currentValue,
   onChange,
 }: {
   currentValue: string;
   onChange: (value: string | null) => void;
 }) {
-  const currentIndex = priceSteps.findIndex((s) => s.value === currentValue);
-  const sliderValue = currentIndex >= 0 ? currentIndex : 0;
-
   return (
-    <div>
-      <input
-        type="range"
-        min={0}
-        max={priceSteps.length - 1}
-        step={1}
-        value={sliderValue}
-        onChange={(e) => {
-          const idx = parseInt(e.target.value, 10);
-          const step = priceSteps[idx];
-          onChange(step.value || null);
-        }}
-        className="price-slider w-full"
-      />
-      <div className="mt-1 flex justify-between px-0.5">
-        {priceSteps.map((step) => (
-          <span
-            key={step.value || "any"}
-            className="text-xs text-stone-400"
+    <div className="space-y-2">
+      <button
+        type="button"
+        onClick={() => onChange(null)}
+        className={`flex w-full items-center rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${
+          !currentValue
+            ? "border-teal-500 bg-teal-500/10 font-medium text-teal-400"
+            : "border-stone-700 bg-stone-900 text-stone-300 active:bg-stone-800"
+        }`}
+      >
+        Any Price
+      </button>
+      {priceTiers.map((tier) => {
+        const active = currentValue === tier.value;
+        return (
+          <button
+            key={tier.value}
+            type="button"
+            onClick={() => onChange(active ? null : tier.value)}
+            className={`flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors ${
+              active
+                ? "border-teal-500 bg-teal-500/10"
+                : "border-stone-700 bg-stone-900 active:bg-stone-800"
+            }`}
           >
-            {step.label}
-          </span>
-        ))}
-      </div>
+            <span
+              className={`text-sm font-semibold ${active ? "text-teal-400" : "text-stone-200"}`}
+            >
+              {tier.symbol}
+            </span>
+            <span className="flex flex-col">
+              <span
+                className={`text-sm ${active ? "font-medium text-teal-400" : "text-stone-300"}`}
+              >
+                {tier.label}
+              </span>
+              <span className="text-xs text-stone-500">{tier.desc}</span>
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -270,9 +276,9 @@ export function FilterSidebar({
           Price Range
         </h3>
 
-        {/* Mobile slider */}
+        {/* Mobile price buttons */}
         <div className="lg:hidden">
-          <MobilePriceSlider
+          <MobilePriceTiers
             currentValue={currentPrice}
             onChange={(val) => updateParam("price", val)}
           />
@@ -290,17 +296,18 @@ export function FilterSidebar({
           >
             Any Price
           </button>
-          {priceOptions.map((opt) => (
+          {priceTiers.map((tier) => (
             <button
-              key={opt.value}
-              onClick={() => updateParam("price", opt.value)}
-              className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
-                currentPrice === opt.value
+              key={tier.value}
+              onClick={() => updateParam("price", tier.value)}
+              className={`flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
+                currentPrice === tier.value
                   ? "bg-teal-50 font-medium text-teal-600 dark:bg-teal-950 dark:text-teal-300"
                   : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
               }`}
             >
-              {opt.label}
+              <span>{tier.symbol} {tier.label}</span>
+              <span className="ml-auto text-xs text-stone-500">{tier.desc}</span>
             </button>
           ))}
         </div>
