@@ -1,12 +1,6 @@
 import Link from "next/link";
-import { getTopCitiesWithListings, getTopStatesByListingCount } from "@/lib/queries";
 
-export async function Footer() {
-  const [topCities, topStates] = await Promise.all([
-    getTopCitiesWithListings(10),
-    getTopStatesByListingCount(8),
-  ]);
-
+export function Footer() {
   return (
     <footer className="border-t border-stone-200 bg-stone-950 dark:border-stone-800 dark:bg-stone-950" role="contentinfo">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -56,13 +50,24 @@ export async function Footer() {
               Top Cities
             </h4>
             <ul className="mt-4 space-y-3">
-              {topCities.map((city) => (
-                <li key={city.id}>
+              {[
+                { name: "New York", path: "/tattoo-shops/new-york/new-york" },
+                { name: "Los Angeles", path: "/tattoo-shops/california/los-angeles" },
+                { name: "Chicago", path: "/tattoo-shops/illinois/chicago" },
+                { name: "Houston", path: "/tattoo-shops/texas/houston" },
+                { name: "Phoenix", path: "/tattoo-shops/arizona/phoenix" },
+                { name: "Philadelphia", path: "/tattoo-shops/pennsylvania/philadelphia" },
+                { name: "San Antonio", path: "/tattoo-shops/texas/san-antonio" },
+                { name: "San Diego", path: "/tattoo-shops/california/san-diego" },
+                { name: "Dallas", path: "/tattoo-shops/texas/dallas" },
+                { name: "Miami", path: "/tattoo-shops/florida/miami" },
+              ].map((city) => (
+                <li key={city.path}>
                   <Link
-                    href={`/tattoo-shops/${city.state.slug}/${city.slug}`}
+                    href={city.path}
                     className="text-sm text-stone-500 transition-colors hover:text-teal-500 dark:text-stone-400 dark:hover:text-teal-400"
                   >
-                    {city.name}, {city.state.abbreviation}
+                    {city.name}
                   </Link>
                 </li>
               ))}
@@ -83,8 +88,17 @@ export async function Footer() {
               Browse by State
             </h4>
             <ul className="mt-4 space-y-3">
-              {topStates.map((state) => (
-                <li key={state.id}>
+              {[
+                { name: "California", slug: "california" },
+                { name: "Texas", slug: "texas" },
+                { name: "Florida", slug: "florida" },
+                { name: "New York", slug: "new-york" },
+                { name: "Illinois", slug: "illinois" },
+                { name: "Pennsylvania", slug: "pennsylvania" },
+                { name: "Arizona", slug: "arizona" },
+                { name: "Georgia", slug: "georgia" },
+              ].map((state) => (
+                <li key={state.slug}>
                   <Link
                     href={`/tattoo-shops/${state.slug}`}
                     className="text-sm text-stone-500 transition-colors hover:text-teal-500 dark:text-stone-400 dark:hover:text-teal-400"
