@@ -110,57 +110,83 @@ function MobileStyleDropdown({
   );
 }
 
-// ── Price Tier Buttons (mobile) ───────────────────────────
+// ── Price Dropdown (mobile) ───────────────────────────────
 
-function MobilePriceTiers({
+function MobilePriceDropdown({
   currentValue,
   onChange,
 }: {
   currentValue: string;
   onChange: (value: string | null) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const selected = priceTiers.find((t) => t.value === currentValue);
+  const label = selected ? `${selected.symbol} ${selected.label}` : "Any Price";
+
   return (
-    <div className="space-y-2">
+    <div ref={ref} className="relative">
       <button
         type="button"
-        onClick={() => onChange(null)}
-        className={`flex w-full items-center rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${
-          !currentValue
-            ? "border-teal-500 bg-teal-500/10 font-medium text-teal-400"
-            : "border-stone-700 bg-stone-900 text-stone-300 active:bg-stone-800"
-        }`}
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between rounded-lg border border-stone-700 bg-stone-900 px-3 py-2 text-sm text-stone-100"
       >
-        Any Price
+        <span className="truncate">{label}</span>
+        <svg
+          className={`ml-2 h-4 w-4 shrink-0 text-stone-400 transition-transform ${open ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
-      {priceTiers.map((tier) => {
-        const active = currentValue === tier.value;
-        return (
+
+      {open && (
+        <div className="absolute left-0 z-50 mt-1 w-full overflow-y-auto rounded-lg border border-stone-700 bg-stone-900 py-1 shadow-lg">
           <button
-            key={tier.value}
             type="button"
-            onClick={() => onChange(active ? null : tier.value)}
-            className={`flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors ${
-              active
-                ? "border-teal-500 bg-teal-500/10"
-                : "border-stone-700 bg-stone-900 active:bg-stone-800"
+            onClick={() => { onChange(null); setOpen(false); }}
+            className={`flex w-full items-center px-3 py-2 text-left text-sm ${
+              !currentValue
+                ? "font-medium text-teal-400 bg-stone-800"
+                : "text-stone-200 hover:bg-stone-800"
             }`}
           >
-            <span
-              className={`text-sm font-semibold ${active ? "text-teal-400" : "text-stone-200"}`}
-            >
-              {tier.symbol}
-            </span>
-            <span className="flex flex-col">
-              <span
-                className={`text-sm ${active ? "font-medium text-teal-400" : "text-stone-300"}`}
-              >
-                {tier.label}
-              </span>
-              <span className="text-xs text-stone-500">{tier.desc}</span>
-            </span>
+            Any Price
           </button>
-        );
-      })}
+          {priceTiers.map((tier) => {
+            const active = currentValue === tier.value;
+            return (
+              <button
+                key={tier.value}
+                type="button"
+                onClick={() => { onChange(tier.value); setOpen(false); }}
+                className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm ${
+                  active
+                    ? "font-medium text-teal-400 bg-stone-800"
+                    : "text-stone-200 hover:bg-stone-800"
+                }`}
+              >
+                <span>{tier.symbol} {tier.label}</span>
+                <span className="text-xs text-stone-500">{tier.desc}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -276,9 +302,9 @@ export function FilterSidebar({
           Price Range
         </h3>
 
-        {/* Mobile price buttons */}
+        {/* Mobile price dropdown */}
         <div className="lg:hidden">
-          <MobilePriceTiers
+          <MobilePriceDropdown
             currentValue={currentPrice}
             onChange={(val) => updateParam("price", val)}
           />
