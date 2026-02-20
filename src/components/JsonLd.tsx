@@ -173,23 +173,22 @@ export function localBusinessJsonLd(listing: {
   return data;
 }
 
-export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
-  const allItems: { label: string; href?: string }[] = [
-    { label: "Home", href: "/" },
-    ...items,
-  ];
-
+export function breadcrumbJsonLd(
+  items: { name: string; url: string }[] | BreadcrumbItem[]
+) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: allItems.map((item, i) => {
+    itemListElement: items.map((item, i) => {
+      const name = "name" in item ? item.name : item.label;
+      const url = "url" in item ? item.url : item.href ? `${SITE_URL}${item.href}` : undefined;
       const element: Record<string, unknown> = {
         "@type": "ListItem",
         position: i + 1,
-        name: item.label,
+        name,
       };
-      if (item.href) {
-        element.item = `${SITE_URL}${item.href}`;
+      if (url) {
+        element.item = url;
       }
       return element;
     }),

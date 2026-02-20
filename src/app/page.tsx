@@ -178,7 +178,7 @@ export default async function HomePage() {
             {states.map((state) => (
               <Link
                 key={state.id}
-                href={`/${state.slug}`}
+                href={`/tattoo-shops/${state.slug}`}
                 className="group flex h-24 w-[calc(50%-0.375rem)] flex-col items-center justify-center rounded-xl border border-stone-200/60 bg-white text-center transition-all hover:-translate-y-0.5 hover:border-teal-500/50 hover:shadow-lg sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.5625rem)] lg:w-[calc(20%-0.6rem)] xl:w-[calc(16.666%-0.625rem)] dark:border-stone-700/50 dark:bg-stone-800/60 dark:hover:border-teal-500/40"
               >
                 <span className="text-xs font-bold tracking-widest text-teal-500 dark:text-teal-400">
