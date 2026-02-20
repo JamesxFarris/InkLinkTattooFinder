@@ -300,9 +300,22 @@ export async function searchListings(params: {
   }
 
   if (categorySlug) {
-    const category = await prisma.category.findUnique({ where: { slug: categorySlug } });
-    if (category) {
-      where.categories = { some: { categoryId: category.id } };
+    const slugs = categorySlug.split(",").filter(Boolean);
+    if (slugs.length === 1) {
+      const category = await prisma.category.findUnique({ where: { slug: slugs[0] } });
+      if (category) {
+        where.categories = { some: { categoryId: category.id } };
+      }
+    } else if (slugs.length > 1) {
+      const categories = await prisma.category.findMany({
+        where: { slug: { in: slugs } },
+        select: { id: true },
+      });
+      if (categories.length > 0) {
+        where.categories = {
+          some: { categoryId: { in: categories.map((c) => c.id) } },
+        };
+      }
     }
   }
 
