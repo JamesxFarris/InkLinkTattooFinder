@@ -28,13 +28,13 @@ export const CITY_IMAGES: Record<string, string> = {
   miami:
     "https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?auto=format&fit=crop&w=800&q=80",
   phoenix:
-    "https://images.unsplash.com/photo-1558645836-e44122a743ee?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1729041534038-fdc1f9cf3d3a?auto=format&fit=crop&w=800&q=80",
   philadelphia:
     "https://images.unsplash.com/photo-1569761316261-9a8696fa2ca3?auto=format&fit=crop&w=800&q=80",
   "san-antonio":
     "https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=800&q=80",
   "san-diego":
-    "https://images.unsplash.com/photo-1538097304804-2a1b932b78eb?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1694381931182-6ae3545ab0e3?auto=format&fit=crop&w=800&q=80",
   dallas:
     "https://images.unsplash.com/photo-1545194445-dddb8f4487c6?auto=format&fit=crop&w=800&q=80",
   austin:
