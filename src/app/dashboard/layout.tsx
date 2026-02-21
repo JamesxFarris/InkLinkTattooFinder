@@ -8,7 +8,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  if (!session) redirect("/sign-in");
+  if (!session) redirect("/login");
 
   const isAdmin = session.user.role === "admin";
 
@@ -36,6 +36,12 @@ export default async function DashboardLayout({
                 className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-stone-100 hover:text-teal-700 dark:text-teal-400 dark:hover:bg-stone-800 dark:hover:text-teal-300"
               >
                 All Listings
+              </Link>
+              <Link
+                href="/dashboard/admin/cities"
+                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-stone-100 hover:text-teal-700 dark:text-teal-400 dark:hover:bg-stone-800 dark:hover:text-teal-300"
+              >
+                Manage Cities
               </Link>
               <Link
                 href="/admin"
