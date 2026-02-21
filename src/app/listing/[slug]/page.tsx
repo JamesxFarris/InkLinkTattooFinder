@@ -114,10 +114,6 @@ export default async function ListingPage({ params }: Props) {
         ]}
       />
 
-      {photos && photos.length > 0 && (
-        <PhotoGallery photos={photos} featured={listing.featured} />
-      )}
-
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Main Content */}
         <div className="lg:col-span-2">
@@ -238,6 +234,11 @@ export default async function ListingPage({ params }: Props) {
               ))}
             </div>
           </div>
+
+          {/* Photos */}
+          {photos && photos.length > 0 && (
+            <PhotoGallery photos={photos} featured={listing.featured} />
+          )}
 
           {/* Map */}
           {listing.latitude && listing.longitude && (

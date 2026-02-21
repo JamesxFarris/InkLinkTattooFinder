@@ -20,36 +20,43 @@ export function PhotoGallery({
   return (
     <>
       {/* Grid */}
-      <div className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="mt-6 grid grid-cols-3 gap-1.5 overflow-hidden rounded-xl">
         {/* Hero — first image spans 2 cols + 2 rows */}
         <div
-          className="relative col-span-2 row-span-2 aspect-[4/3] cursor-pointer overflow-hidden rounded-xl"
+          className="relative col-span-2 row-span-2 aspect-[4/3] cursor-pointer overflow-hidden"
           onClick={() => setLightboxIndex(0)}
         >
           <Image
             src={items[0]}
             alt="Photo 1"
             fill
+            unoptimized
             className="object-cover transition-transform duration-300 hover:scale-105"
-            sizes="(max-width: 640px) 100vw, 50vw"
-            priority
+            sizes="(max-width: 640px) 66vw, 400px"
           />
         </div>
 
         {/* Thumbnails */}
-        {items.slice(1).map((src, i) => (
+        {items.slice(1, 5).map((src, i) => (
           <div
             key={i}
-            className="relative aspect-square cursor-pointer overflow-hidden rounded-xl"
+            className="relative aspect-square cursor-pointer overflow-hidden"
             onClick={() => setLightboxIndex(i + 1)}
           >
             <Image
               src={src}
               alt={`Photo ${i + 2}`}
               fill
+              unoptimized
               className="object-cover transition-transform duration-300 hover:scale-105"
-              sizes="(max-width: 640px) 50vw, 25vw"
+              sizes="(max-width: 640px) 33vw, 200px"
             />
+            {/* "+N more" overlay on last visible thumbnail */}
+            {i === 3 && items.length > 5 && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
+                +{items.length - 5} more
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -60,7 +67,6 @@ export function PhotoGallery({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
           onClick={() => setLightboxIndex(null)}
         >
-          {/* Close */}
           <button
             onClick={() => setLightboxIndex(null)}
             className="absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
@@ -71,7 +77,6 @@ export function PhotoGallery({
             </svg>
           </button>
 
-          {/* Prev */}
           {items.length > 1 && (
             <button
               onClick={(e) => {
@@ -89,7 +94,6 @@ export function PhotoGallery({
             </button>
           )}
 
-          {/* Image */}
           <div
             className="relative max-h-[85vh] max-w-[90vw]"
             onClick={(e) => e.stopPropagation()}
@@ -99,6 +103,7 @@ export function PhotoGallery({
               alt={`Photo ${lightboxIndex + 1}`}
               width={1200}
               height={800}
+              unoptimized
               className="max-h-[85vh] w-auto rounded-lg object-contain"
             />
             <div className="mt-2 text-center text-sm text-white/60">
@@ -106,7 +111,6 @@ export function PhotoGallery({
             </div>
           </div>
 
-          {/* Next */}
           {items.length > 1 && (
             <button
               onClick={(e) => {

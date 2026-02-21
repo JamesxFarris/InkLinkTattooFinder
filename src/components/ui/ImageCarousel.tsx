@@ -58,7 +58,7 @@ export function ImageCarousel({
 
   return (
     <div
-      className={`group/carousel relative ${className}`}
+      className={`group/carousel relative h-full w-full ${className}`}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -67,6 +67,7 @@ export function ImageCarousel({
         src={images[current]}
         alt={`${alt} — photo ${current + 1}`}
         fill
+        unoptimized
         className="object-cover transition-transform duration-500 group-hover:scale-105"
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
       />
