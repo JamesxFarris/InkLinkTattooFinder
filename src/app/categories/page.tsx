@@ -13,8 +13,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/categories" },
 };
 
+const removedSlugs = new Set(["color-specialist", "black-and-grey", "custom-design", "tattoo-supplies", "aftercare-products"]);
+
 export default async function CategoriesPage() {
-  const categories = await getAllCategories();
+  const allCategories = await getAllCategories();
+  const categories = allCategories.filter((c) => !removedSlugs.has(c.slug));
 
   const shopStyles = categories.filter((c) => c.type === "shop");
   const additionalServices = categories.filter((c) => c.type === "artist" || c.type === "supplier");
