@@ -11,42 +11,7 @@ function LogoMark({ className }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* Ink swirl */}
-      <path
-        d="M38 18c2 6 1 13-4 18s-13 6-19 3"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <path
-        d="M10 30c-2-6-1-13 4-18s13-6 19-3"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        opacity="0.5"
-      />
-      {/* Pen body */}
-      <rect
-        x="17.5"
-        y="8"
-        width="6"
-        height="18"
-        rx="1.5"
-        transform="rotate(35 20.5 17)"
-        fill="#9ca3af"
-      />
-      {/* Needle */}
-      <line
-        x1="26"
-        y1="28"
-        x2="30"
-        y2="34"
-        stroke="#d1d5db"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      {/* Ink drop */}
-      <circle cx="31" cy="35.5" r="2.2" fill="currentColor" />
+      <circle cx="24" cy="24" r="22" fill="currentColor" />
     </svg>
   );
 }
