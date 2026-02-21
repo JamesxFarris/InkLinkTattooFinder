@@ -21,7 +21,7 @@ export async function Header() {
   const session = await auth();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-stone-200/60 bg-white/95 backdrop-blur-lg dark:border-stone-800/40 dark:bg-stone-950/95">
+    <header className="sticky top-0 z-50 border-b border-stone-200/60 bg-stone-50 md:bg-white/95 md:backdrop-blur-lg dark:border-stone-800/40 dark:bg-stone-950 dark:md:bg-stone-950/95">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2.5" aria-label="InkLink Tattoo Finder — Home">
           <LogoMark className="h-8 w-8 text-teal-500 dark:text-teal-500" />
