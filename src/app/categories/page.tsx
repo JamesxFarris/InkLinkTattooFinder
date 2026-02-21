@@ -17,8 +17,7 @@ export default async function CategoriesPage() {
   const categories = await getAllCategories();
 
   const shopStyles = categories.filter((c) => c.type === "shop");
-  const artistSpecs = categories.filter((c) => c.type === "artist");
-  const suppliers = categories.filter((c) => c.type === "supplier");
+  const additionalServices = categories.filter((c) => c.type === "artist" || c.type === "supplier");
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -59,32 +58,14 @@ export default async function CategoriesPage() {
         </div>
       </section>
 
-      {/* Artist Specializations */}
-      {artistSpecs.length > 0 && (
+      {/* Additional Services */}
+      {additionalServices.length > 0 && (
         <section className="mt-10">
           <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
-            Artist Specializations
+            Additional Services
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {artistSpecs.map((category) => (
-              <CategoryCard
-                key={category.id}
-                category={category}
-                href={`/categories/${category.slug}`}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Services & Suppliers */}
-      {suppliers.length > 0 && (
-        <section className="mt-10">
-          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
-            Services & Suppliers
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {suppliers.map((category) => (
+            {additionalServices.map((category) => (
               <CategoryCard
                 key={category.id}
                 category={category}
