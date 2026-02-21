@@ -31,14 +31,28 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
           </span>
         )}
 
+        {/* Verified badge */}
+        {listing.ownerId && (
+          <span className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-teal-600 px-2.5 py-1 text-xs font-semibold text-white shadow-lg">
+            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Verified
+          </span>
+        )}
+
         {/* Rating overlay */}
-        {listing.googleRating && (
+        {listing.googleRating ? (
           <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-1 text-sm font-medium text-stone-900 backdrop-blur-sm dark:bg-stone-900/90 dark:text-stone-100">
             <span className="text-amber-500" aria-hidden="true">&#9733;</span>
             <span>{listing.googleRating}</span>
             {listing.googleReviewCount && (
               <span className="text-stone-400">({listing.googleReviewCount})</span>
             )}
+          </div>
+        ) : (
+          <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-sm font-medium text-stone-500 backdrop-blur-sm dark:bg-stone-900/90 dark:text-stone-400">
+            Not rated
           </div>
         )}
       </div>

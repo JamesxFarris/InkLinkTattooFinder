@@ -39,18 +39,18 @@
 }
 
 :root {
-  color-scheme: dark;
-  --background: #0F1117;
-  --foreground: #F1F5F9;
-  --muted: #1A1D27;
-  --muted-foreground: #94A3B8;
-  --border: #2A2F3C;
+  color-scheme: light;
+  --background: #F8FAFC;
+  --foreground: #1A1D27;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --border: #E2E8F0;
   --primary: #14B8A6;
   --primary-foreground: #ffffff;
-  --accent: #F1F5F9;
-  --accent-foreground: #0F1117;
-  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --card-shadow-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+  --accent: #0F1117;
+  --accent-foreground: #F1F5F9;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 8px 16px -8px rgba(0, 0, 0, 0.08);
 }
 
 body {

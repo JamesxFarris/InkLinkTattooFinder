@@ -8,7 +8,7 @@ import { StatsBar } from "@/components/StatsBar";
 import { ListingGrid } from "@/components/ListingGrid";
 import { ListingCard } from "@/components/ListingCard";
 import { StyleFilter } from "@/components/StyleFilter";
-import { CityFAQ, getCityFaqData } from "@/components/CityFAQ";
+import { CityFAQ, getCityFaqData } from "@/components/CityFaq";
 import { TattooTips } from "@/components/TattooTips";
 import { CityCard } from "@/components/CityCard";
 import {
@@ -164,6 +164,16 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
               }))}
             />
           </Suspense>
+        </div>
+      )}
+
+      {/* Verified legend */}
+      {listings.some((l) => l.ownerId) && (
+        <div className="mt-8 flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
+          <svg className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>= Owner Verified</span>
         </div>
       )}
 
