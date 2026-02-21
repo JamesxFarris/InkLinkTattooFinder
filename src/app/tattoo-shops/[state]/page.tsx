@@ -18,6 +18,7 @@ import {
   getAllStates,
   getPopularCategoriesInState,
 } from "@/lib/queries";
+import { getCityImageUrl } from "@/lib/images";
 import { statePageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -107,7 +108,7 @@ export default async function StatePillarPage({ params }: Props) {
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sortedCities.map((city) => (
-            <CityCard key={city.id} city={city} />
+            <CityCard key={city.id} city={city} imageUrl={getCityImageUrl(city)} />
           ))}
         </div>
         {cities.length === 0 && (

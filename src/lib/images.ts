@@ -67,3 +67,14 @@ export function getStockImage(seed: string): string {
 export function getCityImage(citySlug: string): string {
   return CITY_IMAGES[citySlug] || CITY_FALLBACK;
 }
+
+/**
+ * Get a city image: DB-cached imageUrl > curated map > deterministic tattoo stock image.
+ * No external API calls — imageUrl is set during DB seeding or bulk uploads.
+ */
+export function getCityImageUrl(
+  city: { slug: string; imageUrl?: string | null }
+): string {
+  if (city.imageUrl) return city.imageUrl;
+  return CITY_IMAGES[city.slug] || getStockImage(city.slug);
+}
