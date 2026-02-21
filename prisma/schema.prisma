@@ -139,6 +139,8 @@ model Listing {
   amenities         Json?
   hours             Json?
   photos            Json?
+  artists           Json?
+  services          Json?
   googlePlaceId     String?
   googleRating      Float?
   googleReviewCount Int?

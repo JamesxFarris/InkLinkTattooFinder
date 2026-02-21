@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Badge } from "./ui/Badge";
 import { StockImage } from "./StockImage";
+import { ImageCarousel } from "./ui/ImageCarousel";
 import { getStockImage } from "@/lib/images";
 import type { ListingWithRelations } from "@/types";
 
 export function ListingCard({ listing }: { listing: ListingWithRelations }) {
   const categoryNames = listing.categories.map((c) => c.category.name);
   const stockSrc = getStockImage(listing.slug || listing.name);
+  const photos = listing.photos as string[] | null;
+  const services = listing.services as string[] | null;
 
   return (
     <Link
@@ -15,14 +18,21 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
     >
       {/* Image */}
       <div className="relative h-52 overflow-hidden">
-        <StockImage
-          src={stockSrc}
-          alt={`${listing.name} — tattoo shop in ${listing.city.name}, ${listing.state.abbreviation}`}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {photos && photos.length >= 1 ? (
+          <ImageCarousel
+            images={photos.slice(0, 3)}
+            alt={`${listing.name} — tattoo shop in ${listing.city.name}, ${listing.state.abbreviation}`}
+          />
+        ) : (
+          <StockImage
+            src={stockSrc}
+            alt={`${listing.name} — tattoo shop in ${listing.city.name}, ${listing.state.abbreviation}`}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
         {/* Warm gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/50 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/50 via-transparent to-transparent pointer-events-none" />
 
         {/* Featured badge */}
         {listing.featured && (
@@ -71,6 +81,12 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
           {listing.city.name}, {listing.state.abbreviation}
         </p>
 
+        {listing.description && (
+          <p className="mt-1.5 line-clamp-2 text-sm leading-snug text-stone-500 dark:text-stone-400">
+            {listing.description}
+          </p>
+        )}
+
         {categoryNames.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1.5">
             {categoryNames.slice(0, 3).map((name) => (
@@ -102,6 +118,11 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
             </span>
           )}
           {listing.piercingServices && <span>Piercings</span>}
+          {services && services.slice(0, 2).map((s) => (
+            <span key={s} className="rounded-md bg-violet-100 px-2 py-0.5 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+              {s}
+            </span>
+          ))}
         </div>
       </div>
     </Link>

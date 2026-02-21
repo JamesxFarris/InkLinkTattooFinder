@@ -384,6 +384,141 @@ async function main() {
   }
   console.log(`Seeded ${listings.length} listings`);
 
+  // ── Demo Listing (all features populated) ──────────────
+  const demoCity = cityMap.get("austin-TX");
+  if (demoCity) {
+    const demo = await prisma.listing.upsert({
+      where: { slug: "iron-rose-tattoo-collective-austin" },
+      update: {
+        name: "Iron Rose Tattoo Collective",
+        description:
+          "Austin's premier artist-run tattoo collective on South Congress. Five resident artists bring decades of combined experience across every major style — from bold traditional Americana to delicate fine line and vibrant Japanese sleeves. Our 3,000 sq ft studio features private rooms, a curated art gallery, and a laid-back atmosphere. We also offer professional tattoo removal, microblading, and permanent makeup services. Walk-ins always welcome; consultations are free.",
+        type: "shop" as ListingType,
+        phone: "5125559876",
+        website: "https://example.com/iron-rose",
+        email: "hello@ironrosetattoo.example.com",
+        address: "1401 S Congress Ave",
+        cityId: demoCity.id,
+        stateId: demoCity.stateId,
+        zipCode: "78704",
+        latitude: 30.2485,
+        longitude: -97.7502,
+        priceRange: "premium" as PriceRange,
+        acceptsWalkIns: true,
+        piercingServices: true,
+        minimumAge: 18,
+        portfolioUrl: "https://example.com/iron-rose/portfolio",
+        amenities: ["Free WiFi", "Private Rooms", "Art Gallery", "Free Parking", "Wheelchair Accessible"],
+        hours: {
+          mon: "11:00 AM – 9:00 PM",
+          tue: "11:00 AM – 9:00 PM",
+          wed: "11:00 AM – 9:00 PM",
+          thu: "11:00 AM – 9:00 PM",
+          fri: "11:00 AM – 10:00 PM",
+          sat: "10:00 AM – 10:00 PM",
+          sun: "12:00 PM – 7:00 PM",
+        },
+        photos: [
+          "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=80",
+          "https://images.unsplash.com/photo-1598371839696-5c5bb1fed6e2?w=800&q=80",
+          "https://images.unsplash.com/photo-1590246814883-57764a8a3e41?w=800&q=80",
+          "https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=800&q=80",
+          "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=800&q=80",
+          "https://images.unsplash.com/photo-1612459284270-27b3f70e2994?w=800&q=80",
+        ],
+        artists: [
+          "Mike Torres",
+          "Sarah Kim",
+          "Diego Reyes",
+          "Jade Nakamura",
+          "Chris \"Bones\" McAllister",
+        ],
+        services: [
+          "Tattoo Removal",
+          "Microblading",
+          "Permanent Makeup",
+          "Piercing",
+          "Cover-Ups",
+        ],
+        googleRating: 4.9,
+        googleReviewCount: 847,
+        featured: true,
+        status: "active" as ListingStatus,
+      },
+      create: {
+        name: "Iron Rose Tattoo Collective",
+        slug: "iron-rose-tattoo-collective-austin",
+        description:
+          "Austin's premier artist-run tattoo collective on South Congress. Five resident artists bring decades of combined experience across every major style — from bold traditional Americana to delicate fine line and vibrant Japanese sleeves. Our 3,000 sq ft studio features private rooms, a curated art gallery, and a laid-back atmosphere. We also offer professional tattoo removal, microblading, and permanent makeup services. Walk-ins always welcome; consultations are free.",
+        type: "shop" as ListingType,
+        phone: "5125559876",
+        website: "https://example.com/iron-rose",
+        email: "hello@ironrosetattoo.example.com",
+        address: "1401 S Congress Ave",
+        cityId: demoCity.id,
+        stateId: demoCity.stateId,
+        zipCode: "78704",
+        latitude: 30.2485,
+        longitude: -97.7502,
+        priceRange: "premium" as PriceRange,
+        acceptsWalkIns: true,
+        piercingServices: true,
+        minimumAge: 18,
+        portfolioUrl: "https://example.com/iron-rose/portfolio",
+        amenities: ["Free WiFi", "Private Rooms", "Art Gallery", "Free Parking", "Wheelchair Accessible"],
+        hours: {
+          mon: "11:00 AM – 9:00 PM",
+          tue: "11:00 AM – 9:00 PM",
+          wed: "11:00 AM – 9:00 PM",
+          thu: "11:00 AM – 9:00 PM",
+          fri: "11:00 AM – 10:00 PM",
+          sat: "10:00 AM – 10:00 PM",
+          sun: "12:00 PM – 7:00 PM",
+        },
+        photos: [
+          "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=80",
+          "https://images.unsplash.com/photo-1598371839696-5c5bb1fed6e2?w=800&q=80",
+          "https://images.unsplash.com/photo-1590246814883-57764a8a3e41?w=800&q=80",
+          "https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=800&q=80",
+          "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=800&q=80",
+          "https://images.unsplash.com/photo-1612459284270-27b3f70e2994?w=800&q=80",
+        ],
+        artists: [
+          "Mike Torres",
+          "Sarah Kim",
+          "Diego Reyes",
+          "Jade Nakamura",
+          "Chris \"Bones\" McAllister",
+        ],
+        services: [
+          "Tattoo Removal",
+          "Microblading",
+          "Permanent Makeup",
+          "Piercing",
+          "Cover-Ups",
+        ],
+        googleRating: 4.9,
+        googleReviewCount: 847,
+        featured: true,
+        status: "active" as ListingStatus,
+      },
+    });
+
+    // Connect demo listing to categories
+    const demoCatSlugs = ["traditional", "japanese", "fine-line", "realism", "neo-traditional", "cover-up"];
+    for (const catSlug of demoCatSlugs) {
+      const catId = catMap.get(catSlug);
+      if (catId) {
+        await prisma.listingCategory.upsert({
+          where: { listingId_categoryId: { listingId: demo.id, categoryId: catId } },
+          update: {},
+          create: { listingId: demo.id, categoryId: catId },
+        });
+      }
+    }
+    console.log("Seeded demo listing: Iron Rose Tattoo Collective (all fields)");
+  }
+
   // ── Admin Users ────────────────────────────────────────
   // Set ADMIN_EMAILS as a comma-separated list in your environment variables
   const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")

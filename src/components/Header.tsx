@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { UserMenu } from "@/components/auth/UserMenu";
+import { MobileNav } from "@/components/MobileNav";
 
 function LogoMark({ className }: { className?: string }) {
   return (
@@ -57,17 +58,18 @@ export async function Header() {
           ) : (
             <Link
               href="/login"
-              className="text-sm font-medium text-stone-600 transition-colors hover:text-teal-500 dark:text-stone-400 dark:hover:text-teal-400"
+              className="hidden text-sm font-medium text-stone-600 transition-colors hover:text-teal-500 md:inline dark:text-stone-400 dark:hover:text-teal-400"
             >
               Sign In
             </Link>
           )}
           <Link
             href="/list-your-shop"
-            className="rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20"
+            className="hidden rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20 md:inline-flex"
           >
             List Your Shop
           </Link>
+          <MobileNav isSignedIn={!!session} />
         </div>
       </div>
     </header>

@@ -18,13 +18,6 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!phone || typeof phone !== "string" || !phone.trim()) {
-      return NextResponse.json(
-        { error: "Phone number is required" },
-        { status: 400 }
-      );
-    }
-
     const listing = await prisma.listing.findUnique({
       where: { id: listingId },
     });
@@ -54,8 +47,8 @@ export async function POST(request: Request) {
       data: {
         userId: parseInt(session.user.id),
         listingId,
-        phone: phone.trim(),
-        message: message || null,
+        phone: phone?.trim() || null,
+        message: message?.trim() || null,
       },
     });
 

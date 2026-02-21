@@ -6,7 +6,7 @@ export function ClaimsList({ claims }: { claims: ClaimWithRelations[] }) {
     return (
       <p className="text-sm text-stone-500 dark:text-stone-400">
         You haven&apos;t submitted any claims yet.{" "}
-        <Link href="/search" className="text-teal-600 hover:underline dark:text-teal-400">
+        <Link href="/dashboard/claim" className="text-teal-600 hover:underline dark:text-teal-400">
           Find a shop to claim
         </Link>.
       </p>

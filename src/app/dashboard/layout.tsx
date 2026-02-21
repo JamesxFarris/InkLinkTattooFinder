@@ -1,73 +1,30 @@
 import { auth } from "@/lib/auth";
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { DashboardNav } from "@/components/dashboard/DashboardNav";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  let session;
-  try {
-    session = await auth();
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return (
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold text-red-600">Auth Error (debug)</h1>
-        <pre className="mt-4 overflow-auto rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-300">
-          {message}
-        </pre>
-      </div>
-    );
-  }
-
+  const session = await auth();
   if (!session) redirect("/login");
 
   const isAdmin = session.user.role === "admin";
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <aside className="hidden w-56 shrink-0 md:block">
-        <nav className="sticky top-24 space-y-1">
-          <Link
-            href="/dashboard"
-            className="block rounded-lg px-4 py-2.5 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-white"
-          >
-            My Listings
-          </Link>
-          <Link
-            href="/list-your-shop"
-            className="block rounded-lg px-4 py-2.5 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-white"
-          >
-            Add New Listing
-          </Link>
-          {isAdmin && (
-            <>
-              <hr className="my-3 border-stone-200 dark:border-stone-800" />
-              <Link
-                href="/dashboard/admin"
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-stone-100 hover:text-teal-700 dark:text-teal-400 dark:hover:bg-stone-800 dark:hover:text-teal-300"
-              >
-                All Listings
-              </Link>
-              <Link
-                href="/dashboard/admin/cities"
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-stone-100 hover:text-teal-700 dark:text-teal-400 dark:hover:bg-stone-800 dark:hover:text-teal-300"
-              >
-                Manage Cities
-              </Link>
-              <Link
-                href="/admin"
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-stone-100 hover:text-teal-700 dark:text-teal-400 dark:hover:bg-stone-800 dark:hover:text-teal-300"
-              >
-                Review Claims
-              </Link>
-            </>
-          )}
-        </nav>
-      </aside>
-      <div className="min-w-0 flex-1">{children}</div>
+    <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      {/* Mobile nav — horizontal scrollable, hidden on desktop */}
+      <div className="md:hidden">
+        <DashboardNav isAdmin={isAdmin} />
+      </div>
+      {/* Desktop layout — sidebar + content */}
+      <div className="flex w-full gap-8">
+        <div className="hidden md:block">
+          <DashboardNav isAdmin={isAdmin} />
+        </div>
+        <div className="min-w-0 flex-1">{children}</div>
+      </div>
     </div>
   );
 }

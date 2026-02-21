@@ -12,6 +12,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { ClaimButton } from "@/components/listing/ClaimButton";
 import { MapEmbed } from "@/components/listing/MapEmbed";
+import { PhotoGallery } from "@/components/listing/PhotoGallery";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -62,6 +63,9 @@ export default async function ListingPage({ params }: Props) {
   const stateSlug = listing.city.state.slug;
   const citySlug = listing.city.slug;
   const hours = listing.hours as Record<string, string> | null;
+  const photos = listing.photos as string[] | null;
+  const artists = listing.artists as string[] | null;
+  const services = listing.services as string[] | null;
 
   const categoryIds = listing.categories.map((c) => c.category.id);
   const [relatedListings, cityCategories] = await Promise.all([
@@ -89,7 +93,7 @@ export default async function ListingPage({ params }: Props) {
           googleReviewCount: listing.googleReviewCount,
           hours,
           priceRange: listing.priceRange,
-          photos: listing.photos as string[] | null,
+          photos,
           categories: listing.categories.map(({ category }) => category.name),
         })}
       />
@@ -109,6 +113,10 @@ export default async function ListingPage({ params }: Props) {
           { label: listing.name },
         ]}
       />
+
+      {photos && photos.length > 0 && (
+        <PhotoGallery photos={photos} featured={listing.featured} />
+      )}
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Main Content */}
@@ -180,6 +188,28 @@ export default async function ListingPage({ params }: Props) {
               </div>
             )}
 
+            {/* Artists */}
+            {artists && artists.length > 0 && (
+              <div className="mt-6">
+                <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
+                  Artists
+                </h2>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {artists.map((name) => (
+                    <span
+                      key={name}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-3 py-1.5 text-sm font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300"
+                    >
+                      <svg className="h-4 w-4 text-stone-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                      </svg>
+                      {name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Features */}
             <div className="mt-6 flex flex-wrap gap-3">
               {listing.priceRange && (
@@ -201,6 +231,11 @@ export default async function ListingPage({ params }: Props) {
                   Piercing Services
                 </div>
               )}
+              {services && services.map((s) => (
+                <div key={s} className="rounded-lg bg-violet-100 px-3 py-1.5 text-sm font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                  {s}
+                </div>
+              ))}
             </div>
           </div>
 

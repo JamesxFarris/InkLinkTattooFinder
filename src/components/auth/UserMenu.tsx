@@ -47,7 +47,7 @@ export function UserMenu() {
           </Link>
           {session.user.role === "admin" && (
             <Link
-              href="/admin"
+              href="/dashboard/admin/claims"
               onClick={() => setOpen(false)}
               className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
             >
