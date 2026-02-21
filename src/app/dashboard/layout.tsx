@@ -7,7 +7,21 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  let session;
+  try {
+    session = await auth();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return (
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        <h1 className="text-2xl font-bold text-red-600">Auth Error (debug)</h1>
+        <pre className="mt-4 overflow-auto rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-300">
+          {message}
+        </pre>
+      </div>
+    );
+  }
+
   if (!session) redirect("/login");
 
   const isAdmin = session.user.role === "admin";
