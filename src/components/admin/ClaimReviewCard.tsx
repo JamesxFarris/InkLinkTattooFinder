@@ -8,6 +8,7 @@ type ClaimReviewCardProps = {
   claim: {
     id: number;
     status: string;
+    phone: string | null;
     message: string | null;
     adminNotes: string | null;
     reviewedAt: string | null;
@@ -52,16 +53,16 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
   const isPending = claim.status === "pending";
 
   return (
-    <div className="rounded-lg border border-stone-700 bg-stone-800 p-5">
+    <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm dark:border-stone-700 dark:bg-stone-800">
       <div className="flex items-start justify-between">
         <div>
           <Link
             href={`/listing/${claim.listing.slug}`}
-            className="font-medium text-stone-100 hover:text-teal-400"
+            className="font-medium text-stone-900 hover:text-teal-600 dark:text-stone-100 dark:hover:text-teal-400"
           >
             {claim.listing.name}
           </Link>
-          <p className="text-sm text-stone-400">
+          <p className="text-sm text-stone-500 dark:text-stone-400">
             {claim.listing.city.name}, {claim.listing.city.state.abbreviation}
           </p>
         </div>
@@ -78,18 +79,24 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
         )}
       </div>
 
-      <div className="mt-3 rounded-lg bg-stone-900 p-3">
-        <p className="text-xs font-medium text-stone-500">Claimed by</p>
-        <p className="text-sm text-stone-300">
+      <div className="mt-3 rounded-lg bg-stone-50 p-3 dark:bg-stone-900">
+        <p className="text-xs font-medium text-stone-400 dark:text-stone-500">Claimed by</p>
+        <p className="text-sm text-stone-700 dark:text-stone-300">
           {claim.user.name} ({claim.user.email})
         </p>
-        {claim.message && (
+        {claim.phone && (
           <>
-            <p className="mt-2 text-xs font-medium text-stone-500">Message</p>
-            <p className="text-sm text-stone-300">{claim.message}</p>
+            <p className="mt-2 text-xs font-medium text-stone-400 dark:text-stone-500">Phone</p>
+            <p className="text-sm text-stone-700 dark:text-stone-300">{claim.phone}</p>
           </>
         )}
-        <p className="mt-2 text-xs text-stone-500">
+        {claim.message && (
+          <>
+            <p className="mt-2 text-xs font-medium text-stone-400 dark:text-stone-500">Message</p>
+            <p className="text-sm text-stone-700 dark:text-stone-300">{claim.message}</p>
+          </>
+        )}
+        <p className="mt-2 text-xs text-stone-400 dark:text-stone-500">
           Submitted {new Date(claim.createdAt).toLocaleDateString()}
         </p>
       </div>
@@ -103,7 +110,7 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
       {isPending && (
         <div className="mt-4 space-y-3">
           <div>
-            <label htmlFor={`notes-${claim.id}`} className="block text-sm text-stone-400">
+            <label htmlFor={`notes-${claim.id}`} className="block text-sm text-stone-500 dark:text-stone-400">
               Admin Notes (optional)
             </label>
             <textarea
@@ -111,7 +118,7 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
               value={adminNotes}
               onChange={(e) => setAdminNotes(e.target.value)}
               rows={2}
-              className="mt-1 block w-full rounded-lg border border-stone-700 bg-stone-900 px-3 py-2 text-sm text-stone-100 placeholder-stone-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="mt-1 block w-full rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-900 placeholder-stone-400 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
               placeholder="Internal notes about this claim..."
             />
           </div>
@@ -136,8 +143,8 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
 
       {!isPending && claim.adminNotes && (
         <div className="mt-3">
-          <p className="text-xs font-medium text-stone-500">Admin Notes</p>
-          <p className="text-sm text-stone-400">{claim.adminNotes}</p>
+          <p className="text-xs font-medium text-stone-400 dark:text-stone-500">Admin Notes</p>
+          <p className="text-sm text-stone-600 dark:text-stone-400">{claim.adminNotes}</p>
         </div>
       )}
     </div>

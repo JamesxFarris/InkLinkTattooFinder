@@ -27,7 +27,7 @@ export default async function AdminPage({
   const [listings, counts] = await Promise.all([
     prisma.listing.findMany({
       where,
-      include: { city: true, state: true, user: { select: { email: true, name: true } } },
+      include: { city: true, state: true, owner: { select: { email: true, name: true } } },
       orderBy: { createdAt: "desc" },
     }),
     prisma.listing.groupBy({
@@ -52,7 +52,7 @@ export default async function AdminPage({
 
   return (
     <div>
-      <h1 className="mb-6 font-display text-2xl font-bold text-stone-100">
+      <h1 className="mb-6 font-display text-2xl font-bold text-stone-900 dark:text-stone-100">
         Admin Panel
       </h1>
 
@@ -69,7 +69,7 @@ export default async function AdminPage({
             className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
               filter === tab.key
                 ? "bg-teal-600 text-white"
-                : "bg-stone-800 text-stone-400 hover:bg-stone-700 hover:text-stone-200"
+                : "bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-800 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700 dark:hover:text-stone-200"
             }`}
           >
             {tab.label}
@@ -79,8 +79,8 @@ export default async function AdminPage({
       </div>
 
       {listings.length === 0 ? (
-        <div className="rounded-xl border border-stone-800 bg-stone-900 p-12 text-center">
-          <p className="text-stone-400">No listings found.</p>
+        <div className="rounded-xl border border-stone-200 bg-stone-50 p-12 text-center dark:border-stone-800 dark:bg-stone-900">
+          <p className="text-stone-500 dark:text-stone-400">No listings found.</p>
         </div>
       ) : (
         <div className="space-y-3">

@@ -17,7 +17,7 @@ type ListingRowProps = {
     createdAt: Date;
     city: { name: string };
     state: { abbreviation: string };
-    user: { email: string; name: string | null } | null;
+    owner: { email: string; name: string | null } | null;
   };
 };
 
@@ -31,22 +31,22 @@ export function AdminListingRow({ listing }: ListingRowProps) {
   }
 
   return (
-    <div className="rounded-xl border border-stone-800 bg-stone-900 p-5">
+    <div className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm dark:border-stone-800 dark:bg-stone-900">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-3">
-            <h2 className="font-semibold text-stone-100">{listing.name}</h2>
+            <h2 className="font-semibold text-stone-900 dark:text-stone-100">{listing.name}</h2>
             <span
               className={`rounded-full border px-3 py-0.5 text-xs font-medium capitalize ${statusStyles[listing.status] ?? ""}`}
             >
               {listing.status}
             </span>
           </div>
-          <p className="mt-1 text-sm text-stone-400">
+          <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
             {listing.city.name}, {listing.state.abbreviation}
-            {listing.user && (
-              <span className="ml-3 text-stone-500">
-                by {listing.user.name ?? listing.user.email}
+            {listing.owner && (
+              <span className="ml-3 text-stone-400 dark:text-stone-500">
+                by {listing.owner.name ?? listing.owner.email}
               </span>
             )}
           </p>

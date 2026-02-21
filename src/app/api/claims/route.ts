@@ -9,11 +9,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { listingId, message } = await request.json();
+    const { listingId, phone, message } = await request.json();
 
     if (!listingId) {
       return NextResponse.json(
         { error: "listingId is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!phone || typeof phone !== "string" || !phone.trim()) {
+      return NextResponse.json(
+        { error: "Phone number is required" },
         { status: 400 }
       );
     }
@@ -47,6 +54,7 @@ export async function POST(request: Request) {
       data: {
         userId: parseInt(session.user.id),
         listingId,
+        phone: phone.trim(),
         message: message || null,
       },
     });

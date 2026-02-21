@@ -21,16 +21,16 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-display text-3xl font-bold text-stone-100">
+      <h1 className="font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
         Dashboard
       </h1>
-      <p className="mt-2 text-stone-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         Welcome back, {session.user.name}
       </p>
 
       {/* Owned Listings */}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold text-stone-100">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           Your Listings
         </h2>
         <div className="mt-4 space-y-3">
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
               <OwnedListingCard key={listing.id} listing={listing} />
             ))
           ) : (
-            <p className="text-sm text-stone-400">
+            <p className="text-sm text-stone-500 dark:text-stone-400">
               You don&apos;t own any listings yet. Claim a listing to get started.
             </p>
           )}
@@ -48,7 +48,7 @@ export default async function DashboardPage() {
 
       {/* Claims */}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold text-stone-100">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           Your Claims
         </h2>
         <div className="mt-4">

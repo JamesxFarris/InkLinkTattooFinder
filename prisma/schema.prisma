@@ -56,6 +56,7 @@ model Claim {
   listingId  Int
   listing    Listing     @relation(fields: [listingId], references: [id], onDelete: Cascade)
   status     ClaimStatus @default(pending)
+  phone      String?
   message    String?
   adminNotes String?
   reviewedAt DateTime?

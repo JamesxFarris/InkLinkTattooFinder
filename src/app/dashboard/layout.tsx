@@ -18,24 +18,30 @@ export default async function DashboardLayout({
         <nav className="sticky top-24 space-y-1">
           <Link
             href="/dashboard"
-            className="block rounded-lg px-4 py-2.5 text-sm font-medium text-stone-300 transition hover:bg-stone-800 hover:text-white"
+            className="block rounded-lg px-4 py-2.5 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-white"
           >
             My Listings
           </Link>
           <Link
             href="/list-your-shop"
-            className="block rounded-lg px-4 py-2.5 text-sm font-medium text-stone-300 transition hover:bg-stone-800 hover:text-white"
+            className="block rounded-lg px-4 py-2.5 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-white"
           >
             Add New Listing
           </Link>
           {isAdmin && (
             <>
-              <hr className="my-3 border-stone-800" />
+              <hr className="my-3 border-stone-200 dark:border-stone-800" />
               <Link
                 href="/dashboard/admin"
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-400 transition hover:bg-stone-800 hover:text-teal-300"
+                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-stone-100 hover:text-teal-700 dark:text-teal-400 dark:hover:bg-stone-800 dark:hover:text-teal-300"
               >
                 All Listings
+              </Link>
+              <Link
+                href="/admin"
+                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-teal-600 transition hover:bg-stone-100 hover:text-teal-700 dark:text-teal-400 dark:hover:bg-stone-800 dark:hover:text-teal-300"
+              >
+                Review Claims
               </Link>
             </>
           )}
