@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(railway version:*)",
+      "Bash(railway:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:webflow.com)",
+      "Bash(git reset:*)",
+      "Bash(nslookup:*)",
+      "Bash(dig:*)",
+      "WebSearch",
+      "WebFetch(domain:unsplash.com)",
+      "WebFetch(domain:images.unsplash.com)",
+      "WebFetch(domain:www.pexels.com)",
+      "Bash(ls:*)",
+      "Bash(npx next build:*)",
+      "Bash(npx prisma:*)",
+      "Bash(git pull:*)",
+      "Bash(npm run build:*)",
+      "Bash(dir:*)",
+      "WebFetch(domain:images.pexels.com)",
+      "Bash(npm install:*)",
+      "Bash(test:*)",
+      "Bash(node -e:*)",
+      "Bash(npx tsc:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:UYZfPZnKUBhyZNzGRIoutCtpogTASabG@switchyard.proxy.rlwy.net:19608/railway\" npx prisma db push:*)",
+      "Bash(cd:*)",
+      "Bash(cd /c/inklink && DATABASE_URL=\"postgresql://postgres:UYZfPZnKUBhyZNzGRIoutCtpogTASabG@postgres.railway.internal:5432/railway\" npx prisma db push --skip-generate 2>&1)",
+      "Bash(cd /c/inklink && DATABASE_URL=\"postgresql://postgres:UYZfPZnKUBhyZNzGRIoutCtpogTASabG@switchyard.proxy.rlwy.net:19608/railway\" npx prisma db push --skip-generate 2>&1)",
+      "WebFetch(domain:www.educative.io)",
+      "WebFetch(domain:gist.github.com)"
+    ]
+  }
+}
