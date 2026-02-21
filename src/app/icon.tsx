@@ -13,18 +13,21 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#FFFFFF",
-          borderRadius: "6px",
+          background: "#14B8A6",
+          borderRadius: "10px",
         }}
       >
-        <svg
-          viewBox="0 0 48 48"
-          width="32"
-          height="32"
-          xmlns="http://www.w3.org/2000/svg"
+        <span
+          style={{
+            fontSize: "28px",
+            fontWeight: 800,
+            color: "#FFFFFF",
+            letterSpacing: "-1px",
+            lineHeight: 1,
+          }}
         >
-          <circle cx="24" cy="24" r="22" fill="#14B8A6" />
-        </svg>
+          IL
+        </span>
       </div>
     ),
     { ...size }
