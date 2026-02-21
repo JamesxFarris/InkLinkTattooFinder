@@ -178,43 +178,62 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
         </div>
       )}
 
-      {/* Featured Listings */}
-      {featured.length > 0 && (
+      {/* Listings — combined grid when filtering by style, split when unfiltered */}
+      {style ? (
         <section className="mt-10">
-          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
-            Featured Shops
-          </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} />
-            ))}
-          </div>
+          {listings.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {listings.map((listing) => (
+                <ListingCard key={listing.id} listing={listing} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl bg-white p-16 text-center shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] dark:bg-stone-900 dark:ring-stone-700">
+              <p className="text-stone-500 dark:text-stone-400">
+                {`No tattoo shops found matching the "${style}" style. Try removing the filter.`}
+              </p>
+            </div>
+          )}
         </section>
-      )}
+      ) : (
+        <>
+          {/* Featured Listings */}
+          {featured.length > 0 && (
+            <section className="mt-10">
+              <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
+                Featured Shops
+              </h2>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {featured.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </div>
+            </section>
+          )}
 
-      {/* All Listings */}
-      <section className="mt-10">
-        {featured.length > 0 && regular.length > 0 && (
-          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
-            All Shops
-          </h2>
-        )}
-        {regular.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {regular.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} />
-            ))}
-          </div>
-        ) : listings.length === 0 ? (
-          <div className="rounded-2xl bg-white p-16 text-center shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] dark:bg-stone-900 dark:ring-stone-700">
-            <p className="text-stone-500 dark:text-stone-400">
-              {style
-                ? `No tattoo shops found matching the "${style}" style. Try removing the filter.`
-                : `No tattoo shops found in ${city.name} yet. Check back soon!`}
-            </p>
-          </div>
-        ) : null}
-      </section>
+          {/* All Listings */}
+          <section className="mt-10">
+            {featured.length > 0 && regular.length > 0 && (
+              <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
+                All Shops
+              </h2>
+            )}
+            {regular.length > 0 ? (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {regular.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </div>
+            ) : listings.length === 0 ? (
+              <div className="rounded-2xl bg-white p-16 text-center shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] dark:bg-stone-900 dark:ring-stone-700">
+                <p className="text-stone-500 dark:text-stone-400">
+                  {`No tattoo shops found in ${city.name} yet. Check back soon!`}
+                </p>
+              </div>
+            ) : null}
+          </section>
+        </>
+      )}
 
       {/* FAQ */}
       <div className="mt-16">

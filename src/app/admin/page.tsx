@@ -22,16 +22,16 @@ export default async function AdminPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="font-display text-3xl font-bold text-stone-100">
-        Admin Panel
+      <h1 className="font-display text-3xl font-bold text-stone-900 dark:text-stone-100">
+        Review Claims
       </h1>
-      <p className="mt-2 text-stone-400">
+      <p className="mt-2 text-stone-600 dark:text-stone-400">
         Manage listing claims and approvals
       </p>
 
       {/* Pending Claims */}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold text-stone-100">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           Pending Claims ({pendingClaims.length})
         </h2>
         <div className="mt-4 space-y-4">
@@ -47,7 +47,7 @@ export default async function AdminPage() {
               />
             ))
           ) : (
-            <p className="text-sm text-stone-400">
+            <p className="text-sm text-stone-500 dark:text-stone-400">
               No pending claims to review.
             </p>
           )}
@@ -56,7 +56,7 @@ export default async function AdminPage() {
 
       {/* Processed Claims */}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold text-stone-100">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           Processed Claims ({processedClaims.length})
         </h2>
         <div className="mt-4 space-y-4">
@@ -72,7 +72,7 @@ export default async function AdminPage() {
               />
             ))
           ) : (
-            <p className="text-sm text-stone-400">
+            <p className="text-sm text-stone-500 dark:text-stone-400">
               No processed claims yet.
             </p>
           )}
