@@ -35,3 +35,19 @@ export async function adminDeleteListing(id: number) {
   await prisma.listing.delete({ where: { id } });
   revalidatePath("/dashboard/admin");
 }
+
+export async function adminDeleteCity(id: number) {
+  await requireAdmin();
+
+  // Delete all listings in the city first (and their related data)
+  await prisma.listingCategory.deleteMany({
+    where: { listing: { cityId: id } },
+  });
+  await prisma.claim.deleteMany({
+    where: { listing: { cityId: id } },
+  });
+  await prisma.listing.deleteMany({ where: { cityId: id } });
+  await prisma.city.delete({ where: { id } });
+
+  revalidatePath("/dashboard/admin/cities");
+}
