@@ -8,7 +8,7 @@ import { StatsBar } from "@/components/StatsBar";
 import { ListingGrid } from "@/components/ListingGrid";
 import { ListingCard } from "@/components/ListingCard";
 import { StyleFilter } from "@/components/StyleFilter";
-import { CityFAQ, getCityFaqData } from "@/components/CityFaq";
+import { CityFaq, getCityFaqData } from "@/components/CityFaq";
 import { TattooTips } from "@/components/TattooTips";
 import { CityCard } from "@/components/CityCard";
 import {
@@ -237,7 +237,7 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
 
       {/* FAQ */}
       <div className="mt-16">
-        <CityFAQ
+        <CityFaq
           cityName={city.name}
           stateAbbr={city.state.abbreviation}
           listingCount={stats.listingCount}

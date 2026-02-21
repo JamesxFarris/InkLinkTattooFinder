@@ -1,5 +1,6 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
+import { ContactForm } from "./ContactForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -35,51 +36,20 @@ export default function ContactPage() {
           <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
             Get in Touch
           </h2>
-          <div className="mt-4 space-y-4">
-            <div>
-              <h3 className="font-medium text-stone-900 dark:text-stone-100">
-                General Inquiries
-              </h3>
-              <p className="mt-1 text-sm">
-                Email us at{" "}
-                <a
-                  href="mailto:inklinktattoofinder@gmail.com"
-                  className="text-teal-500 hover:underline"
-                >
-                  inklinktattoofinder@gmail.com
-                </a>
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-stone-900 dark:text-stone-100">
-                List Your Shop
-              </h3>
-              <p className="mt-1 text-sm">
-                Want to add or claim your tattoo shop listing? Email{" "}
-                <a
-                  href="mailto:inklinktattoofinder@gmail.com"
-                  className="text-teal-500 hover:underline"
-                >
-                  inklinktattoofinder@gmail.com
-                </a>
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium text-stone-900 dark:text-stone-100">
-                Report an Issue
-              </h3>
-              <p className="mt-1 text-sm">
-                Found incorrect information? Let us know at{" "}
-                <a
-                  href="mailto:inklinktattoofinder@gmail.com"
-                  className="text-teal-500 hover:underline"
-                >
-                  inklinktattoofinder@gmail.com
-                </a>
-              </p>
-            </div>
+          <div className="mt-4">
+            <ContactForm />
           </div>
         </div>
+
+        <p className="text-center text-sm">
+          Or email us directly at{" "}
+          <a
+            href="mailto:inklinktattoofinder@gmail.com"
+            className="text-teal-500 hover:underline"
+          >
+            inklinktattoofinder@gmail.com
+          </a>
+        </p>
       </div>
     </div>
   );

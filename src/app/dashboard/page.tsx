@@ -34,6 +34,9 @@ export default async function DashboardPage() {
         <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
           Your Listings
         </h2>
+        <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
+          Listings marked &ldquo;Pending&rdquo; are under review and not yet publicly visible.
+        </p>
         <div className="mt-4 space-y-3">
           {ownedListings.length > 0 ? (
             ownedListings.map((listing) => (

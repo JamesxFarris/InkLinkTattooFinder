@@ -24,7 +24,7 @@ export default async function AdminPage({
       ? {}
       : { status: filter as "active" | "pending" | "inactive" };
 
-  const [listings, counts] = await Promise.all([
+  const [listings, counts, recentPending] = await Promise.all([
     prisma.listing.findMany({
       where,
       include: { city: true, state: true, owner: { select: { email: true, name: true } } },
@@ -33,6 +33,12 @@ export default async function AdminPage({
     prisma.listing.groupBy({
       by: ["status"],
       _count: true,
+    }),
+    prisma.listing.findMany({
+      where: { status: "pending" },
+      include: { city: true, state: true, owner: { select: { email: true, name: true } } },
+      orderBy: { createdAt: "desc" },
+      take: 5,
     }),
   ]);
 
@@ -43,9 +49,11 @@ export default async function AdminPage({
     total += c._count;
   }
 
+  const pendingCount = countMap["pending"] ?? 0;
+
   const tabs = [
     { key: "all", label: "All", count: total },
-    { key: "pending", label: "Pending", count: countMap["pending"] ?? 0 },
+    { key: "pending", label: "Pending", count: pendingCount },
     { key: "active", label: "Active", count: countMap["active"] ?? 0 },
     { key: "inactive", label: "Inactive", count: countMap["inactive"] ?? 0 },
   ];
@@ -55,6 +63,35 @@ export default async function AdminPage({
       <h1 className="mb-6 font-display text-2xl font-bold text-stone-900 dark:text-stone-100">
         Admin Panel
       </h1>
+
+      {/* Pending Listings Banner */}
+      {pendingCount > 0 && (
+        <div className="mb-6 rounded-xl bg-amber-50 p-5 ring-1 ring-amber-200 dark:bg-amber-950/30 dark:ring-amber-800">
+          <div className="flex items-center gap-3">
+            <svg className="h-5 w-5 shrink-0 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+            </svg>
+            <div className="flex flex-1 items-center justify-between">
+              <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                {pendingCount} new {pendingCount === 1 ? "listing" : "listings"} awaiting review
+              </p>
+              <a
+                href="/dashboard/admin?status=pending"
+                className="text-sm font-medium text-amber-700 underline hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100"
+              >
+                View All Pending
+              </a>
+            </div>
+          </div>
+          {recentPending.length > 0 && (
+            <div className="mt-4 space-y-2">
+              {recentPending.map((listing) => (
+                <AdminListingRow key={listing.id} listing={listing} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Filter Tabs */}
       <div className="mb-6 flex gap-2">

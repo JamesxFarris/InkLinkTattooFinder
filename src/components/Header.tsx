@@ -18,7 +18,12 @@ function LogoMark({ className }: { className?: string }) {
 }
 
 export async function Header() {
-  const session = await auth();
+  let session = null;
+  try {
+    session = await auth();
+  } catch {
+    // Gracefully handle auth errors (e.g. corrupt JWT during signout)
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-stone-200/60 bg-stone-50 md:bg-white/95 md:backdrop-blur-lg dark:border-stone-800/40 dark:bg-stone-950 dark:md:bg-stone-950/95">

@@ -1,6 +1,6 @@
 import { prisma } from "./db";
 import { ITEMS_PER_PAGE } from "./utils";
-import { haversineDistance } from "./geo";
+import { haversineDistance, boundingBox } from "./geo";
 import type { ListingStatus, ListingType, PriceRange } from "@prisma/client";
 
 // ── States ──────────────────────────────────────────────
@@ -116,6 +116,17 @@ export async function getCategoriesForCity(cityId: number) {
 }
 
 // ── Listings ────────────────────────────────────────────
+
+export async function getListingById(id: number) {
+  return prisma.listing.findUnique({
+    where: { id },
+    include: {
+      city: { include: { state: true } },
+      state: true,
+      categories: { include: { category: true } },
+    },
+  });
+}
 
 export async function getListingBySlug(slug: string) {
   return prisma.listing.findUnique({
@@ -290,13 +301,13 @@ export async function getClaimsByUser(userId: number) {
 
 export async function getOwnedListings(userId: number) {
   return prisma.listing.findMany({
-    where: { ownerId: userId, status: "active" },
+    where: { ownerId: userId, status: { in: ["active", "pending"] } },
     include: {
       city: { include: { state: true } },
       state: true,
       categories: { include: { category: true } },
     },
-    orderBy: { name: "asc" },
+    orderBy: { createdAt: "desc" },
   });
 }
 
@@ -605,16 +616,18 @@ export async function searchListingsNearby(params: {
     perPage = ITEMS_PER_PAGE,
   } = params;
 
-  // First find all cities within the radius
-  const allCities = await prisma.city.findMany({
+  // Pre-filter cities using a bounding box at the DB level, then refine with Haversine
+  const bbox = boundingBox(latitude, longitude, radiusMiles);
+
+  const nearbyCities = await prisma.city.findMany({
     where: {
-      latitude: { not: null },
-      longitude: { not: null },
+      latitude: { gte: bbox.minLat, lte: bbox.maxLat, not: null },
+      longitude: { gte: bbox.minLng, lte: bbox.maxLng, not: null },
     },
     select: { id: true, name: true, latitude: true, longitude: true },
   });
 
-  const citiesWithDistance = allCities
+  const citiesWithDistance = nearbyCities
     .map((city) => ({
       ...city,
       distance: haversineDistance(

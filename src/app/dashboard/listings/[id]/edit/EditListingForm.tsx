@@ -1,55 +1,55 @@
 "use client";
 
 import { useActionState } from "react";
-import { submitListing } from "./actions";
+import { updateListing } from "./actions";
 import { Button } from "@/components/ui/Button";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
 
 type State = { id: number; name: string };
+
+type ListingData = {
+  id: number;
+  name: string;
+  description: string | null;
+  type: string;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
+  address: string | null;
+  stateId: number;
+  cityName: string;
+  zipCode: string | null;
+  priceRange: string | null;
+  acceptsWalkIns: boolean;
+  piercingServices: boolean;
+  photos: string[] | null;
+};
 
 const inputClass =
   "w-full rounded-lg border border-stone-300 bg-white px-4 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 dark:placeholder-stone-500";
 
 const labelClass = "block text-sm font-medium text-stone-700 dark:text-stone-300";
 
-async function handleSubmit(
-  _prev: { success: boolean; message: string } | null,
-  formData: FormData
-) {
-  return submitListing(formData);
-}
-
-export function SubmissionForm({ states }: { states: State[] }) {
-  const [result, formAction, isPending] = useActionState(handleSubmit, null);
-
-  if (result?.success) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-8 text-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal-500/10">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            className="h-8 w-8 text-teal-500"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <p className="text-lg font-semibold text-stone-900 dark:text-stone-100">
-          Submission Received
-        </p>
-        <p className="max-w-md text-sm text-stone-600 dark:text-stone-400">
-          {result.message}
-        </p>
-      </div>
-    );
-  }
+export function EditListingForm({
+  listing,
+  states,
+}: {
+  listing: ListingData;
+  states: State[];
+}) {
+  const boundUpdate = updateListing.bind(null, listing.id);
+  const [result, formAction, isPending] = useActionState(boundUpdate, null);
 
   return (
     <form action={formAction} className="space-y-6">
       {result && !result.success && (
         <div className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+          {result.message}
+        </div>
+      )}
+
+      {result?.success && (
+        <div className="rounded-lg border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-700 dark:bg-green-900/20 dark:text-green-400">
           {result.message}
         </div>
       )}
@@ -64,6 +64,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
           id="name"
           name="name"
           required
+          defaultValue={listing.name}
           className={`mt-1 ${inputClass}`}
           placeholder="e.g. Iron Rose Tattoo"
         />
@@ -75,7 +76,13 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <label htmlFor="stateId" className={labelClass}>
             State <span className="text-red-500">*</span>
           </label>
-          <select id="stateId" name="stateId" required className={`mt-1 ${inputClass}`}>
+          <select
+            id="stateId"
+            name="stateId"
+            required
+            defaultValue={listing.stateId}
+            className={`mt-1 ${inputClass}`}
+          >
             <option value="">Select a state</option>
             {states.map((s) => (
               <option key={s.id} value={s.id}>
@@ -93,6 +100,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
             id="cityName"
             name="cityName"
             required
+            defaultValue={listing.cityName}
             className={`mt-1 ${inputClass}`}
             placeholder="e.g. Austin"
           />
@@ -109,6 +117,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
             type="text"
             id="address"
             name="address"
+            defaultValue={listing.address ?? ""}
             className={`mt-1 ${inputClass}`}
             placeholder="123 Main St"
           />
@@ -121,6 +130,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
             type="text"
             id="zipCode"
             name="zipCode"
+            defaultValue={listing.zipCode ?? ""}
             className={`mt-1 ${inputClass}`}
             placeholder="78701"
           />
@@ -137,6 +147,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
             type="tel"
             id="phone"
             name="phone"
+            defaultValue={listing.phone ?? ""}
             className={`mt-1 ${inputClass}`}
             placeholder="(512) 555-0100"
           />
@@ -149,6 +160,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
             type="email"
             id="email"
             name="email"
+            defaultValue={listing.email ?? ""}
             className={`mt-1 ${inputClass}`}
             placeholder="info@yourshop.com"
           />
@@ -164,6 +176,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
           type="url"
           id="website"
           name="website"
+          defaultValue={listing.website ?? ""}
           className={`mt-1 ${inputClass}`}
           placeholder="https://yourshop.com"
         />
@@ -178,6 +191,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
           id="description"
           name="description"
           rows={4}
+          defaultValue={listing.description ?? ""}
           className={`mt-1 ${inputClass}`}
           placeholder="Tell us about your shop, specialties, and what makes you unique..."
         />
@@ -187,7 +201,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
       <div>
         <label className={labelClass}>Photos (optional, up to 6)</label>
         <div className="mt-1">
-          <PhotoUpload />
+          <PhotoUpload existingPhotos={listing.photos ?? []} />
         </div>
       </div>
 
@@ -197,7 +211,12 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <label htmlFor="type" className={labelClass}>
             Type
           </label>
-          <select id="type" name="type" className={`mt-1 ${inputClass}`}>
+          <select
+            id="type"
+            name="type"
+            defaultValue={listing.type}
+            className={`mt-1 ${inputClass}`}
+          >
             <option value="shop">Tattoo Shop</option>
             <option value="artist">Independent Artist</option>
             <option value="supplier">Supplier</option>
@@ -207,7 +226,12 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <label htmlFor="priceRange" className={labelClass}>
             Price Range
           </label>
-          <select id="priceRange" name="priceRange" className={`mt-1 ${inputClass}`}>
+          <select
+            id="priceRange"
+            name="priceRange"
+            defaultValue={listing.priceRange ?? ""}
+            className={`mt-1 ${inputClass}`}
+          >
             <option value="">Select...</option>
             <option value="budget">$ — Budget</option>
             <option value="moderate">$$ — Moderate</option>
@@ -223,6 +247,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <input
             type="checkbox"
             name="acceptsWalkIns"
+            defaultChecked={listing.acceptsWalkIns}
             className="rounded border-stone-300 text-teal-500 focus:ring-teal-500 dark:border-stone-600"
           />
           Accepts walk-ins
@@ -231,6 +256,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <input
             type="checkbox"
             name="piercingServices"
+            defaultChecked={listing.piercingServices}
             className="rounded border-stone-300 text-teal-500 focus:ring-teal-500 dark:border-stone-600"
           />
           Offers piercing services
@@ -245,7 +271,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
         className="w-full"
         disabled={isPending}
       >
-        {isPending ? "Submitting..." : "Submit Your Shop"}
+        {isPending ? "Saving..." : "Save Changes"}
       </Button>
     </form>
   );

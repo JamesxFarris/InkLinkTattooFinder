@@ -56,7 +56,10 @@ export function UserMenu() {
           )}
           <hr className="my-1 border-stone-200 dark:border-stone-700" />
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={async () => {
+              await signOut({ redirect: false });
+              window.location.href = "/";
+            }}
             className="block w-full px-4 py-2 text-left text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
           >
             Sign Out

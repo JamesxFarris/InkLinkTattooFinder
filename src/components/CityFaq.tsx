@@ -1,4 +1,4 @@
-export function CityFAQ({
+export function CityFaq({
   cityName,
   stateAbbr,
   listingCount,

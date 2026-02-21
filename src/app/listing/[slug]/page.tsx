@@ -42,6 +42,13 @@ export default async function ListingPage({ params }: Props) {
 
   const session = await auth();
 
+  // Only owners and admins can view non-active listings
+  if (listing.status !== "active") {
+    const isOwner = listing.ownerId != null && session && listing.ownerId === parseInt(session.user.id);
+    const isAdmin = session?.user.role === "admin";
+    if (!isOwner && !isAdmin) notFound();
+  }
+
   let existingClaimStatus: "pending" | "approved" | "denied" | null = null;
   const isOwned = !!listing.ownerId && listing.ownerId === (session ? parseInt(session.user.id) : -1);
 

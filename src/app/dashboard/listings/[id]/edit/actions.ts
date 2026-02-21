@@ -4,14 +4,30 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { slugify } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
-type SubmitResult = { success: boolean; message: string };
+type UpdateResult = { success: boolean; message: string };
 
-export async function submitListing(formData: FormData): Promise<SubmitResult> {
+export async function updateListing(
+  listingId: number,
+  _prev: UpdateResult | null,
+  formData: FormData
+): Promise<UpdateResult> {
   try {
     const session = await auth();
     if (!session) {
-      return { success: false, message: "You must be signed in to submit a listing." };
+      return { success: false, message: "You must be signed in." };
+    }
+
+    const listing = await prisma.listing.findUnique({ where: { id: listingId } });
+    if (!listing) {
+      return { success: false, message: "Listing not found." };
+    }
+
+    const isOwner = listing.ownerId === parseInt(session.user.id);
+    const isAdmin = session.user.role === "admin";
+    if (!isOwner && !isAdmin) {
+      return { success: false, message: "You are not authorized to edit this listing." };
     }
 
     const name = formData.get("name") as string | null;
@@ -29,7 +45,6 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     const piercingServices = formData.get("piercingServices") === "on";
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
 
-    // Validate required fields
     if (!name?.trim() || !stateId?.trim() || !cityName?.trim()) {
       return { success: false, message: "Shop name, state, and city are required." };
     }
@@ -55,20 +70,11 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
       });
     }
 
-    // Generate unique slug
-    let listingSlug = slugify(name.trim());
-    const existing = await prisma.listing.findUnique({
-      where: { slug: listingSlug },
-    });
-    if (existing) {
-      listingSlug = `${listingSlug}-${Date.now()}`;
-    }
-
-    // Create listing as pending
-    await prisma.listing.create({
+    await prisma.listing.update({
+      where: { id: listingId },
       data: {
         name: name.trim(),
-        slug: listingSlug,
+        // slug is NOT changed (preserves URLs)
         description: description?.trim() || null,
         type: type as "shop" | "artist" | "supplier",
         phone: phone?.trim() || null,
@@ -82,17 +88,19 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
         acceptsWalkIns,
         piercingServices,
         photos: photos.length > 0 ? photos : Prisma.JsonNull,
-        status: "pending",
-        ownerId: parseInt(session.user.id),
+        // status is NOT changed (edits stay live if active, stay pending if pending)
       },
     });
 
+    revalidatePath("/dashboard");
+    revalidatePath(`/listing/${listing.slug}`);
+
     return {
       success: true,
-      message: "Your shop has been submitted successfully! It will appear on the site after review.",
+      message: "Your listing has been updated successfully.",
     };
   } catch (error) {
-    console.error("Error submitting listing:", error);
+    console.error("Error updating listing:", error);
     return {
       success: false,
       message: "Something went wrong. Please try again later.",

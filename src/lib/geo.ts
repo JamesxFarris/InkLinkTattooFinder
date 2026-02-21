@@ -22,6 +22,25 @@ export function haversineDistance(
   return EARTH_RADIUS_MILES * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+/**
+ * Compute a lat/lng bounding box for a given center point and radius in miles.
+ * Used to pre-filter cities at the DB level before doing exact Haversine math.
+ */
+export function boundingBox(
+  lat: number,
+  lng: number,
+  radiusMiles: number
+): { minLat: number; maxLat: number; minLng: number; maxLng: number } {
+  const latDelta = radiusMiles / 69.0; // ~69 miles per degree of latitude
+  const lngDelta = radiusMiles / (69.0 * Math.cos((lat * Math.PI) / 180));
+  return {
+    minLat: lat - latDelta,
+    maxLat: lat + latDelta,
+    minLng: lng - lngDelta,
+    maxLng: lng + lngDelta,
+  };
+}
+
 export type GeoResult = { latitude: number; longitude: number; place?: string; state?: string };
 
 /** Detect if a string looks like a US zip code (5 digits) */
