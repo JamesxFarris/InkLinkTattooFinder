@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 
 /**
- * Edge-compatible auth config — used by middleware.
+ * Edge-compatible auth config — used by middleware AND spread into auth.ts.
  * NO Node.js-only imports (no bcrypt, no prisma).
  * Providers are added in auth.ts for server-side use.
  */
@@ -22,24 +22,6 @@ export const authConfig = {
         session.user.role = token.role as "owner" | "admin";
       }
       return session;
-    },
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const pathname = nextUrl.pathname;
-
-      if (pathname.startsWith("/dashboard")) {
-        return isLoggedIn;
-      }
-
-      if (pathname.startsWith("/admin")) {
-        if (!isLoggedIn) return false;
-        if ((auth.user as { role?: string })?.role !== "admin") {
-          return Response.redirect(new URL("/dashboard", nextUrl));
-        }
-        return true;
-      }
-
-      return true;
     },
   },
   providers: [],
