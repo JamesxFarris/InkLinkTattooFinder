@@ -392,7 +392,7 @@ async function main() {
       update: {
         name: "Iron Rose Tattoo Collective",
         description:
-          "Austin's premier artist-run tattoo collective on South Congress. Five resident artists bring decades of combined experience across every major style — from bold traditional Americana to delicate fine line and vibrant Japanese sleeves. Our 3,000 sq ft studio features private rooms, a curated art gallery, and a laid-back atmosphere. We also offer professional tattoo removal, microblading, and permanent makeup services. Walk-ins always welcome; consultations are free.",
+          "Austin's premier artist-run tattoo collective on South Congress. Five resident artists bring decades of combined experience across every major style — from bold traditional Americana to delicate fine line and vibrant Japanese sleeves. Our 3,000 sq ft studio features private rooms, a curated art gallery, and a laid-back atmosphere. We also offer professional tattoo removal, piercing, and expert cover-up services. Walk-ins always welcome; consultations are free.",
         type: "shop" as ListingType,
         phone: "5125559876",
         website: "https://example.com/iron-rose",
@@ -419,12 +419,12 @@ async function main() {
           sun: "12:00 PM – 7:00 PM",
         },
         photos: [
-          "https://images.unsplash.com/photo-1598371839696-5c5bb1fed6e2?w=800&q=80",
-          "https://images.unsplash.com/photo-1605020420620-20c943cc4669?w=800&q=80",
-          "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=800&q=80",
-          "https://images.unsplash.com/photo-1542556398-95fb5b9f9304?w=800&q=80",
-          "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?w=800&q=80",
+          "https://images.unsplash.com/photo-1590246814883-57c511e76713?w=800&q=80",
+          "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=800&q=80",
           "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=80",
+          "https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=800&q=80",
+          "https://images.unsplash.com/photo-1598371839696-5c5bb1fed6e2?w=800&q=80",
+          "https://images.unsplash.com/photo-1580820267682-426da823b514?w=800&q=80",
         ],
         artists: [
           "Mike Torres",
@@ -435,8 +435,6 @@ async function main() {
         ],
         services: [
           "Tattoo Removal",
-          "Microblading",
-          "Permanent Makeup",
           "Piercing",
           "Cover-Ups",
         ],
@@ -449,7 +447,7 @@ async function main() {
         name: "Iron Rose Tattoo Collective",
         slug: "iron-rose-tattoo-collective-austin",
         description:
-          "Austin's premier artist-run tattoo collective on South Congress. Five resident artists bring decades of combined experience across every major style — from bold traditional Americana to delicate fine line and vibrant Japanese sleeves. Our 3,000 sq ft studio features private rooms, a curated art gallery, and a laid-back atmosphere. We also offer professional tattoo removal, microblading, and permanent makeup services. Walk-ins always welcome; consultations are free.",
+          "Austin's premier artist-run tattoo collective on South Congress. Five resident artists bring decades of combined experience across every major style — from bold traditional Americana to delicate fine line and vibrant Japanese sleeves. Our 3,000 sq ft studio features private rooms, a curated art gallery, and a laid-back atmosphere. We also offer professional tattoo removal, piercing, and expert cover-up services. Walk-ins always welcome; consultations are free.",
         type: "shop" as ListingType,
         phone: "5125559876",
         website: "https://example.com/iron-rose",
@@ -476,12 +474,12 @@ async function main() {
           sun: "12:00 PM – 7:00 PM",
         },
         photos: [
-          "https://images.unsplash.com/photo-1598371839696-5c5bb1fed6e2?w=800&q=80",
-          "https://images.unsplash.com/photo-1605020420620-20c943cc4669?w=800&q=80",
-          "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=800&q=80",
-          "https://images.unsplash.com/photo-1542556398-95fb5b9f9304?w=800&q=80",
-          "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?w=800&q=80",
+          "https://images.unsplash.com/photo-1590246814883-57c511e76713?w=800&q=80",
+          "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=800&q=80",
           "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=80",
+          "https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=800&q=80",
+          "https://images.unsplash.com/photo-1598371839696-5c5bb1fed6e2?w=800&q=80",
+          "https://images.unsplash.com/photo-1580820267682-426da823b514?w=800&q=80",
         ],
         artists: [
           "Mike Torres",
@@ -492,8 +490,6 @@ async function main() {
         ],
         services: [
           "Tattoo Removal",
-          "Microblading",
-          "Permanent Makeup",
           "Piercing",
           "Cover-Ups",
         ],

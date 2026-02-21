@@ -100,7 +100,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
           </div>
         )}
 
-        <div className="mt-4 flex items-center gap-3 border-t border-stone-100 pt-3 text-xs font-medium text-stone-500 dark:border-stone-700 dark:text-stone-400">
+        <div className="mt-4 flex items-center gap-2 overflow-hidden border-t border-stone-100 pt-3 text-xs font-medium text-stone-500 dark:border-stone-700 dark:text-stone-400">
           {listing.priceRange && (
             <span className="rounded-md bg-stone-100 px-2 py-0.5 dark:bg-stone-800">
               {listing.priceRange === "budget" && "$"}
@@ -118,8 +118,8 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
             </span>
           )}
           {listing.piercingServices && <span>Piercings</span>}
-          {services && services.slice(0, 2).map((s) => (
-            <span key={s} className="rounded-md bg-violet-100 px-2 py-0.5 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+          {services && services.slice(0, 1).map((s) => (
+            <span key={s} className="truncate rounded-md bg-violet-100 px-2 py-0.5 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
               {s}
             </span>
           ))}

@@ -19,44 +19,22 @@ export function PhotoGallery({
 
   return (
     <>
-      {/* Grid */}
-      <div className="mt-6 grid grid-cols-3 gap-1.5 overflow-hidden rounded-xl">
-        {/* Hero — first image spans 2 cols + 2 rows */}
-        <div
-          className="relative col-span-2 row-span-2 aspect-[4/3] cursor-pointer overflow-hidden"
-          onClick={() => setLightboxIndex(0)}
-        >
-          <Image
-            src={items[0]}
-            alt="Photo 1"
-            fill
-            unoptimized
-            className="object-cover transition-transform duration-300 hover:scale-105"
-            sizes="(max-width: 640px) 66vw, 400px"
-          />
-        </div>
-
-        {/* Thumbnails */}
-        {items.slice(1, 5).map((src, i) => (
+      {/* Uniform grid — all photos same size */}
+      <div className="mt-6 grid grid-cols-2 gap-1.5 overflow-hidden rounded-xl sm:grid-cols-3">
+        {items.map((src, i) => (
           <div
             key={i}
             className="relative aspect-square cursor-pointer overflow-hidden"
-            onClick={() => setLightboxIndex(i + 1)}
+            onClick={() => setLightboxIndex(i)}
           >
             <Image
               src={src}
-              alt={`Photo ${i + 2}`}
+              alt={`Photo ${i + 1}`}
               fill
               unoptimized
               className="object-cover transition-transform duration-300 hover:scale-105"
-              sizes="(max-width: 640px) 33vw, 200px"
+              sizes="(max-width: 640px) 50vw, 33vw"
             />
-            {/* "+N more" overlay on last visible thumbnail */}
-            {i === 3 && items.length > 5 && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
-                +{items.length - 5} more
-              </div>
-            )}
           </div>
         ))}
       </div>

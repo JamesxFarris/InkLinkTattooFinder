@@ -119,6 +119,7 @@ export default async function ListingPage({ params }: Props) {
         <div className="lg:col-span-2">
           {/* Header */}
           <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
+
             <div className="flex items-start justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
@@ -235,6 +236,31 @@ export default async function ListingPage({ params }: Props) {
             </div>
           </div>
 
+          {/* Mobile-only Contact Bar */}
+          <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-stone-200 bg-white p-4 lg:hidden dark:border-stone-700 dark:bg-stone-900">
+            {listing.phone && (
+              <a href={`tel:${listing.phone}`} className="inline-flex items-center gap-2 rounded-full bg-teal-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                {formatPhone(listing.phone)}
+              </a>
+            )}
+            {listing.website && (
+              <a href={listing.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-teal-500 hover:text-teal-600 dark:border-stone-600 dark:text-stone-300">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+                Website
+              </a>
+            )}
+            {listing.address && (
+              <span className="text-sm text-stone-500 dark:text-stone-400">
+                {listing.address}, {listing.city.name}, {listing.city.state.abbreviation} {listing.zipCode}
+              </span>
+            )}
+          </div>
+
           {/* Photos */}
           {photos && photos.length > 0 && (
             <PhotoGallery photos={photos} featured={listing.featured} />
@@ -252,8 +278,8 @@ export default async function ListingPage({ params }: Props) {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Contact Info */}
-          <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
+          {/* Contact Info — hidden on mobile (shown inline above) */}
+          <div className="hidden rounded-xl border border-stone-200 bg-white p-6 lg:block dark:border-stone-700 dark:bg-stone-900">
             <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
               Contact
             </h2>
