@@ -5,8 +5,8 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { StatsBar } from "@/components/StatsBar";
-import { InlineListingCard } from "@/components/InlineListingCard";
-import { InlineListingNav } from "@/components/InlineListingNav";
+import { ListingGrid } from "@/components/ListingGrid";
+import { ListingCard } from "@/components/ListingCard";
 import { StyleFilter } from "@/components/StyleFilter";
 import { CityFAQ, getCityFaqData } from "@/components/CityFAQ";
 import { TattooTips } from "@/components/TattooTips";
@@ -68,6 +68,9 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
         l.categories.some((c) => c.category.slug === style)
       )
     : allListings;
+
+  const featured = listings.filter((l) => l.featured);
+  const regular = listings.filter((l) => !l.featured);
 
   const styleNames = categories.map((c) => c.name);
   const uniqueStyleCount = categories.length;
@@ -146,21 +149,6 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
         />
       </div>
 
-      {/* Quick-jump nav */}
-      {listings.length > 1 && (
-        <div className="mt-8">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
-            Jump to Listing
-          </h2>
-          <InlineListingNav
-            items={listings.map((l, i) => ({
-              index: i + 1,
-              name: l.name,
-            }))}
-          />
-        </div>
-      )}
-
       {/* Style filter */}
       {categories.length > 0 && (
         <div className="mt-8">
@@ -179,17 +167,34 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
         </div>
       )}
 
-      {/* Listings */}
-      <section className="mt-10 space-y-6">
-        {listings.length > 0 ? (
-          listings.map((listing, i) => (
-            <InlineListingCard
-              key={listing.id}
-              listing={listing}
-              index={i + 1}
-            />
-          ))
-        ) : (
+      {/* Featured Listings */}
+      {featured.length > 0 && (
+        <section className="mt-10">
+          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
+            Featured Shops
+          </h2>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* All Listings */}
+      <section className="mt-10">
+        {featured.length > 0 && regular.length > 0 && (
+          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
+            All Shops
+          </h2>
+        )}
+        {regular.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {regular.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        ) : listings.length === 0 ? (
           <div className="rounded-2xl bg-white p-16 text-center shadow-[var(--card-shadow)] ring-1 ring-stone-900/[0.04] dark:bg-stone-900 dark:ring-stone-700">
             <p className="text-stone-500 dark:text-stone-400">
               {style
@@ -197,7 +202,7 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
                 : `No tattoo shops found in ${city.name} yet. Check back soon!`}
             </p>
           </div>
-        )}
+        ) : null}
       </section>
 
       {/* FAQ */}
