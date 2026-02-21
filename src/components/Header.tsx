@@ -5,48 +5,48 @@ import { UserMenu } from "@/components/auth/UserMenu";
 function LogoMark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 36 36"
+      viewBox="0 0 48 48"
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* Ornate diamond frame */}
+      {/* Ink swirl */}
       <path
-        d="M18 3L33 18L18 33L3 18Z"
+        d="M38 18c2 6 1 13-4 18s-13 6-19 3"
         stroke="currentColor"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      {/* Inner diamond */}
-      <path
-        d="M18 9L27 18L18 27L9 18Z"
-        stroke="currentColor"
-        strokeWidth="0.75"
-        fill="none"
-        opacity="0.4"
-      />
-      {/* Tattoo needle — diagonal through center */}
-      <line
-        x1="11"
-        y1="11"
-        x2="25"
-        y2="25"
-        stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="3"
         strokeLinecap="round"
       />
-      {/* Needle tip (ink drop) */}
-      <circle cx="25.5" cy="25.5" r="2" fill="currentColor" />
-      {/* Grip detail lines */}
-      <line x1="14" y1="16" x2="16" y2="14" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
-      <line x1="16" y1="18" x2="18" y2="16" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
-      <line x1="18" y1="20" x2="20" y2="18" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
-      {/* Corner ornaments */}
-      <circle cx="18" cy="3" r="1" fill="currentColor" />
-      <circle cx="33" cy="18" r="1" fill="currentColor" />
-      <circle cx="18" cy="33" r="1" fill="currentColor" />
-      <circle cx="3" cy="18" r="1" fill="currentColor" />
+      <path
+        d="M10 30c-2-6-1-13 4-18s13-6 19-3"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        opacity="0.5"
+      />
+      {/* Pen body */}
+      <rect
+        x="17.5"
+        y="8"
+        width="6"
+        height="18"
+        rx="1.5"
+        transform="rotate(35 20.5 17)"
+        fill="#9ca3af"
+      />
+      {/* Needle */}
+      <line
+        x1="26"
+        y1="28"
+        x2="30"
+        y2="34"
+        stroke="#d1d5db"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      {/* Ink drop */}
+      <circle cx="31" cy="35.5" r="2.2" fill="currentColor" />
     </svg>
   );
 }
