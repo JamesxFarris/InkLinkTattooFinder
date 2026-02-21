@@ -26,8 +26,11 @@ export const metadata: Metadata = {
     "Discover the best tattoo artists and shops in your area. Browse by style, city, and read reviews to find your next tattoo artist.",
   metadataBase: new URL("https://inklinktattoofinder.com"),
   icons: {
-    icon: "/icon?v=2",
-    apple: "/apple-icon?v=2",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon", type: "image/png", sizes: "48x48" },
+    ],
+    apple: "/apple-icon",
   },
   openGraph: {
     type: "website",
