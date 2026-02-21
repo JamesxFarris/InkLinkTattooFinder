@@ -4,11 +4,11 @@ import bcrypt from "bcryptjs";
 import { prisma } from "./db";
 
 // Emails that are always admin, regardless of how they registered.
-// This survives redeploys, database resets, and normal registration.
-const ADMIN_EMAILS = [
-  "jafarris.exe@gmail.com",
-  ...(process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : []),
-];
+// Set ADMIN_EMAILS as a comma-separated list in your environment variables.
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [

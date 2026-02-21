@@ -385,11 +385,11 @@ async function main() {
   console.log(`Seeded ${listings.length} listings`);
 
   // ── Admin Users ────────────────────────────────────────
-  // Always ensure these emails are admin, even across redeploys
-  const ADMIN_EMAILS = [
-    "jafarris.exe@gmail.com",
-    ...(process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : []),
-  ];
+  // Set ADMIN_EMAILS as a comma-separated list in your environment variables
+  const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
 
   for (const email of ADMIN_EMAILS) {
     // If user already exists (e.g. registered normally), promote to admin
@@ -401,8 +401,12 @@ async function main() {
       });
       console.log(`Promoted existing user to admin: ${email}`);
     } else {
-      // Create admin account with env password or a secure default
-      const adminPassword = process.env.ADMIN_PASSWORD || "admin123456";
+      // Create admin account — ADMIN_PASSWORD env var is required
+      const adminPassword = process.env.ADMIN_PASSWORD;
+      if (!adminPassword) {
+        console.warn(`Skipping admin creation for ${email}: ADMIN_PASSWORD env var not set`);
+        continue;
+      }
       const adminHash = await bcrypt.hash(adminPassword, 12);
       await prisma.user.create({
         data: {

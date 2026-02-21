@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 
-// Hardcoded admin emails — auto-assigned admin on registration
-const ADMIN_EMAILS = [
-  "jafarris.exe@gmail.com",
-  ...(process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : []),
-];
+// Admin emails from environment — auto-assigned admin on registration
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 
 export async function POST(request: Request) {
   try {

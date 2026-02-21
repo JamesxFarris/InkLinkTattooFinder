@@ -25,6 +25,14 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+.env.production
+
+# claude code local settings
+.claude/
+
+# local data and photos
+data/
+photos/
 
 # vercel
 .vercel
