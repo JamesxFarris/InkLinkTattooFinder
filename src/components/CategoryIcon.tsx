@@ -26,12 +26,7 @@ export const categoryColors: Record<
   "cover-up":         { from: "#3a3530", to: "#0a5550", accent: "#2dd4bf" },
   portrait:           { from: "#4a3e28", to: "#3a3530", accent: "#fcd34d" },
   biomechanical:      { from: "#1e2e4e", to: "#3a3530", accent: "#60a5fa" },
-  "color-specialist": { from: "#5a1a1a", to: "#1e2e4e", accent: "#f87171" },
-  "black-and-grey":   { from: "#3a3530", to: "#4a4540", accent: "#d6d3d1" },
-  "custom-design":    { from: "#4a2810", to: "#3a3530", accent: "#fb923c" },
   "flash-tattoos":    { from: "#4a3810", to: "#4a2810", accent: "#fcd34d" },
-  "tattoo-supplies":  { from: "#0a5550", to: "#3a3530", accent: "#2dd4bf" },
-  "aftercare-products": { from: "#0e5a28", to: "#0a5550", accent: "#4ade80" },
   "tattoo-removal":   { from: "#5a1a1a", to: "#3a3530", accent: "#f87171" },
   "piercing-studio":  { from: "#3a3530", to: "#0a5550", accent: "#2dd4bf" },
 };
@@ -267,37 +262,6 @@ const icons: Record<string, React.ReactNode> = {
 
   // — Artist Specializations —
 
-  "color-specialist": (
-    // Palette — bright multi-color dots
-    <>
-      <circle cx="12" cy="12" r="9" stroke="#d6d3d1" strokeWidth="1.5" fill="none" />
-      <circle cx="9" cy="8" r="1.8" fill="#f87171" />
-      <circle cx="14" cy="7" r="1.8" fill="#fbbf24" />
-      <circle cx="8" cy="13" r="1.8" fill="#60a5fa" />
-      <circle cx="12" cy="16" r="1.8" fill="#4ade80" />
-      <ellipse cx="16.5" cy="13" rx="2.5" ry="2" fill="none" stroke="#d6d3d1" strokeWidth="1.5" />
-    </>
-  ),
-
-  "black-and-grey": (
-    // Gradient split circle — light contrast
-    <>
-      <circle cx="12" cy="12" r="8" stroke="#a8a29e" strokeWidth="1.5" fill="none" />
-      <path d="M12 4a8 8 0 010 16V4z" fill="#e7e5e4" opacity="0.5" />
-      <path d="M12 4a8 8 0 000 16V4z" fill="#78716c" opacity="0.3" />
-    </>
-  ),
-
-  "custom-design": (
-    // Pencil — bright orange + light
-    <>
-      <path d="M16 3l5 5-13 13H3v-5L16 3z" fill="#fb923c" opacity="0.15" />
-      <path d="M16 3l5 5-13 13H3v-5L16 3z" stroke="#d6d3d1" strokeWidth="1.5" fill="none" />
-      <path d="M14 5l5 5" stroke="#d6d3d1" strokeWidth="1.5" />
-      <path d="M3 21l3-1-2-2-1 3z" fill="#fb923c" opacity="0.5" />
-    </>
-  ),
-
   "flash-tattoos": (
     // Lightning bolt — bright yellow + amber
     <>
@@ -306,28 +270,7 @@ const icons: Record<string, React.ReactNode> = {
     </>
   ),
 
-  // — Supplier Categories —
-
-  "tattoo-supplies": (
-    // Tattoo machine — teal + light
-    <>
-      <rect x="8" y="3" width="8" height="11" rx="2" fill="#5eead4" opacity="0.15" />
-      <rect x="8" y="3" width="8" height="11" rx="2" stroke="#d6d3d1" strokeWidth="1.5" fill="none" />
-      <line x1="12" y1="14" x2="12" y2="20" stroke="#d6d3d1" strokeWidth="1.5" />
-      <circle cx="12" cy="21" r="1" fill="#5eead4" />
-      <line x1="6" y1="6" x2="8" y2="6" stroke="#d6d3d1" strokeWidth="1.5" />
-      <line x1="16" y1="6" x2="18" y2="6" stroke="#d6d3d1" strokeWidth="1.5" />
-    </>
-  ),
-
-  "aftercare-products": (
-    // Shield with cross — bright green
-    <>
-      <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z" fill="#4ade80" opacity="0.18" />
-      <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z" stroke="#4ade80" strokeWidth="1.5" fill="none" />
-      <path d="M12 9v6m-3-3h6" stroke="#4ade80" strokeWidth="1.5" />
-    </>
-  ),
+  // — Service Categories —
 
   "tattoo-removal": (
     // Laser zap — bright red + light grey

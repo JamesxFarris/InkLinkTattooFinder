@@ -203,6 +203,15 @@ export default async function ListingPage({ params }: Props) {
               )}
             </div>
           </div>
+
+          {/* Map */}
+          {listing.latitude && listing.longitude && (
+            <MapEmbed
+              latitude={listing.latitude}
+              longitude={listing.longitude}
+              name={listing.name}
+            />
+          )}
         </div>
 
         {/* Sidebar */}
@@ -249,15 +258,6 @@ export default async function ListingPage({ params }: Props) {
               )}
             </div>
           </div>
-
-          {/* Map */}
-          {listing.latitude && listing.longitude && (
-            <MapEmbed
-              latitude={listing.latitude}
-              longitude={listing.longitude}
-              name={listing.name}
-            />
-          )}
 
           {/* Claim this Business */}
           <ClaimButton

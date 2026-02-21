@@ -9,9 +9,8 @@ export function MapEmbed({
   longitude: number;
   name: string;
 }) {
-  const zoom = 15;
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${longitude - 0.01},${latitude - 0.007},${longitude + 0.01},${latitude + 0.007}&layer=mapnik&marker=${latitude},${longitude}`;
-  const mapLink = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=${zoom}/${latitude}/${longitude}`;
+  const src = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
+  const mapLink = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
 
   return (
     <div className="overflow-hidden rounded-xl border border-stone-200 dark:border-stone-700">
@@ -21,6 +20,7 @@ export function MapEmbed({
         className="h-56 w-full border-0"
         loading="lazy"
         referrerPolicy="no-referrer"
+        allowFullScreen
       />
       <a
         href={mapLink}
@@ -31,7 +31,7 @@ export function MapEmbed({
         <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
         </svg>
-        View larger map
+        View on Google Maps
       </a>
     </div>
   );
