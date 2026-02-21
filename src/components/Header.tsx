@@ -35,7 +35,7 @@ export async function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-6 md:flex" aria-label="Main navigation">
           {[
             { href: "/tattoo-shops", label: "Browse States" },
             { href: "/categories", label: "Styles" },
@@ -52,20 +52,20 @@ export async function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           {session ? (
             <UserMenu />
           ) : (
             <Link
               href="/login"
-              className="hidden text-sm font-medium text-stone-600 transition-colors hover:text-teal-500 md:inline dark:text-stone-400 dark:hover:text-teal-400"
+              className="hidden rounded-full border border-stone-300 px-4 py-1.5 text-sm font-medium text-stone-700 transition-all hover:border-teal-500 hover:text-teal-600 md:inline-flex dark:border-stone-600 dark:text-stone-300 dark:hover:border-teal-400 dark:hover:text-teal-400"
             >
               Sign In
             </Link>
           )}
           <Link
             href="/list-your-shop"
-            className="hidden rounded-full border border-teal-500 bg-teal-500 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:border-teal-600 hover:shadow-lg hover:shadow-teal-500/20 md:inline-flex"
+            className="hidden rounded-full bg-teal-500 px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-500/20 md:inline-flex"
           >
             List Your Shop
           </Link>
