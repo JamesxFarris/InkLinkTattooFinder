@@ -1,38 +1,24 @@
-import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { authConfig } from "@/lib/auth.config";
+import type { NextRequest } from "next/server";
 
-// Edge-compatible middleware — does NOT import bcrypt or prisma.
-// Route protection is handled explicitly below (not via authorized callback,
-// which would also run server-side and break).
-const { auth } = NextAuth(authConfig);
+/**
+ * Lightweight Edge-compatible middleware.
+ * Only checks for the session cookie — no NextAuth import needed.
+ * Actual session validation + role checks happen in page components via auth().
+ */
+export function middleware(req: NextRequest) {
+  const hasSession =
+    req.cookies.has("authjs.session-token") ||
+    req.cookies.has("__Secure-authjs.session-token");
 
-export default auth((req) => {
-  const { pathname } = req.nextUrl;
-
-  // Dashboard routes require login
-  if (pathname.startsWith("/dashboard")) {
-    if (!req.auth) {
-      const loginUrl = new URL("/login", req.url);
-      loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(loginUrl);
-    }
-  }
-
-  // Admin routes require login + admin role
-  if (pathname.startsWith("/admin")) {
-    if (!req.auth) {
-      const loginUrl = new URL("/login", req.url);
-      loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(loginUrl);
-    }
-    if ((req.auth.user as { role?: string })?.role !== "admin") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
+  if (!hasSession) {
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: ["/dashboard/:path*", "/admin/:path*"],
