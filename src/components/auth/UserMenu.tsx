@@ -25,7 +25,7 @@ export function UserMenu() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-full border border-stone-700 bg-stone-800 px-3 py-1.5 text-sm font-medium text-stone-300 transition-colors hover:border-stone-600 hover:text-stone-100"
+        className="flex items-center gap-2 rounded-full border border-stone-300 bg-stone-100 px-3 py-1.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-900 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-stone-600 dark:hover:text-stone-100"
       >
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-500/20 text-xs font-bold text-teal-400">
           {session.user.name?.[0]?.toUpperCase() || "U"}
@@ -37,11 +37,11 @@ export function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-stone-700 bg-stone-800 py-1 shadow-xl">
+        <div className="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-stone-200 bg-white py-1 shadow-xl dark:border-stone-700 dark:bg-stone-800">
           <Link
             href="/dashboard"
             onClick={() => setOpen(false)}
-            className="block px-4 py-2 text-sm text-stone-300 hover:bg-stone-700 hover:text-stone-100"
+            className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
           >
             Dashboard
           </Link>
@@ -49,15 +49,15 @@ export function UserMenu() {
             <Link
               href="/admin"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-stone-300 hover:bg-stone-700 hover:text-stone-100"
+              className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
             >
               Admin Panel
             </Link>
           )}
-          <hr className="my-1 border-stone-700" />
+          <hr className="my-1 border-stone-200 dark:border-stone-700" />
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="block w-full px-4 py-2 text-left text-sm text-stone-300 hover:bg-stone-700 hover:text-stone-100"
+            className="block w-full px-4 py-2 text-left text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
           >
             Sign Out
           </button>

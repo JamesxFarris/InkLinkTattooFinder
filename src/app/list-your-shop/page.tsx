@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import { getAllStates } from "@/lib/queries";
@@ -14,6 +16,9 @@ export const metadata: Metadata = {
 type StateOption = { id: number; name: string };
 
 export default async function ListYourShopPage() {
+  const session = await auth();
+  if (!session) redirect("/register?callbackUrl=/list-your-shop");
+
   let states: StateOption[] = [];
   try {
     const allStates = await getAllStates();

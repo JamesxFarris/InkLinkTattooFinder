@@ -628,7 +628,7 @@ export async function searchListingsNearby(params: {
     .sort((a, b) => a.distance - b.distance);
 
   if (citiesWithDistance.length === 0) {
-    return { listings: [], total: 0, totalPages: 0, nearestCities: [] };
+    return { listings: [], total: 0, totalPages: 0, nearestCities: [], distances: {} };
   }
 
   const cityIds = citiesWithDistance.map((c) => c.id);

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { Suspense } from "react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ListingCard } from "@/components/ListingCard";
 import { ListingGrid } from "@/components/ListingGrid";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { Pagination } from "@/components/Pagination";
@@ -22,6 +23,8 @@ type Props = {
     sort?: string;
     page?: string;
     radius?: string;
+    lat?: string;
+    lng?: string;
   }>;
 };
 
@@ -47,16 +50,39 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
     slug: c.slug,
   }));
 
-  // Check if the query is a zip code
+  // Check if the query is a zip code or browser geolocation
   const isZip = isZipCode(query);
+  const hasGeoCoords = !!(params.lat && params.lng);
   let geoResult: { latitude: number; longitude: number; place?: string; state?: string } | null = null;
+  let isGeoSearch = false;
   let listings: ListingWithRelations[] = [];
   let total = 0;
   let totalPages = 0;
   let nearestCities: { id: number; name: string; distance: number }[] = [];
   let distances: Record<number, number> = {};
 
-  if (isZip) {
+  if (hasGeoCoords && !query) {
+    // Browser geolocation search
+    const lat = parseFloat(params.lat!);
+    const lng = parseFloat(params.lng!);
+    if (!isNaN(lat) && !isNaN(lng)) {
+      isGeoSearch = true;
+      const result = await searchListingsNearby({
+        latitude: lat,
+        longitude: lng,
+        radiusMiles: radius,
+        categorySlug: params.category,
+        price: params.price,
+        walkIns: params.walkIns,
+        page,
+      });
+      listings = result.listings;
+      distances = result.distances;
+      total = result.total;
+      totalPages = result.totalPages;
+      nearestCities = result.nearestCities;
+    }
+  } else if (isZip) {
     // Geocode zip code and do proximity search
     geoResult = await geocodeZip(query);
 
@@ -101,6 +127,8 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
   if (params.walkIns) paginationParams.walkIns = params.walkIns;
   if (params.sort) paginationParams.sort = params.sort;
   if (params.radius) paginationParams.radius = params.radius;
+  if (params.lat) paginationParams.lat = params.lat;
+  if (params.lng) paginationParams.lng = params.lng;
 
   return (
     <div className="flex flex-col gap-8 lg:flex-row">
@@ -111,6 +139,56 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
 
       {/* Results */}
       <div className="flex-1">
+        {/* Geolocation banner */}
+        {isGeoSearch && (
+          <div className="mb-6 rounded-xl bg-teal-50 p-4 ring-1 ring-teal-200 dark:bg-teal-950/30 dark:ring-teal-800">
+            <div className="flex items-start gap-3">
+              <svg className="mt-0.5 h-5 w-5 shrink-0 text-teal-600 dark:text-teal-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+              </svg>
+              <div>
+                <p className="text-sm font-medium text-teal-900 dark:text-teal-100">
+                  Showing tattoo shops near your location
+                </p>
+                <p className="mt-0.5 text-xs text-teal-700 dark:text-teal-300">
+                  Within {radius} miles &middot; {total} {total === 1 ? "shop" : "shops"} found
+                </p>
+                {nearestCities.length > 0 && (
+                  <p className="mt-1 text-xs text-teal-600 dark:text-teal-400">
+                    Nearest cities: {nearestCities.map((c) => `${c.name} (${c.distance} mi)`).join(", ")}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Radius controls */}
+            <div className="mt-3 flex flex-wrap gap-2">
+              {[25, 50, 100, 200].map((r) => {
+                const radiusParams = new URLSearchParams();
+                radiusParams.set("lat", params.lat!);
+                radiusParams.set("lng", params.lng!);
+                radiusParams.set("radius", String(r));
+                if (params.category) radiusParams.set("category", params.category);
+                if (params.price) radiusParams.set("price", params.price);
+                if (params.walkIns) radiusParams.set("walkIns", params.walkIns);
+                return (
+                  <a
+                    key={r}
+                    href={`/search?${radiusParams.toString()}`}
+                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                      r === radius
+                        ? "bg-teal-600 text-white"
+                        : "bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800"
+                    }`}
+                  >
+                    {r} miles
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Zip code location banner */}
         {isZip && geoResult && (
           <div className="mb-6 rounded-xl bg-teal-50 p-4 ring-1 ring-teal-200 dark:bg-teal-950/30 dark:ring-teal-800">
@@ -179,8 +257,18 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
           </p>
         </div>
 
-        {/* Listings with distance badges for zip searches */}
-        {isZip && listings.length > 0 ? (
+        {/* Verified legend */}
+        {listings.some((l) => l.ownerId) && (
+          <div className="mb-4 flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
+            <svg className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>= Owner Verified</span>
+          </div>
+        )}
+
+        {/* Listings with distance badges for proximity searches */}
+        {(isZip || isGeoSearch) && listings.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {listings.map((listing) => {
               const dist = distances[listing.id];
@@ -191,7 +279,7 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
                       {dist < 1 ? "< 1 mi" : `${Math.round(dist)} mi`}
                     </span>
                   )}
-                  <ListingGrid listings={[listing]} />
+                  <ListingCard listing={listing} />
                 </div>
               );
             })}
@@ -226,7 +314,7 @@ export default async function SearchPage({ searchParams }: Props) {
       <Suspense
         fallback={
           <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-stone-700 border-t-teal-500" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-stone-200 border-t-teal-500 dark:border-stone-700" />
           </div>
         }
       >

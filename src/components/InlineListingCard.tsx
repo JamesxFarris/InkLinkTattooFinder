@@ -28,6 +28,14 @@ export function InlineListingCard({
               {listing.name}
             </h3>
             {listing.featured && <Badge variant="primary">Featured</Badge>}
+            {listing.ownerId && (
+              <span className="flex items-center gap-1 rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-900 dark:text-teal-300">
+                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Verified
+              </span>
+            )}
           </div>
 
           {listing.address && (
@@ -38,7 +46,7 @@ export function InlineListingCard({
           )}
         </div>
 
-        {listing.googleRating && (
+        {listing.googleRating ? (
           <div className="shrink-0 text-right">
             <div className="flex items-center gap-1">
               {Array.from({ length: 5 }).map((_, i) => (
@@ -62,6 +70,10 @@ export function InlineListingCard({
                 </span>
               )}
             </p>
+          </div>
+        ) : (
+          <div className="shrink-0">
+            <p className="text-sm text-stone-500 dark:text-stone-400">Not rated</p>
           </div>
         )}
       </div>

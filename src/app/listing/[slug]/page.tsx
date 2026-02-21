@@ -11,6 +11,7 @@ import { formatPhone } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { ClaimButton } from "@/components/listing/ClaimButton";
+import { MapEmbed } from "@/components/listing/MapEmbed";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -130,7 +131,7 @@ export default async function ListingPage({ params }: Props) {
               )}
             </div>
 
-            {listing.googleRating && (
+            {listing.googleRating ? (
               <div className="mt-4 flex items-center gap-2">
                 <div className="flex items-center gap-1">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -153,6 +154,8 @@ export default async function ListingPage({ params }: Props) {
                   </span>
                 )}
               </div>
+            ) : (
+              <p className="mt-4 text-sm text-stone-500 dark:text-stone-400">Not rated</p>
             )}
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -246,6 +249,15 @@ export default async function ListingPage({ params }: Props) {
               )}
             </div>
           </div>
+
+          {/* Map */}
+          {listing.latitude && listing.longitude && (
+            <MapEmbed
+              latitude={listing.latitude}
+              longitude={listing.longitude}
+              name={listing.name}
+            />
+          )}
 
           {/* Claim this Business */}
           <ClaimButton
