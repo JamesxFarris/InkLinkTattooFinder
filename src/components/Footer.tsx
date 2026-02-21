@@ -41,6 +41,14 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  href="/styles"
+                  className="text-sm font-medium text-teal-500 transition-colors hover:text-teal-400"
+                >
+                  All Styles Guide
+                </Link>
+              </li>
             </ul>
           </div>
 
