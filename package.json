@@ -1,7 +1,7 @@
 {
   "name": "tattoo-directory",
   "version": "1.0.0",
-  "description": "Tattoo artist and shop directory",
+  "description": "InkLink Tattoo Finder - directory for tattoo shops and artists",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && prisma db push --skip-generate && next build",
