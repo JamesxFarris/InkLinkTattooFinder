@@ -3,8 +3,8 @@ import { StockImage } from "./StockImage";
 import { getCityImage } from "@/lib/images";
 import type { CityWithCount } from "@/types";
 
-export function CityCard({ city }: { city: CityWithCount }) {
-  const imageSrc = getCityImage(city.slug);
+export function CityCard({ city, imageUrl }: { city: CityWithCount; imageUrl?: string }) {
+  const imageSrc = imageUrl || getCityImage(city.slug);
 
   return (
     <Link

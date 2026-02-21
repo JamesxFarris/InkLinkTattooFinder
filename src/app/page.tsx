@@ -5,7 +5,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { CategoryCard } from "@/components/CategoryCard";
 import { CityCard } from "@/components/CityCard";
 import { JsonLd, websiteJsonLd, organizationJsonLd, faqJsonLd } from "@/components/JsonLd";
-import { HERO_IMAGE } from "@/lib/images";
+import { HERO_IMAGE, getCityImageUrl } from "@/lib/images";
 import { getAllCategories, getTopCities, getAllStates, getPopularSearchCombos } from "@/lib/queries";
 import type { FaqItem } from "@/lib/faq";
 import type { Metadata } from "next";
@@ -164,7 +164,7 @@ export default async function HomePage() {
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cities.map((city) => (
-            <CityCard key={city.id} city={city} />
+            <CityCard key={city.id} city={city} imageUrl={getCityImageUrl(city)} />
           ))}
         </div>
       </section>

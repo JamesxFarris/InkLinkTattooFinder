@@ -105,6 +105,7 @@ model City {
   latitude   Float?
   longitude  Float?
   metroArea  String?
+  imageUrl   String?
   listings   Listing[]
 
   @@unique([slug, stateId])
