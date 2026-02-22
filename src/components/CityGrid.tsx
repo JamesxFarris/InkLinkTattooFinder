@@ -6,13 +6,7 @@ import type { CityWithCount } from "@/types";
 
 type SortMode = "alpha" | "shops-desc" | "shops-asc";
 
-export function CityGrid({
-  cities,
-  imageUrls,
-}: {
-  cities: CityWithCount[];
-  imageUrls: Record<number, string>;
-}) {
+export function CityGrid({ cities }: { cities: CityWithCount[] }) {
   const [sort, setSort] = useState<SortMode>("alpha");
   const [search, setSearch] = useState("");
 
@@ -60,9 +54,9 @@ export function CityGrid({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((city) => (
-          <CityCard key={city.id} city={city} imageUrl={imageUrls[city.id]} />
+          <CityCard key={city.id} city={city} />
         ))}
       </div>
 

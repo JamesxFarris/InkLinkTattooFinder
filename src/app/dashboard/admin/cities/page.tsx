@@ -3,7 +3,6 @@ import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { AdminCityRow } from "./AdminCityRow";
-import { BulkFetchImagesButton } from "./BulkFetchImagesButton";
 
 export const metadata: Metadata = {
   title: "Manage Cities",
@@ -32,9 +31,6 @@ export default async function AdminCitiesPage({
     },
     orderBy: [{ state: { name: "asc" } }, { name: "asc" }],
   });
-
-  const allCityIds = cities.map((c) => c.id);
-  const missingImageIds = cities.filter((c) => !c.imageUrl).map((c) => c.id);
 
   return (
     <div>
@@ -78,8 +74,6 @@ export default async function AdminCitiesPage({
           })}
       </div>
 
-      <BulkFetchImagesButton missingIds={missingImageIds} allIds={allCityIds} />
-
       {cities.length === 0 ? (
         <div className="rounded-xl border border-stone-200 bg-stone-50 p-12 text-center dark:border-stone-800 dark:bg-stone-900">
           <p className="text-stone-500 dark:text-stone-400">No cities found.</p>
@@ -96,11 +90,9 @@ export default async function AdminCitiesPage({
                 state: {
                   name: city.state.name,
                   abbreviation: city.state.abbreviation,
-                  slug: city.state.slug,
                 },
                 listingCount: city._count.listings,
                 population: city.population,
-                imageUrl: city.imageUrl,
               }}
             />
           ))}

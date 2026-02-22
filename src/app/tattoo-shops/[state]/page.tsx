@@ -18,7 +18,6 @@ import {
   getAllStates,
   getPopularCategoriesInState,
 } from "@/lib/queries";
-import { getCityImageUrl } from "@/lib/images";
 import { statePageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -48,12 +47,6 @@ export default async function StatePillarPage({ params }: Props) {
     getAllStates(),
     getPopularCategoriesInState(state.id),
   ]);
-
-  // Pre-compute image URLs server-side for the client CityGrid component
-  const cityImageUrls: Record<number, string> = {};
-  for (const city of cities) {
-    cityImageUrls[city.id] = getCityImageUrl(city);
-  }
 
   const baseUrl = "https://inklinktattoofinder.com";
 
@@ -109,7 +102,7 @@ export default async function StatePillarPage({ params }: Props) {
           Cities in {state.name}
         </h2>
         {cities.length > 0 ? (
-          <CityGrid cities={cities} imageUrls={cityImageUrls} />
+          <CityGrid cities={cities} />
         ) : (
           <p className="mt-8 text-center text-stone-500">
             No cities with listings found in {state.name} yet. Check back soon!

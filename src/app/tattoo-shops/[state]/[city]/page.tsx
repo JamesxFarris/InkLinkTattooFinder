@@ -24,7 +24,6 @@ import {
   getCategoriesForCity,
   getCitiesByState,
 } from "@/lib/queries";
-import { getCityImageUrl } from "@/lib/images";
 import { cityPageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -245,9 +244,9 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
           <h2 className="mb-4 text-xl font-bold text-stone-900 dark:text-stone-100">
             Other Cities in {city.state.name}
           </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {otherCities.map((c) => (
-              <CityCard key={c.id} city={c} imageUrl={getCityImageUrl(c)} />
+              <CityCard key={c.id} city={c} />
             ))}
           </div>
         </section>
