@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, DragEvent } from "react";
 
 type PhotoUploadProps = {
   existingPhotos?: string[];
@@ -13,6 +13,8 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const handleFiles = useCallback(
     async (files: FileList | null) => {
@@ -65,6 +67,39 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
     [handleFiles]
   );
 
+  // --- Thumbnail reorder drag handlers ---
+  const onThumbDragStart = (e: DragEvent, index: number) => {
+    setDragIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const onThumbDragOver = (e: DragEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverIndex(index);
+  };
+
+  const onThumbDrop = (e: DragEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (dragIndex !== null && dragIndex !== index) {
+      setPhotos((prev) => {
+        const next = [...prev];
+        const [moved] = next.splice(dragIndex, 1);
+        next.splice(index, 0, moved);
+        return next;
+      });
+    }
+    setDragIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const onThumbDragEnd = () => {
+    setDragIndex(null);
+    setDragOverIndex(null);
+  };
+
   return (
     <div>
       {/* Hidden inputs for form submission */}
@@ -116,27 +151,48 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
 
       {/* Thumbnails */}
       {photos.length > 0 && (
-        <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
-          {photos.map((url, i) => (
-            <div key={i} className="group relative">
-              <img
-                src={url}
-                alt={`Photo ${i + 1}`}
-                className="h-24 w-full rounded-lg object-cover ring-1 ring-stone-200 dark:ring-stone-700"
-              />
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removePhoto(i);
-                }}
-                className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white opacity-0 shadow transition group-hover:opacity-100"
+        <>
+          <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
+            {photos.map((url, i) => (
+              <div
+                key={url}
+                draggable
+                onDragStart={(e) => onThumbDragStart(e, i)}
+                onDragOver={(e) => onThumbDragOver(e, i)}
+                onDrop={(e) => onThumbDrop(e, i)}
+                onDragEnd={onThumbDragEnd}
+                className={`group relative cursor-grab active:cursor-grabbing ${
+                  dragIndex === i ? "opacity-40" : ""
+                } ${
+                  dragOverIndex === i && dragIndex !== i
+                    ? "ring-2 ring-teal-400 rounded-lg"
+                    : ""
+                }`}
               >
-                &times;
-              </button>
-            </div>
-          ))}
-        </div>
+                <img
+                  src={url}
+                  alt={`Photo ${i + 1}`}
+                  className="h-24 w-full rounded-lg object-cover ring-1 ring-stone-200 dark:ring-stone-700"
+                />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removePhoto(i);
+                  }}
+                  className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white opacity-0 shadow transition group-hover:opacity-100"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+          </div>
+          {photos.length > 1 && (
+            <p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
+              Drag to reorder &middot; First photo is the cover image
+            </p>
+          )}
+        </>
       )}
     </div>
   );
