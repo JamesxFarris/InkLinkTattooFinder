@@ -80,36 +80,32 @@ async function geocodeCities() {
   console.log(`Phase 1 done: ${success} cities geocoded, ${failed} failed\n`);
 }
 
-// ── Phase 2: Listing-level geocoding via Census Bureau ──────────
-
-interface CensusResult {
-  result?: {
-    addressMatches?: Array<{
-      coordinates: { x: number; y: number };
-      matchedAddress: string;
-    }>;
-  };
-}
+// ── Phase 2: Listing-level geocoding via Nominatim ──────────────
 
 async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
   try {
     const params = new URLSearchParams({
-      address: address,
-      benchmark: "Public_AR_Current",
+      q: address,
       format: "json",
+      limit: "1",
+      countrycodes: "us",
     });
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
-    const res = await fetch(
-      `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?${params}`,
-      { signal: controller.signal }
-    );
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?${params}`, {
+      signal: controller.signal,
+      headers: {
+        "User-Agent": "InkLink-Tattoo-Directory/1.0 (geocoding tattoo shops)",
+      },
+    });
     clearTimeout(timeout);
     if (!res.ok) return null;
-    const data: CensusResult = await res.json();
-    const match = data.result?.addressMatches?.[0];
-    if (!match) return null;
-    return { lat: match.coordinates.y, lng: match.coordinates.x };
+    const data = await res.json();
+    if (!data || data.length === 0) return null;
+    const lat = parseFloat(data[0].lat);
+    const lng = parseFloat(data[0].lon);
+    if (isNaN(lat) || isNaN(lng)) return null;
+    return { lat, lng };
   } catch {
     return null;
   }
@@ -133,16 +129,16 @@ async function geocodeListings() {
     return;
   }
 
-  console.log(`Phase 2: ${listings.length} listings without coordinates`);
+  console.log(`Phase 2: ${listings.length} listings to geocode via Nominatim`);
+  console.log(`  Estimated time: ~${Math.ceil(listings.length * 1.1 / 60)} minutes (1 req/sec)\n`);
 
   let success = 0;
   let failed = 0;
 
   for (let i = 0; i < listings.length; i++) {
     const listing = listings[i];
-    const address = listing.address!;
-
-    const coords = await geocodeAddress(address);
+    // Use the raw address as-is — CSV addresses already include city, state, zip
+    const coords = await geocodeAddress(listing.address!);
 
     if (coords) {
       await prisma.listing.update({
@@ -154,18 +150,20 @@ async function geocodeListings() {
       failed++;
     }
 
-    if ((i + 1) % 200 === 0 || i === listings.length - 1) {
+    if ((i + 1) % 100 === 0 || i === listings.length - 1) {
       const pct = ((success / (i + 1)) * 100).toFixed(1);
+      const remaining = listings.length - (i + 1);
+      const etaMin = Math.ceil((remaining * 1.1) / 60);
       console.log(
-        `  [${i + 1}/${listings.length}] ${success} geocoded (${pct}%), ${failed} failed`
+        `  [${i + 1}/${listings.length}] ${success} geocoded (${pct}%), ${failed} failed | ETA: ~${etaMin} min`
       );
     }
 
-    // Census geocoder can handle ~10 req/sec; 250ms is conservative and safe
-    if (i < listings.length - 1) await sleep(250);
+    // Nominatim policy: max 1 request per second
+    if (i < listings.length - 1) await sleep(1100);
   }
 
-  console.log(`Phase 2 done: ${success} listings geocoded, ${failed} failed\n`);
+  console.log(`\nPhase 2 done: ${success} listings geocoded, ${failed} failed\n`);
 }
 
 // ── Main ────────────────────────────────────────────────────────
