@@ -15,6 +15,46 @@ export const TATTOO_STOCK_IMAGES = [
   "https://images.pexels.com/photos/4125659/pexels-photo-4125659.jpeg?auto=compress&fit=crop&w=800&q=80",
 ];
 
+// Curated city skyline/landmark images for major cities (homepage featured cards)
+export const CITY_IMAGES: Record<string, string> = {
+  "new-york":
+    "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
+  "los-angeles":
+    "https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?auto=format&fit=crop&w=800&q=80",
+  chicago:
+    "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?auto=format&fit=crop&w=800&q=80",
+  houston:
+    "https://images.unsplash.com/photo-1530089711124-9ca31fb9e863?auto=format&fit=crop&w=800&q=80",
+  miami:
+    "https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?auto=format&fit=crop&w=800&q=80",
+  phoenix:
+    "https://images.unsplash.com/photo-1729041534038-fdc1f9cf3d3a?auto=format&fit=crop&w=800&q=80",
+  philadelphia:
+    "https://images.unsplash.com/photo-1569761316261-9a8696fa2ca3?auto=format&fit=crop&w=800&q=80",
+  "san-antonio":
+    "https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=800&q=80",
+  "san-diego":
+    "https://images.unsplash.com/photo-1694381931182-6ae3545ab0e3?auto=format&fit=crop&w=800&q=80",
+  dallas:
+    "https://images.unsplash.com/photo-1545194445-dddb8f4487c6?auto=format&fit=crop&w=800&q=80",
+  austin:
+    "https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=800&q=80",
+  denver:
+    "https://images.unsplash.com/photo-1619856699906-09e1f4ef34b0?auto=format&fit=crop&w=800&q=80",
+};
+
+/**
+ * Get a curated image for a city: city-specific photo > state scenic > deterministic stock.
+ * Only uses hand-picked images — no DB/Wikipedia URLs.
+ */
+export function getCityImageUrl(
+  city: { slug: string; state?: { slug: string } }
+): string {
+  if (CITY_IMAGES[city.slug]) return CITY_IMAGES[city.slug];
+  if (city.state?.slug && STATE_IMAGES[city.state.slug]) return STATE_IMAGES[city.state.slug];
+  return getStockImage(city.slug);
+}
+
 // State-specific scenic images (landmarks / landscapes)
 export const STATE_IMAGES: Record<string, string> = {
   "alabama":
