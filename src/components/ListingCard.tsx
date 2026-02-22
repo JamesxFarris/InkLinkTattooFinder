@@ -25,8 +25,11 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
             {/* Subtle pattern overlay */}
             <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle, #14b8a6 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
             {/* IL brand monogram */}
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-500/15 ring-1 ring-teal-500/20">
-              <span className="text-2xl font-bold tracking-tight text-teal-500/70">IL</span>
+            <div className="flex flex-col items-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-500/15 ring-1 ring-teal-500/20">
+                <span className="text-2xl font-bold tracking-tight text-teal-500/70">IL</span>
+              </div>
+              <span className="mt-2 text-xs font-medium tracking-wide text-stone-500">More to come</span>
             </div>
           </div>
         )}
