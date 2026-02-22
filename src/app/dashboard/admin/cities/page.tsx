@@ -33,7 +33,8 @@ export default async function AdminCitiesPage({
     orderBy: [{ state: { name: "asc" } }, { name: "asc" }],
   });
 
-  const citiesWithoutImages = cities.filter((c) => !c.imageUrl).map((c) => c.id);
+  const allCityIds = cities.map((c) => c.id);
+  const missingImageIds = cities.filter((c) => !c.imageUrl).map((c) => c.id);
 
   return (
     <div>
@@ -77,7 +78,7 @@ export default async function AdminCitiesPage({
           })}
       </div>
 
-      <BulkFetchImagesButton cityIds={citiesWithoutImages} />
+      <BulkFetchImagesButton missingIds={missingImageIds} allIds={allCityIds} />
 
       {cities.length === 0 ? (
         <div className="rounded-xl border border-stone-200 bg-stone-50 p-12 text-center dark:border-stone-800 dark:bg-stone-900">

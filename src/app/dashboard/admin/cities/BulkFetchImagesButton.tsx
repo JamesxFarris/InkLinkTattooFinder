@@ -1,25 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { fetchCityImage } from "../actions";
+import { clearCityImage, fetchCityImage } from "../actions";
 
-export function BulkFetchImagesButton({ cityIds }: { cityIds: number[] }) {
+type Props = {
+  missingIds: number[];
+  allIds: number[];
+};
+
+export function BulkFetchImagesButton({ missingIds, allIds }: Props) {
   const [running, setRunning] = useState(false);
+  const [mode, setMode] = useState<"missing" | "all">("missing");
   const [progress, setProgress] = useState(0);
+  const [total, setTotal] = useState(0);
   const [results, setResults] = useState<{ fetched: number; skipped: number } | null>(null);
 
-  async function handleBulkFetch() {
+  async function handleBulkFetch(ids: number[], clearFirst: boolean) {
     setRunning(true);
     setProgress(0);
+    setTotal(ids.length);
     setResults(null);
 
     let fetched = 0;
     let skipped = 0;
 
-    for (let i = 0; i < cityIds.length; i++) {
+    for (let i = 0; i < ids.length; i++) {
       setProgress(i + 1);
       try {
-        const result = await fetchCityImage(cityIds[i]);
+        if (clearFirst) await clearCityImage(ids[i]);
+        const result = await fetchCityImage(ids[i]);
         if (result.success) {
           fetched++;
         } else {
@@ -34,18 +43,30 @@ export function BulkFetchImagesButton({ cityIds }: { cityIds: number[] }) {
     setRunning(false);
   }
 
-  if (cityIds.length === 0) return null;
+  if (allIds.length === 0) return null;
 
   return (
-    <div className="mb-6 flex items-center gap-4">
+    <div className="mb-6 flex flex-wrap items-center gap-3">
+      {missingIds.length > 0 && (
+        <button
+          onClick={() => { setMode("missing"); handleBulkFetch(missingIds, false); }}
+          disabled={running}
+          className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-teal-700 disabled:opacity-50"
+        >
+          {running && mode === "missing"
+            ? `Fetching ${progress} of ${total}...`
+            : `Fetch Missing (${missingIds.length})`}
+        </button>
+      )}
+
       <button
-        onClick={handleBulkFetch}
+        onClick={() => { setMode("all"); handleBulkFetch(allIds, true); }}
         disabled={running}
-        className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-teal-700 disabled:opacity-50"
+        className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-amber-700 disabled:opacity-50"
       >
-        {running
-          ? `Fetching ${progress} of ${cityIds.length}...`
-          : `Fetch Missing Images (${cityIds.length})`}
+        {running && mode === "all"
+          ? `Re-fetching ${progress} of ${total}...`
+          : `Re-fetch All (${allIds.length})`}
       </button>
 
       {running && (
@@ -53,7 +74,7 @@ export function BulkFetchImagesButton({ cityIds }: { cityIds: number[] }) {
           <div className="h-2 rounded-full bg-stone-200 dark:bg-stone-700">
             <div
               className="h-2 rounded-full bg-teal-500 transition-all"
-              style={{ width: `${(progress / cityIds.length) * 100}%` }}
+              style={{ width: `${(progress / total) * 100}%` }}
             />
           </div>
         </div>
