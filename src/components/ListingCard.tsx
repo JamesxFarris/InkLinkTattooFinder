@@ -85,7 +85,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
         </p>
 
         {listing.description && (
-          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+          <p className="mt-1.5 line-clamp-3 text-sm leading-snug text-stone-500 dark:text-stone-400">
             {listing.description}
           </p>
         )}
