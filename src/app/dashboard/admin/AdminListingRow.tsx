@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { approveListing, rejectListing, adminDeleteListing } from "./actions";
+import { approveListing, rejectListing, adminDeleteListing, revokeOwnership } from "./actions";
 
 const statusStyles: Record<string, string> = {
   active: "bg-green-500/10 text-green-400 border-green-500/30",
@@ -69,6 +69,19 @@ export function AdminListingRow({ listing }: ListingRowProps) {
               className="rounded-lg bg-yellow-600/20 px-3 py-1.5 text-xs font-medium text-yellow-400 transition hover:bg-yellow-600/30 disabled:opacity-50"
             >
               Reject
+            </button>
+          )}
+          {listing.owner && (
+            <button
+              onClick={() => {
+                if (confirm(`Revoke ownership from ${listing.owner!.name ?? listing.owner!.email}?`)) {
+                  handleAction(revokeOwnership);
+                }
+              }}
+              disabled={loading}
+              className="rounded-lg bg-orange-600/20 px-3 py-1.5 text-xs font-medium text-orange-400 transition hover:bg-orange-600/30 disabled:opacity-50"
+            >
+              Revoke Owner
             </button>
           )}
           <button

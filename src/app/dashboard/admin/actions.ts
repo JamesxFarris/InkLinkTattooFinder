@@ -30,6 +30,20 @@ export async function rejectListing(id: number) {
   revalidatePath("/dashboard/admin");
 }
 
+export async function revokeOwnership(id: number) {
+  await requireAdmin();
+  await prisma.listing.update({
+    where: { id },
+    data: { ownerId: null },
+  });
+  // Mark any approved claims for this listing as denied so the slot reopens
+  await prisma.claim.updateMany({
+    where: { listingId: id, status: "approved" },
+    data: { status: "denied", adminNotes: "Ownership revoked by admin" },
+  });
+  revalidatePath("/dashboard/admin");
+}
+
 export async function adminDeleteListing(id: number) {
   await requireAdmin();
   await prisma.listing.delete({ where: { id } });
