@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { searchCityImage } from "@/lib/wikipedia";
 import { revalidatePath } from "next/cache";
 
 async function requireAdmin() {
@@ -89,6 +90,49 @@ export async function adminDeleteCity(id: number) {
   });
   await prisma.listing.deleteMany({ where: { cityId: id } });
   await prisma.city.delete({ where: { id } });
+
+  revalidatePath("/dashboard/admin/cities");
+}
+
+export async function fetchCityImage(cityId: number) {
+  await requireAdmin();
+
+  const city = await prisma.city.findUnique({
+    where: { id: cityId },
+    include: { state: true },
+  });
+  if (!city) throw new Error("City not found");
+
+  const imageUrl = await searchCityImage(city.name, city.state.name);
+  if (!imageUrl) return { success: false as const };
+
+  await prisma.city.update({
+    where: { id: cityId },
+    data: { imageUrl },
+  });
+
+  revalidatePath("/dashboard/admin/cities");
+  return { success: true as const, imageUrl };
+}
+
+export async function setCityImage(cityId: number, imageUrl: string) {
+  await requireAdmin();
+
+  await prisma.city.update({
+    where: { id: cityId },
+    data: { imageUrl },
+  });
+
+  revalidatePath("/dashboard/admin/cities");
+}
+
+export async function clearCityImage(cityId: number) {
+  await requireAdmin();
+
+  await prisma.city.update({
+    where: { id: cityId },
+    data: { imageUrl: null },
+  });
 
   revalidatePath("/dashboard/admin/cities");
 }

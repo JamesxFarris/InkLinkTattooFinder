@@ -1,22 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { adminDeleteCity } from "../actions";
+import Image from "next/image";
+import { adminDeleteCity, fetchCityImage, clearCityImage } from "../actions";
+import { getCityImageUrl } from "@/lib/images";
 
 type CityRowProps = {
   city: {
     id: number;
     name: string;
     slug: string;
-    state: { name: string; abbreviation: string };
+    state: { name: string; abbreviation: string; slug: string };
     listingCount: number;
     population: number | null;
+    imageUrl: string | null;
   };
 };
 
 export function AdminCityRow({ city }: CityRowProps) {
   const [loading, setLoading] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [fetching, setFetching] = useState(false);
+  const [clearing, setClearing] = useState(false);
+
+  const displayImage = getCityImageUrl({
+    slug: city.slug,
+    imageUrl: city.imageUrl,
+    state: { slug: city.state.slug },
+  });
 
   async function handleDelete() {
     setLoading(true);
@@ -25,9 +36,46 @@ export function AdminCityRow({ city }: CityRowProps) {
     setConfirming(false);
   }
 
+  async function handleFetch() {
+    setFetching(true);
+    try {
+      await fetchCityImage(city.id);
+    } catch {
+      // handled server-side
+    }
+    setFetching(false);
+  }
+
+  async function handleClear() {
+    setClearing(true);
+    try {
+      await clearCityImage(city.id);
+    } catch {
+      // handled server-side
+    }
+    setClearing(false);
+  }
+
   return (
     <div className="rounded-xl border border-stone-200 bg-white p-5 shadow-sm dark:border-stone-800 dark:bg-stone-900">
       <div className="flex flex-wrap items-start justify-between gap-4">
+        {/* Thumbnail + status dot */}
+        <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
+          <Image
+            src={displayImage}
+            alt={city.name}
+            fill
+            className="object-cover"
+            sizes="48px"
+          />
+          <span
+            className={`absolute bottom-0.5 right-0.5 h-2.5 w-2.5 rounded-full border border-white dark:border-stone-900 ${
+              city.imageUrl ? "bg-green-500" : "bg-amber-400"
+            }`}
+            title={city.imageUrl ? "Custom image" : "Using state fallback"}
+          />
+        </div>
+
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-3">
             <h2 className="font-semibold text-stone-900 dark:text-stone-100">
@@ -51,6 +99,25 @@ export function AdminCityRow({ city }: CityRowProps) {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Image actions */}
+          <button
+            onClick={handleFetch}
+            disabled={fetching}
+            className="rounded-lg bg-teal-600/20 px-3 py-1.5 text-xs font-medium text-teal-600 transition hover:bg-teal-600/30 disabled:opacity-50 dark:text-teal-400"
+          >
+            {fetching ? "Fetching..." : "Fetch"}
+          </button>
+          {city.imageUrl && (
+            <button
+              onClick={handleClear}
+              disabled={clearing}
+              className="rounded-lg bg-amber-600/20 px-3 py-1.5 text-xs font-medium text-amber-600 transition hover:bg-amber-600/30 disabled:opacity-50 dark:text-amber-400"
+            >
+              {clearing ? "Clearing..." : "Clear"}
+            </button>
+          )}
+
+          {/* Delete */}
           {confirming ? (
             <>
               <span className="text-xs text-red-400">
