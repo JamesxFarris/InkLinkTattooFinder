@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { StateCard } from "@/components/StateCard";
+import { StateGrid } from "@/components/StateGrid";
 import { StatsBar } from "@/components/StatsBar";
 import { JsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { getAllStates } from "@/lib/queries";
@@ -21,10 +21,6 @@ export function generateMetadata(): Metadata {
 export default async function StatesIndexPage() {
   const states = await getAllStates();
 
-  const sortedStates = [...states].sort(
-    (a, b) => b._count.listings - a._count.listings
-  );
-
   const totalListings = states.reduce((sum, s) => sum + s._count.listings, 0);
   const totalCities = states.reduce((sum, s) => sum + s._count.cities, 0);
 
@@ -34,7 +30,7 @@ export default async function StatesIndexPage() {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <JsonLd
         data={itemListJsonLd(
-          sortedStates.map((s, i) => ({
+          states.map((s, i) => ({
             name: s.name,
             url: `${baseUrl}/tattoo-shops/${s.slug}`,
             position: i + 1,
@@ -62,11 +58,7 @@ export default async function StatesIndexPage() {
         />
       </div>
 
-      <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sortedStates.map((state) => (
-          <StateCard key={state.id} state={state} />
-        ))}
-      </div>
+      <StateGrid states={states} />
     </div>
   );
 }

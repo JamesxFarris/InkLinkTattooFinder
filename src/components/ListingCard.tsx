@@ -1,13 +1,10 @@
 import Link from "next/link";
 import { Badge } from "./ui/Badge";
-import { StockImage } from "./StockImage";
 import { ImageCarousel } from "./ui/ImageCarousel";
-import { getStockImage } from "@/lib/images";
 import type { ListingWithRelations } from "@/types";
 
 export function ListingCard({ listing }: { listing: ListingWithRelations }) {
   const categoryNames = listing.categories.map((c) => c.category.name);
-  const stockSrc = getStockImage(listing.slug || listing.name);
   const photos = listing.photos as string[] | null;
   const services = listing.services as string[] | null;
 
@@ -24,12 +21,14 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
             alt={`${listing.name} — tattoo shop in ${listing.city.name}, ${listing.state.abbreviation}`}
           />
         ) : (
-          <StockImage
-            src={stockSrc}
-            alt={`${listing.name} — tattoo shop in ${listing.city.name}, ${listing.state.abbreviation}`}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-stone-800 via-stone-900 to-stone-950">
+            {/* Tattoo machine icon */}
+            <svg className="h-12 w-12 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span className="mt-2 text-xs font-medium tracking-wide text-stone-500">No shop images listed</span>
+          </div>
         )}
         {/* Warm gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-stone-900/50 via-transparent to-transparent pointer-events-none" />

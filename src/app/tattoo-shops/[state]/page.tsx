@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { CityCard } from "@/components/CityCard";
+import { CityGrid } from "@/components/CityGrid";
 import { StatsBar } from "@/components/StatsBar";
 import { BrowseStates } from "@/components/BrowseStates";
 import {
@@ -49,9 +49,11 @@ export default async function StatePillarPage({ params }: Props) {
     getPopularCategoriesInState(state.id),
   ]);
 
-  const sortedCities = [...cities].sort(
-    (a, b) => b._count.listings - a._count.listings
-  );
+  // Pre-compute image URLs server-side for the client CityGrid component
+  const cityImageUrls: Record<number, string> = {};
+  for (const city of cities) {
+    cityImageUrls[city.id] = getCityImageUrl(city);
+  }
 
   const baseUrl = "https://inklinktattoofinder.com";
 
@@ -59,7 +61,7 @@ export default async function StatePillarPage({ params }: Props) {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <JsonLd
         data={itemListJsonLd(
-          sortedCities.map((c, i) => ({
+          cities.map((c, i) => ({
             name: `${c.name}, ${state.abbreviation}`,
             url: `${baseUrl}/tattoo-shops/${state.slug}/${c.slug}`,
             position: i + 1,
@@ -106,12 +108,9 @@ export default async function StatePillarPage({ params }: Props) {
         <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
           Cities in {state.name}
         </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {sortedCities.map((city) => (
-            <CityCard key={city.id} city={city} imageUrl={getCityImageUrl(city)} />
-          ))}
-        </div>
-        {cities.length === 0 && (
+        {cities.length > 0 ? (
+          <CityGrid cities={cities} imageUrls={cityImageUrls} />
+        ) : (
           <p className="mt-8 text-center text-stone-500">
             No cities with listings found in {state.name} yet. Check back soon!
           </p>

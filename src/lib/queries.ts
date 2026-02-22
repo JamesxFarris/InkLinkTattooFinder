@@ -66,7 +66,7 @@ export async function getTopCities(limit = 20) {
         },
       },
     },
-    orderBy: { population: "desc" },
+    orderBy: { listings: { _count: "desc" } },
     take: limit,
   });
 }
@@ -490,7 +490,7 @@ export async function getTopCitiesForCategory(categoryId: number, limit = 10) {
         },
       },
     },
-    orderBy: { population: "desc" },
+    orderBy: { listings: { _count: "desc" } },
     take: limit,
   });
   return cities;
@@ -535,7 +535,7 @@ export async function getTopCitiesWithListings(limit = 10) {
         },
       },
     },
-    orderBy: { population: "desc" },
+    orderBy: { listings: { _count: "desc" } },
     take: limit,
   });
 }
