@@ -120,11 +120,6 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
             </span>
           )}
           {listing.piercingServices && <span>Piercings</span>}
-          {services && services.slice(0, 1).map((s) => (
-            <span key={s} className="truncate rounded-md bg-violet-100 px-2 py-0.5 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
-              {s}
-            </span>
-          ))}
         </div>
       </div>
     </Link>
