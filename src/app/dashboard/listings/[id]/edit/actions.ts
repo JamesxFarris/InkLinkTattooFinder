@@ -44,8 +44,13 @@ export async function updateListing(
     const description = formData.get("description") as string | null;
     const type = (formData.get("type") as string) || "shop";
     const priceRange = formData.get("priceRange") as string | null;
+    const hourlyRateMinRaw = formData.get("hourlyRateMin") as string | null;
+    const hourlyRateMaxRaw = formData.get("hourlyRateMax") as string | null;
+    const hourlyRateMin = hourlyRateMinRaw ? parseInt(hourlyRateMinRaw, 10) : null;
+    const hourlyRateMax = hourlyRateMaxRaw ? parseInt(hourlyRateMaxRaw, 10) : null;
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
+    const categoryIds = formData.getAll("categoryIds").map((id) => parseInt(id as string, 10)).filter((id) => !isNaN(id));
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
     const artists = formData.getAll("artists").filter((a) => typeof a === "string" && a.length > 0) as string[];
 
@@ -74,27 +79,39 @@ export async function updateListing(
       });
     }
 
-    await prisma.listing.update({
-      where: { id: listingId },
-      data: {
-        name: name.trim(),
-        // slug is NOT changed (preserves URLs)
-        description: description?.trim() || null,
-        type: type as "shop" | "artist" | "supplier",
-        phone: phone?.trim() || null,
-        email: email?.trim() || null,
-        website: website?.trim() || null,
-        address: address?.trim() || null,
-        cityId: city.id,
-        stateId: parsedStateId,
-        zipCode: zipCode?.trim() || null,
-        priceRange: priceRange ? (priceRange as "budget" | "moderate" | "premium" | "luxury") : null,
-        acceptsWalkIns,
-        piercingServices,
-        photos: photos.length > 0 ? photos : Prisma.JsonNull,
-        artists: artists.length > 0 ? artists : Prisma.JsonNull,
-        // status is NOT changed (edits stay live if active, stay pending if pending)
-      },
+    await prisma.$transaction(async (tx) => {
+      await tx.listing.update({
+        where: { id: listingId },
+        data: {
+          name: name.trim(),
+          // slug is NOT changed (preserves URLs)
+          description: description?.trim() || null,
+          type: type as "shop" | "artist" | "supplier",
+          phone: phone?.trim() || null,
+          email: email?.trim() || null,
+          website: website?.trim() || null,
+          address: address?.trim() || null,
+          cityId: city.id,
+          stateId: parsedStateId,
+          zipCode: zipCode?.trim() || null,
+          priceRange: priceRange ? (priceRange as "budget" | "moderate" | "premium" | "luxury") : null,
+          hourlyRateMin: hourlyRateMin && !isNaN(hourlyRateMin) ? hourlyRateMin : null,
+          hourlyRateMax: hourlyRateMax && !isNaN(hourlyRateMax) ? hourlyRateMax : null,
+          acceptsWalkIns,
+          piercingServices,
+          photos: photos.length > 0 ? photos : Prisma.JsonNull,
+          artists: artists.length > 0 ? artists : Prisma.JsonNull,
+          // status is NOT changed (edits stay live if active, stay pending if pending)
+        },
+      });
+
+      // Sync categories
+      await tx.listingCategory.deleteMany({ where: { listingId } });
+      if (categoryIds.length > 0) {
+        await tx.listingCategory.createMany({
+          data: categoryIds.map((categoryId) => ({ listingId, categoryId })),
+        });
+      }
     });
 
     revalidatePath("/dashboard");

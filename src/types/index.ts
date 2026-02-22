@@ -23,7 +23,6 @@ export type SearchParams = {
   q?: string;
   city?: string;
   category?: string;
-  price?: string;
   style?: string;
   walkIns?: string;
   sort?: string;

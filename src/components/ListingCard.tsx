@@ -104,12 +104,13 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
         )}
 
         <div className="mt-4 flex items-center gap-2 overflow-hidden border-t border-stone-100 pt-3 text-xs font-medium text-stone-500 dark:border-stone-700 dark:text-stone-400">
-          {listing.priceRange && (
+          {(listing.hourlyRateMin || listing.hourlyRateMax) && (
             <span className="rounded-md bg-stone-100 px-2 py-0.5 dark:bg-stone-800">
-              {listing.priceRange === "budget" && "$"}
-              {listing.priceRange === "moderate" && "$$"}
-              {listing.priceRange === "premium" && "$$$"}
-              {listing.priceRange === "luxury" && "$$$$"}
+              {listing.hourlyRateMin && listing.hourlyRateMax
+                ? `$${listing.hourlyRateMin}–$${listing.hourlyRateMax}/hr`
+                : listing.hourlyRateMin
+                  ? `From $${listing.hourlyRateMin}/hr`
+                  : `Up to $${listing.hourlyRateMax}/hr`}
             </span>
           )}
           {listing.acceptsWalkIns && (

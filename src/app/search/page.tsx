@@ -18,7 +18,6 @@ type Props = {
     q?: string;
     city?: string;
     category?: string;
-    price?: string;
     walkIns?: string;
     sort?: string;
     page?: string;
@@ -72,7 +71,6 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
         longitude: lng,
         radiusMiles: radius,
         categorySlug: params.category,
-        price: params.price,
         walkIns: params.walkIns,
         page,
       });
@@ -92,7 +90,6 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
         longitude: geoResult.longitude,
         radiusMiles: radius,
         categorySlug: params.category,
-        price: params.price,
         walkIns: params.walkIns,
         page,
       });
@@ -108,7 +105,6 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
       q: query || undefined,
       citySlug: params.city,
       categorySlug: params.category,
-      price: params.price,
       walkIns: params.walkIns,
       sort: params.sort,
       page,
@@ -123,7 +119,6 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
   if (params.q) paginationParams.q = params.q;
   if (params.city) paginationParams.city = params.city;
   if (params.category) paginationParams.category = params.category;
-  if (params.price) paginationParams.price = params.price;
   if (params.walkIns) paginationParams.walkIns = params.walkIns;
   if (params.sort) paginationParams.sort = params.sort;
   if (params.radius) paginationParams.radius = params.radius;
@@ -169,7 +164,6 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
                 radiusParams.set("lng", params.lng!);
                 radiusParams.set("radius", String(r));
                 if (params.category) radiusParams.set("category", params.category);
-                if (params.price) radiusParams.set("price", params.price);
                 if (params.walkIns) radiusParams.set("walkIns", params.walkIns);
                 return (
                   <a
@@ -218,7 +212,6 @@ async function SearchResults({ searchParams }: { searchParams: Props["searchPara
                 radiusParams.set("q", query);
                 radiusParams.set("radius", String(r));
                 if (params.category) radiusParams.set("category", params.category);
-                if (params.price) radiusParams.set("price", params.price);
                 if (params.walkIns) radiusParams.set("walkIns", params.walkIns);
                 return (
                   <a

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { updateListing } from "./actions";
 import { Button } from "@/components/ui/Button";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
@@ -8,6 +8,7 @@ import { ArtistEditor } from "@/components/ui/ArtistEditor";
 import { inputClass, labelClass } from "@/lib/formClasses";
 
 type State = { id: number; name: string };
+type CategoryOption = { id: number; name: string; slug: string };
 
 type ListingData = {
   id: number;
@@ -22,6 +23,9 @@ type ListingData = {
   cityName: string;
   zipCode: string | null;
   priceRange: string | null;
+  hourlyRateMin: number | null;
+  hourlyRateMax: number | null;
+  categoryIds: number[];
   acceptsWalkIns: boolean;
   piercingServices: boolean;
   photos: string[] | null;
@@ -31,12 +35,15 @@ type ListingData = {
 export function EditListingForm({
   listing,
   states,
+  categories,
 }: {
   listing: ListingData;
   states: State[];
+  categories: CategoryOption[];
 }) {
   const boundUpdate = updateListing.bind(null, listing.id);
   const [result, formAction, isPending] = useActionState(boundUpdate, null);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(listing.categoryIds);
 
   return (
     <form action={formAction} className="space-y-6">
@@ -229,22 +236,63 @@ export function EditListingForm({
           </select>
         </div>
         <div>
-          <label htmlFor="priceRange" className={labelClass}>
-            Price Range
-          </label>
-          <select
-            id="priceRange"
-            name="priceRange"
-            defaultValue={listing.priceRange ?? ""}
-            className={`mt-1 ${inputClass}`}
-          >
-            <option value="">Select...</option>
-            <option value="budget">$ — Budget</option>
-            <option value="moderate">$$ — Moderate</option>
-            <option value="premium">$$$ — Premium</option>
-            <option value="luxury">$$$$ — Luxury</option>
-          </select>
+          <label className={labelClass}>Hourly Rate ($/hr)</label>
+          <div className="mt-1 flex items-center gap-2">
+            <input
+              type="number"
+              name="hourlyRateMin"
+              placeholder="Min"
+              min={0}
+              max={9999}
+              defaultValue={listing.hourlyRateMin ?? ""}
+              className={inputClass}
+            />
+            <span className="text-stone-400">–</span>
+            <input
+              type="number"
+              name="hourlyRateMax"
+              placeholder="Max"
+              min={0}
+              max={9999}
+              defaultValue={listing.hourlyRateMax ?? ""}
+              className={inputClass}
+            />
+          </div>
         </div>
+      </div>
+
+      {/* Styles / Categories */}
+      <div>
+        <label className={labelClass}>Styles Offered</label>
+        <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+          Select the tattoo styles this shop specializes in.
+        </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {categories.map((cat) => {
+            const selected = selectedCategoryIds.includes(cat.id);
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() =>
+                  setSelectedCategoryIds((prev) =>
+                    selected ? prev.filter((id) => id !== cat.id) : [...prev, cat.id]
+                  )
+                }
+                className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+                  selected
+                    ? "border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300"
+                    : "border-stone-200 bg-white text-stone-600 hover:border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:border-stone-600"
+                }`}
+              >
+                {cat.name}
+              </button>
+            );
+          })}
+        </div>
+        {selectedCategoryIds.map((id) => (
+          <input key={id} type="hidden" name="categoryIds" value={id} />
+        ))}
       </div>
 
       {/* Checkboxes */}

@@ -1,7 +1,7 @@
 import { prisma } from "./db";
 import { ITEMS_PER_PAGE } from "./utils";
 import { haversineDistance, boundingBox } from "./geo";
-import type { ListingStatus, ListingType, PriceRange } from "@prisma/client";
+import type { ListingStatus, ListingType } from "@prisma/client";
 
 // ── States ──────────────────────────────────────────────
 
@@ -219,13 +219,12 @@ export async function searchListings(params: {
   q?: string;
   citySlug?: string;
   categorySlug?: string;
-  price?: string;
   walkIns?: string;
   sort?: string;
   page?: number;
   perPage?: number;
 }) {
-  const { q, citySlug, categorySlug, price, walkIns, sort, page = 1, perPage = ITEMS_PER_PAGE } = params;
+  const { q, citySlug, categorySlug, walkIns, sort, page = 1, perPage = ITEMS_PER_PAGE } = params;
 
   const where: Record<string, unknown> = { status: "active" as ListingStatus };
 
@@ -249,10 +248,6 @@ export async function searchListings(params: {
     if (category) {
       where.categories = { some: { categoryId: category.id } };
     }
-  }
-
-  if (price) {
-    where.priceRange = price as PriceRange;
   }
 
   if (walkIns === "true") {
@@ -607,7 +602,6 @@ export async function searchListingsNearby(params: {
   longitude: number;
   radiusMiles?: number;
   categorySlug?: string;
-  price?: string;
   walkIns?: string;
   page?: number;
   perPage?: number;
@@ -617,7 +611,6 @@ export async function searchListingsNearby(params: {
     longitude,
     radiusMiles = 50,
     categorySlug,
-    price,
     walkIns,
     page = 1,
     perPage = ITEMS_PER_PAGE,
@@ -665,10 +658,6 @@ export async function searchListingsNearby(params: {
     if (category) {
       where.categories = { some: { categoryId: category.id } };
     }
-  }
-
-  if (price) {
-    where.priceRange = price as PriceRange;
   }
 
   if (walkIns === "true") {

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
-import { getListingById, getAllStates } from "@/lib/queries";
+import { getListingById, getAllStates, getAllCategories } from "@/lib/queries";
 import { EditListingForm } from "./EditListingForm";
 import type { Metadata } from "next";
 
@@ -27,8 +27,14 @@ export default async function EditListingPage({
   const isAdmin = session.user.role === "admin";
   if (!isOwner && !isAdmin) redirect("/dashboard");
 
-  const allStates = await getAllStates();
+  const [allStates, allCategories] = await Promise.all([
+    getAllStates(),
+    getAllCategories(),
+  ]);
   const states = allStates.map((s) => ({ id: s.id, name: s.name }));
+  const categories = allCategories
+    .filter((c) => c.type === "shop")
+    .map((c) => ({ id: c.id, name: c.name, slug: c.slug }));
 
   const listingData = {
     id: listing.id,
@@ -43,8 +49,11 @@ export default async function EditListingPage({
     cityName: listing.city.name,
     zipCode: listing.zipCode,
     priceRange: listing.priceRange,
+    hourlyRateMin: listing.hourlyRateMin,
+    hourlyRateMax: listing.hourlyRateMax,
     acceptsWalkIns: listing.acceptsWalkIns,
     piercingServices: listing.piercingServices,
+    categoryIds: listing.categories.map((c) => c.category.id),
     photos: listing.photos as string[] | null,
     artists: Array.isArray(listing.artists) ? (listing.artists as string[]) : [],
   };
@@ -59,7 +68,7 @@ export default async function EditListingPage({
       </p>
 
       <div className="mt-8 rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-        <EditListingForm listing={listingData} states={states} />
+        <EditListingForm listing={listingData} states={states} categories={categories} />
       </div>
     </div>
   );

@@ -231,13 +231,13 @@ export default async function ListingPage({ params }: Props) {
 
             {/* Features */}
             <div className="mt-6 flex flex-wrap gap-3">
-              {listing.priceRange && (
+              {(listing.hourlyRateMin || listing.hourlyRateMax) && (
                 <div className="rounded-lg bg-stone-100 px-3 py-1.5 text-sm dark:bg-stone-800">
-                  Price:{" "}
-                  {listing.priceRange === "budget" && "$ Budget"}
-                  {listing.priceRange === "moderate" && "$$ Moderate"}
-                  {listing.priceRange === "premium" && "$$$ Premium"}
-                  {listing.priceRange === "luxury" && "$$$$ Luxury"}
+                  {listing.hourlyRateMin && listing.hourlyRateMax
+                    ? `$${listing.hourlyRateMin}–$${listing.hourlyRateMax}/hr`
+                    : listing.hourlyRateMin
+                      ? `From $${listing.hourlyRateMin}/hr`
+                      : `Up to $${listing.hourlyRateMax}/hr`}
                 </div>
               )}
               {listing.acceptsWalkIns && (

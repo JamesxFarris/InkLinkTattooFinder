@@ -18,6 +18,7 @@ type ClaimReviewCardProps = {
       id: number;
       name: string;
       slug: string;
+      phone: string | null;
       city: { name: string; slug: string; state: { abbreviation: string; slug: string } };
     };
   };
@@ -65,6 +66,13 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
           <p className="text-sm text-stone-500 dark:text-stone-400">
             {claim.listing.city.name}, {claim.listing.city.state.abbreviation}
           </p>
+          {claim.listing.phone && (
+            <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
+              <a href={`tel:${claim.listing.phone}`} className="text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300">
+                {claim.listing.phone}
+              </a>
+            </p>
+          )}
         </div>
         {!isPending && (
           <span

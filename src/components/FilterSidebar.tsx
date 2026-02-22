@@ -5,13 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 type FilterOption = { label: string; value: string };
 
-const priceTiers = [
-  { symbol: "$", label: "Budget", desc: "$80–150/hr", value: "budget" },
-  { symbol: "$$", label: "Moderate", desc: "$150–250/hr", value: "moderate" },
-  { symbol: "$$$", label: "Premium", desc: "$250–400/hr", value: "premium" },
-  { symbol: "$$$$", label: "Luxury", desc: "$400+/hr", value: "luxury" },
-];
-
 const sortOptions: FilterOption[] = [
   { label: "Relevance", value: "relevance" },
   { label: "Name A-Z", value: "name" },
@@ -110,61 +103,6 @@ function MobileStyleDropdown({
   );
 }
 
-// ── Price Tier Buttons (mobile) ───────────────────────────
-
-function MobilePriceTiers({
-  currentValue,
-  onChange,
-}: {
-  currentValue: string;
-  onChange: (value: string | null) => void;
-}) {
-  return (
-    <div className="space-y-2">
-      <button
-        type="button"
-        onClick={() => onChange(null)}
-        className={`flex w-full items-center rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${
-          !currentValue
-            ? "border-teal-500 bg-teal-500/10 font-medium text-teal-400"
-            : "border-stone-700 bg-stone-900 text-stone-300 active:bg-stone-800"
-        }`}
-      >
-        Any Price
-      </button>
-      {priceTiers.map((tier) => {
-        const active = currentValue === tier.value;
-        return (
-          <button
-            key={tier.value}
-            type="button"
-            onClick={() => onChange(active ? null : tier.value)}
-            className={`flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors ${
-              active
-                ? "border-teal-500 bg-teal-500/10"
-                : "border-stone-700 bg-stone-900 active:bg-stone-800"
-            }`}
-          >
-            <span
-              className={`text-sm font-semibold ${active ? "text-teal-400" : "text-stone-200"}`}
-            >
-              {tier.symbol}
-            </span>
-            <span className="flex flex-col">
-              <span
-                className={`text-sm ${active ? "font-medium text-teal-400" : "text-stone-300"}`}
-              >
-                {tier.label}
-              </span>
-              <span className="text-xs text-stone-500">{tier.desc}</span>
-            </span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 // ── Main FilterSidebar ────────────────────────────────────
 
 export function FilterSidebar({
@@ -193,7 +131,6 @@ export function FilterSidebar({
 
   const currentCategory = searchParams.get("category") || "";
   const selectedSlugs = currentCategory ? currentCategory.split(",").filter(Boolean) : [];
-  const currentPrice = searchParams.get("price") || "";
   const currentSort = searchParams.get("sort") || "relevance";
   const currentWalkIns = searchParams.get("walkIns") === "true";
 
@@ -267,49 +204,6 @@ export function FilterSidebar({
               }`}
             >
               {cat.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Price Range — Mobile: slider, Desktop: button list */}
-      <div>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
-          Price Range
-        </h3>
-
-        {/* Mobile price buttons */}
-        <div className="lg:hidden">
-          <MobilePriceTiers
-            currentValue={currentPrice}
-            onChange={(val) => updateParam("price", val)}
-          />
-        </div>
-
-        {/* Desktop button list */}
-        <div className="hidden space-y-2 lg:block">
-          <button
-            onClick={() => updateParam("price", null)}
-            className={`block w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
-              !currentPrice
-                ? "bg-teal-50 font-medium text-teal-600 dark:bg-teal-950 dark:text-teal-300"
-                : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
-            }`}
-          >
-            Any Price
-          </button>
-          {priceTiers.map((tier) => (
-            <button
-              key={tier.value}
-              onClick={() => updateParam("price", tier.value)}
-              className={`flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
-                currentPrice === tier.value
-                  ? "bg-teal-50 font-medium text-teal-600 dark:bg-teal-950 dark:text-teal-300"
-                  : "text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
-              }`}
-            >
-              <span>{tier.symbol} {tier.label}</span>
-              <span className="ml-auto text-xs text-stone-500">{tier.desc}</span>
             </button>
           ))}
         </div>

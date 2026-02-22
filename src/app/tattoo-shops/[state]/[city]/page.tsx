@@ -87,7 +87,6 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
     cityName: city.name,
     stateAbbr: city.state.abbreviation,
     listingCount: stats.listingCount,
-    walkInCount: stats.walkInCount,
     styles: styleNames,
   });
 
@@ -132,15 +131,13 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
       </h1>
       <p className="mt-2 max-w-2xl text-stone-600 dark:text-stone-400">
         Discover the top-rated tattoo shops and artists in {city.name},{" "}
-        {city.state.name}. Compare ratings, styles, hours, and walk-in
-        availability all in one place.
+        {city.state.name}. Compare ratings, styles, and hours all in one place.
       </p>
 
       <div className="mt-8">
         <StatsBar
           stats={[
             { label: "Total Shops", value: stats.listingCount },
-            { label: "Walk-ins Welcome", value: stats.walkInCount },
             {
               label: "Avg Rating",
               value: stats.avgRating ? `${stats.avgRating} / 5` : "N/A",
@@ -212,7 +209,6 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
           cityName={city.name}
           stateAbbr={city.state.abbreviation}
           listingCount={stats.listingCount}
-          walkInCount={stats.walkInCount}
           styles={styleNames}
         />
       </div>

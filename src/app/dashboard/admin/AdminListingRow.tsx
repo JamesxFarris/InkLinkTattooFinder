@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { approveListing, rejectListing, adminDeleteListing, revokeOwnership } from "./actions";
 
 const statusStyles: Record<string, string> = {
@@ -13,10 +14,12 @@ type ListingRowProps = {
   listing: {
     id: number;
     name: string;
+    slug: string;
+    phone: string | null;
     status: string;
     createdAt: Date;
-    city: { name: string };
-    state: { abbreviation: string };
+    city: { name: string; slug: string };
+    state: { abbreviation: string; slug: string };
     owner: { email: string; name: string | null } | null;
   };
 };
@@ -44,12 +47,33 @@ export function AdminListingRow({ listing }: ListingRowProps) {
           </div>
           <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
             {listing.city.name}, {listing.state.abbreviation}
+            {listing.phone && (
+              <span className="ml-3">
+                <a href={`tel:${listing.phone}`} className="text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300">
+                  {listing.phone}
+                </a>
+              </span>
+            )}
             {listing.owner && (
               <span className="ml-3 text-stone-400 dark:text-stone-500">
                 by {listing.owner.name ?? listing.owner.email}
               </span>
             )}
           </p>
+          <div className="mt-1 flex gap-3 text-xs">
+            <Link
+              href={`/tattoo-shops/${listing.state.slug}/${listing.city.slug}/${listing.slug}`}
+              className="text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300"
+            >
+              View
+            </Link>
+            <Link
+              href={`/dashboard/listings/${listing.id}/edit`}
+              className="text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300"
+            >
+              Edit
+            </Link>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">

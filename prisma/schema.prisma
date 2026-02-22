@@ -131,6 +131,8 @@ model Listing {
   latitude          Float?
   longitude         Float?
   priceRange        PriceRange?
+  hourlyRateMin     Int?
+  hourlyRateMax     Int?
   styles            Json?
   acceptsWalkIns    Boolean         @default(false)
   minimumAge        Int?
