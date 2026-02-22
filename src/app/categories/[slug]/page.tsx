@@ -93,7 +93,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             {topCities.map((city) => (
               <Link
                 key={city.id}
-                href={`/tattoo-shops/${city.state.slug}/${city.slug}?style=${slug}`}
+                href={`/tattoo-shops/${city.state.slug}/${city.slug}/style/${slug}`}
                 className="rounded-xl border border-stone-200 bg-white p-4 text-center transition-all hover:-translate-y-0.5 hover:border-teal-500/50 hover:shadow-lg dark:border-stone-700 dark:bg-stone-800 dark:hover:border-teal-500/40"
               >
                 <span className="block text-sm font-semibold text-stone-800 dark:text-stone-200">

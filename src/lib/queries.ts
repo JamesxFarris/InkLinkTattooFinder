@@ -578,7 +578,7 @@ export async function getPopularSearchCombos(limit = 8) {
     if (!comboMap.has(key)) {
       comboMap.set(key, {
         label: `${c.category.name} tattoos in ${c.listing.city.name}, ${c.listing.city.state.abbreviation}`,
-        href: `/tattoo-shops/${c.listing.city.state.slug}/${c.listing.city.slug}?style=${c.category.slug}`,
+        href: `/tattoo-shops/${c.listing.city.state.slug}/${c.listing.city.slug}/style/${c.category.slug}`,
         count: 0,
       });
     }

@@ -196,30 +196,16 @@ export function SubmissionForm({ states }: { states: State[] }) {
         </div>
       </div>
 
-      {/* Type & Price Range */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor="type" className={labelClass}>
-            Type
-          </label>
-          <select id="type" name="type" className={`mt-1 ${inputClass}`}>
-            <option value="shop">Tattoo Shop</option>
-            <option value="artist">Independent Artist</option>
-            <option value="supplier">Supplier</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="priceRange" className={labelClass}>
-            Price Range
-          </label>
-          <select id="priceRange" name="priceRange" className={`mt-1 ${inputClass}`}>
-            <option value="">Select...</option>
-            <option value="budget">$ — Budget</option>
-            <option value="moderate">$$ — Moderate</option>
-            <option value="premium">$$$ — Premium</option>
-            <option value="luxury">$$$$ — Luxury</option>
-          </select>
-        </div>
+      {/* Type */}
+      <div>
+        <label htmlFor="type" className={labelClass}>
+          Type
+        </label>
+        <select id="type" name="type" className={`mt-1 ${inputClass}`}>
+          <option value="shop">Tattoo Shop</option>
+          <option value="artist">Independent Artist</option>
+          <option value="supplier">Supplier</option>
+        </select>
       </div>
 
       {/* Checkboxes */}

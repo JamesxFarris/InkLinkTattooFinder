@@ -189,7 +189,7 @@ export default async function ListingPage({ params }: Props) {
               {listing.categories.map(({ category }) => (
                 <Link
                   key={category.id}
-                  href={`/tattoo-shops/${stateSlug}/${citySlug}?style=${category.slug}`}
+                  href={`/tattoo-shops/${stateSlug}/${citySlug}/style/${category.slug}`}
                 >
                   <Badge variant="default">{category.name}</Badge>
                 </Link>
@@ -424,7 +424,7 @@ export default async function ListingPage({ params }: Props) {
             {cityCategories.map((cat) => (
               <Link
                 key={cat.id}
-                href={`/tattoo-shops/${stateSlug}/${citySlug}?style=${cat.slug}`}
+                href={`/tattoo-shops/${stateSlug}/${citySlug}/style/${cat.slug}`}
                 className="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-teal-500 hover:text-teal-600 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:text-teal-400"
               >
                 {cat.name} ({cat._count.listings})

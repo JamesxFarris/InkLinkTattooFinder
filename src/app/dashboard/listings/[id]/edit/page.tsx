@@ -48,7 +48,6 @@ export default async function EditListingPage({
     stateId: listing.stateId,
     cityName: listing.city.name,
     zipCode: listing.zipCode,
-    priceRange: listing.priceRange,
     hourlyRateMin: listing.hourlyRateMin,
     hourlyRateMax: listing.hourlyRateMax,
     acceptsWalkIns: listing.acceptsWalkIns,

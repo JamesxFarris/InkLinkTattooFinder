@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 type Category = {
@@ -9,27 +9,17 @@ type Category = {
   slug: string;
 };
 
-export function StyleFilter({ categories }: { categories: Category[] }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const activeStyle = searchParams.get("style");
+type StyleFilterProps = {
+  categories: Category[];
+  basePath: string;
+  activeStyle?: string;
+};
 
-  function handleClick(slug: string | null) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (slug) {
-      params.set("style", slug);
-    } else {
-      params.delete("style");
-    }
-    const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-  }
-
+export function StyleFilter({ categories, basePath, activeStyle }: StyleFilterProps) {
   return (
     <div className="flex flex-wrap gap-2">
-      <button
-        onClick={() => handleClick(null)}
+      <Link
+        href={basePath}
         className={cn(
           "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
           !activeStyle
@@ -38,11 +28,11 @@ export function StyleFilter({ categories }: { categories: Category[] }) {
         )}
       >
         All
-      </button>
+      </Link>
       {categories.map((cat) => (
-        <button
+        <Link
           key={cat.id}
-          onClick={() => handleClick(cat.slug)}
+          href={`${basePath}/style/${cat.slug}`}
           className={cn(
             "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
             activeStyle === cat.slug
@@ -51,7 +41,7 @@ export function StyleFilter({ categories }: { categories: Category[] }) {
           )}
         >
           {cat.name}
-        </button>
+        </Link>
       ))}
     </div>
   );

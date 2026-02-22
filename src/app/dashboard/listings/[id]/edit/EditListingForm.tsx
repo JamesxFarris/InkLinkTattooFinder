@@ -22,7 +22,6 @@ type ListingData = {
   stateId: number;
   cityName: string;
   zipCode: string | null;
-  priceRange: string | null;
   hourlyRateMin: number | null;
   hourlyRateMax: number | null;
   categoryIds: number[];
@@ -218,7 +217,7 @@ export function EditListingForm({
         </div>
       </div>
 
-      {/* Type & Price Range */}
+      {/* Type & Hourly Rate */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="type" className={labelClass}>

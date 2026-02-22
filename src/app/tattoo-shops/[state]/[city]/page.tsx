@@ -1,6 +1,6 @@
 export const revalidate = 3600;
 
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -53,22 +53,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CityPillarPage({ params, searchParams }: Props) {
   const { state: stateSlug, city: citySlug } = await params;
   const { style } = await searchParams;
+
+  // Redirect ?style= to dedicated /style/ route
+  if (style) {
+    redirect(`/tattoo-shops/${stateSlug}/${citySlug}/style/${style}`);
+  }
+
   const city = await getCityBySlug(citySlug, stateSlug);
   if (!city) notFound();
 
-  const [allListings, stats, categories, siblingCities] = await Promise.all([
+  const [listings, stats, categories, siblingCities] = await Promise.all([
     getAllListingsByCity(city.id),
     getCityStats(city.id),
     getCategoriesForCity(city.id),
     getCitiesByState(city.stateId),
   ]);
-
-  // Filter by style if query param present
-  const listings = style
-    ? allListings.filter((l) =>
-        l.categories.some((c) => c.category.slug === style)
-      )
-    : allListings;
 
   const featured = listings.filter((l) => l.featured);
   const regular = listings.filter((l) => !l.featured);
@@ -82,6 +81,7 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
     .slice(0, 6);
 
   const baseUrl = "https://inklinktattoofinder.com";
+  const basePath = `/tattoo-shops/${stateSlug}/${citySlug}`;
 
   const faqData = getCityFaqData({
     cityName: city.name,
@@ -112,7 +112,7 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
           },
           {
             name: city.name,
-            url: `${baseUrl}/tattoo-shops/${city.state.slug}/${city.slug}`,
+            url: `${baseUrl}${basePath}`,
           },
         ])}
       />
@@ -160,6 +160,7 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
                 name: c.name,
                 slug: c.slug,
               }))}
+              basePath={basePath}
             />
           </Suspense>
         </div>
@@ -176,7 +177,7 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
       )}
 
       {/* Featured Listings */}
-      {!style && featured.length > 0 && (
+      {featured.length > 0 && (
         <section className="mt-10">
           <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
             Featured Shops
@@ -191,13 +192,13 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
 
       {/* All Listings with search */}
       <section className="mt-10">
-        {!style && featured.length > 0 && regular.length > 0 && (
+        {featured.length > 0 && regular.length > 0 && (
           <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
             All Shops
           </h2>
         )}
         <ListingSearch
-          listings={style ? listings : regular.length > 0 ? regular : listings}
+          listings={regular.length > 0 ? regular : listings}
           placeholder={`Search shops in ${city.name}...`}
           emptyMessage={`No tattoo shops found in ${city.name} yet. Check back soon!`}
         />

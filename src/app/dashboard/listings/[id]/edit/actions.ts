@@ -43,7 +43,6 @@ export async function updateListing(
     const website = formData.get("website") as string | null;
     const description = formData.get("description") as string | null;
     const type = (formData.get("type") as string) || "shop";
-    const priceRange = formData.get("priceRange") as string | null;
     const hourlyRateMinRaw = formData.get("hourlyRateMin") as string | null;
     const hourlyRateMaxRaw = formData.get("hourlyRateMax") as string | null;
     const hourlyRateMin = hourlyRateMinRaw ? parseInt(hourlyRateMinRaw, 10) : null;
@@ -94,7 +93,6 @@ export async function updateListing(
           cityId: city.id,
           stateId: parsedStateId,
           zipCode: zipCode?.trim() || null,
-          priceRange: priceRange ? (priceRange as "budget" | "moderate" | "premium" | "luxury") : null,
           hourlyRateMin: hourlyRateMin && !isNaN(hourlyRateMin) ? hourlyRateMin : null,
           hourlyRateMax: hourlyRateMax && !isNaN(hourlyRateMax) ? hourlyRateMax : null,
           acceptsWalkIns,

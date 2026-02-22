@@ -80,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const comboSet = new Set<string>();
   const cityCategoryPages: MetadataRoute.Sitemap = [];
   for (const combo of cityCategoryCombos) {
-    const key = `${combo.listing.city.state.slug}/${combo.listing.city.slug}?style=${combo.category.slug}`;
+    const key = `${combo.listing.city.state.slug}/${combo.listing.city.slug}/style/${combo.category.slug}`;
     if (!comboSet.has(key)) {
       comboSet.add(key);
       cityCategoryPages.push({

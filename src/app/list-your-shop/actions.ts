@@ -24,7 +24,6 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     const website = formData.get("website") as string | null;
     const description = formData.get("description") as string | null;
     const type = (formData.get("type") as string) || "shop";
-    const priceRange = formData.get("priceRange") as string | null;
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
@@ -79,7 +78,6 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
         cityId: city.id,
         stateId: parsedStateId,
         zipCode: zipCode?.trim() || null,
-        priceRange: priceRange ? (priceRange as "budget" | "moderate" | "premium" | "luxury") : null,
         acceptsWalkIns,
         piercingServices,
         photos: photos.length > 0 ? photos : Prisma.JsonNull,
