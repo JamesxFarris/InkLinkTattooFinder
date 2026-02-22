@@ -22,6 +22,7 @@ export function DashboardNav({ isAdmin }: { isAdmin: boolean }) {
     { href: "/dashboard/admin", label: "All Listings", exact: true },
     { href: "/dashboard/admin/cities", label: "Manage Cities" },
     { href: "/dashboard/admin/claims", label: "Review Claims" },
+    { href: "/dashboard/admin/users", label: "Manage Users" },
   ];
 
   function isActive(item: NavItem) {

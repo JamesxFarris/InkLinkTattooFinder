@@ -56,6 +56,27 @@ export async function adminDeleteClaim(id: number) {
   revalidatePath("/dashboard/admin/claims");
 }
 
+export async function changeUserRole(id: number, role: "owner" | "admin") {
+  const session = await requireAdmin();
+  if (parseInt(session.user.id) === id) {
+    throw new Error("Cannot change your own role");
+  }
+  await prisma.user.update({
+    where: { id },
+    data: { role },
+  });
+  revalidatePath("/dashboard/admin/users");
+}
+
+export async function adminDeleteUser(id: number) {
+  const session = await requireAdmin();
+  if (parseInt(session.user.id) === id) {
+    throw new Error("Cannot delete your own account");
+  }
+  await prisma.user.delete({ where: { id } });
+  revalidatePath("/dashboard/admin/users");
+}
+
 export async function adminDeleteCity(id: number) {
   await requireAdmin();
 
