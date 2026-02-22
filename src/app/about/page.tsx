@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
+import { prisma } from "@/lib/db";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -79,14 +80,21 @@ const features = [
   },
 ];
 
-const stats = [
-  { value: "50", label: "States Covered" },
-  { value: "1,000+", label: "Cities Listed" },
-  { value: "15+", label: "Tattoo Styles" },
-  { value: "100%", label: "Free to Use" },
-];
+export const dynamic = "force-dynamic";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [shopCount, cityCount, styleCount] = await Promise.all([
+    prisma.listing.count({ where: { status: "active" } }),
+    prisma.city.count({ where: { listings: { some: { status: "active" } } } }),
+    prisma.category.count(),
+  ]);
+
+  const stats = [
+    { value: shopCount.toLocaleString() + "+", label: "Shops Listed" },
+    { value: cityCount.toLocaleString() + "+", label: "Cities Covered" },
+    { value: styleCount.toString() + "+", label: "Tattoo Styles" },
+    { value: "100%", label: "Free to Use" },
+  ];
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ label: "About" }])} />

@@ -137,6 +137,7 @@ export function Footer() {
                 { name: "Contact", href: "/contact" },
                 { name: "List Your Shop", href: "/list-your-shop" },
                 { name: "Privacy Policy", href: "/privacy" },
+                { name: "Terms of Service", href: "/terms" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
