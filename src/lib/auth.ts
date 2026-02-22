@@ -57,10 +57,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id!;
         token.role = user.role;
+      } else if (token.id) {
+        // Refresh role from DB so admin promotions take effect immediately
+        const dbUser = await prisma.user.findUnique({
+          where: { id: parseInt(token.id as string, 10) },
+          select: { role: true },
+        });
+        if (dbUser) {
+          token.role = dbUser.role;
+        }
       }
       return token;
     },
