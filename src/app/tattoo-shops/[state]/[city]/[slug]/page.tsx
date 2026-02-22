@@ -258,7 +258,7 @@ export default async function ListingPage({ params }: Props) {
               {services && services
                 .filter((s) => !/^(tattooing|tattoos?|custom (tattoo|design)s?)$/i.test(s))
                 .map((s) => (
-                <div key={s} className="rounded-lg bg-violet-100 px-3 py-1.5 text-sm font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                <div key={s} className="rounded-lg bg-violet-100 px-3 py-1.5 text-sm font-medium capitalize text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
                   {s}
                 </div>
               ))}
