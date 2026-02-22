@@ -8,6 +8,12 @@ export const metadata: Metadata = {
   description:
     "Get in touch with InkLink Tattoo Finder. Reach out about listing your shop, updating information, or general inquiries.",
   alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Us | InkLink Tattoo Finder",
+    description:
+      "Get in touch with InkLink Tattoo Finder. Reach out about listing your shop, updating information, or general inquiries.",
+    url: "/contact",
+  },
 };
 
 export default function ContactPage() {

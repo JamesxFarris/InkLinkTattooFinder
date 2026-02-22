@@ -28,6 +28,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
+    const artists = formData.getAll("artists").filter((a) => typeof a === "string" && a.length > 0) as string[];
 
     // Validate required fields
     if (!name?.trim() || !stateId?.trim() || !cityName?.trim()) {
@@ -82,6 +83,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
         acceptsWalkIns,
         piercingServices,
         photos: photos.length > 0 ? photos : Prisma.JsonNull,
+        artists: artists.length > 0 ? artists : Prisma.JsonNull,
         status: "pending",
         ownerId: parseInt(session.user.id),
       },

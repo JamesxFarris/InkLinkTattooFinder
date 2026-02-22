@@ -21,13 +21,13 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
             alt={`${listing.name} — tattoo shop in ${listing.city.name}, ${listing.state.abbreviation}`}
           />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-stone-800 via-stone-900 to-stone-950">
-            {/* Tattoo machine icon */}
-            <svg className="h-12 w-12 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span className="mt-2 text-xs font-medium tracking-wide text-stone-500">No shop images listed</span>
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-stone-900 via-stone-900 to-teal-950">
+            {/* Subtle pattern overlay */}
+            <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle, #14b8a6 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+            {/* IL brand monogram */}
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-500/15 ring-1 ring-teal-500/20">
+              <span className="text-2xl font-bold tracking-tight text-teal-500/70">IL</span>
+            </div>
           </div>
         )}
         {/* Warm gradient overlay */}

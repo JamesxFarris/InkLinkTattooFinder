@@ -46,6 +46,7 @@ export default async function EditListingPage({
     acceptsWalkIns: listing.acceptsWalkIns,
     piercingServices: listing.piercingServices,
     photos: listing.photos as string[] | null,
+    artists: Array.isArray(listing.artists) ? (listing.artists as string[]) : [],
   };
 
   return (

@@ -44,6 +44,7 @@ export async function updateListing(
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
+    const artists = formData.getAll("artists").filter((a) => typeof a === "string" && a.length > 0) as string[];
 
     if (!name?.trim() || !stateId?.trim() || !cityName?.trim()) {
       return { success: false, message: "Shop name, state, and city are required." };
@@ -88,6 +89,7 @@ export async function updateListing(
         acceptsWalkIns,
         piercingServices,
         photos: photos.length > 0 ? photos : Prisma.JsonNull,
+        artists: artists.length > 0 ? artists : Prisma.JsonNull,
         // status is NOT changed (edits stay live if active, stay pending if pending)
       },
     });
