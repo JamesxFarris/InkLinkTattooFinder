@@ -3,7 +3,6 @@ import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { AdminCityRow } from "./AdminCityRow";
-import { ClearAllImagesButton } from "./ClearAllImagesButton";
 
 export const metadata: Metadata = {
   title: "Manage Cities",
@@ -73,10 +72,6 @@ export default async function AdminCitiesPage({
               </a>
             );
           })}
-      </div>
-
-      <div className="mb-6">
-        <ClearAllImagesButton />
       </div>
 
       {cities.length === 0 ? (

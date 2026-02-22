@@ -92,11 +92,3 @@ export async function adminDeleteCity(id: number) {
 
   revalidatePath("/dashboard/admin/cities");
 }
-
-export async function clearAllCityImages() {
-  await requireAdmin();
-  await prisma.city.updateMany({
-    data: { imageUrl: null },
-  });
-  revalidatePath("/dashboard/admin/cities");
-}
