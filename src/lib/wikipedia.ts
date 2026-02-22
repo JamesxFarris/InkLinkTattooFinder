@@ -22,11 +22,9 @@ export async function searchCityImage(
     }
 
     const data = await res.json();
-    const thumb = data?.thumbnail?.source;
-    if (!thumb) return null;
 
-    // Thumbnail comes back at 320px wide — upsize to 800px for quality
-    return thumb.replace(/\/\d+px-/, "/800px-");
+    // Use the original full-size image — next/image handles resizing
+    return (data?.originalimage?.source as string) ?? null;
   } catch (err) {
     console.warn(`Wikipedia fetch failed for "${title}":`, err);
     return null;
