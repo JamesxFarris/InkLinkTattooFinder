@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Image from "next/image";
 
 export function PhotoGallery({
@@ -11,11 +11,25 @@ export function PhotoGallery({
   featured?: boolean;
 }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [failedUrls, setFailedUrls] = useState<Set<string>>(new Set());
+
+  const handleImageError = useCallback((src: string) => {
+    setFailedUrls((prev) => new Set(prev).add(src));
+  }, []);
 
   if (!photos || photos.length === 0) return null;
 
   const limit = featured ? 12 : 6;
-  const items = photos.slice(0, limit);
+  // Filter out broken images, then take up to `limit`
+  const items = photos.filter((src) => !failedUrls.has(src)).slice(0, limit);
+
+  if (items.length === 0) return null;
+
+  // Clamp lightbox index after failed images are removed
+  const safeLightboxIndex =
+    lightboxIndex !== null
+      ? Math.min(lightboxIndex, items.length - 1)
+      : null;
 
   return (
     <>
@@ -23,7 +37,7 @@ export function PhotoGallery({
       <div className="mt-6 grid grid-cols-2 gap-1.5 overflow-hidden rounded-xl sm:grid-cols-3">
         {items.map((src, i) => (
           <div
-            key={i}
+            key={src}
             className="relative aspect-square cursor-pointer overflow-hidden"
             onClick={() => setLightboxIndex(i)}
           >
@@ -34,13 +48,14 @@ export function PhotoGallery({
               unoptimized
               className="object-cover transition-transform duration-300 hover:scale-105"
               sizes="(max-width: 640px) 50vw, 33vw"
+              onError={() => handleImageError(src)}
             />
           </div>
         ))}
       </div>
 
       {/* Lightbox */}
-      {lightboxIndex !== null && (
+      {safeLightboxIndex !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
           onClick={() => setLightboxIndex(null)}
@@ -77,15 +92,16 @@ export function PhotoGallery({
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={items[lightboxIndex]}
-              alt={`Photo ${lightboxIndex + 1}`}
+              src={items[safeLightboxIndex]}
+              alt={`Photo ${safeLightboxIndex + 1}`}
               width={1200}
               height={800}
               unoptimized
               className="max-h-[85vh] w-auto rounded-lg object-contain"
+              onError={() => handleImageError(items[safeLightboxIndex])}
             />
             <div className="mt-2 text-center text-sm text-white/60">
-              {lightboxIndex + 1} / {items.length}
+              {safeLightboxIndex + 1} / {items.length}
             </div>
           </div>
 
