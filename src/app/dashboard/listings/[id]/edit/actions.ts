@@ -49,9 +49,28 @@ export async function updateListing(
     const hourlyRateMax = hourlyRateMaxRaw ? parseInt(hourlyRateMaxRaw, 10) : null;
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
+    const tattooRemoval = formData.get("tattooRemoval") === "on";
+    const hoursRaw = formData.get("hours") as string | null;
     const categoryIds = formData.getAll("categoryIds").map((id) => parseInt(id as string, 10)).filter((id) => !isNaN(id));
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
     const artists = formData.getAll("artists").filter((a) => typeof a === "string" && a.length > 0) as string[];
+
+    // Parse hours JSON
+    const VALID_DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+    let parsedHours: Record<string, string> | null = null;
+    if (hoursRaw) {
+      try {
+        const obj = JSON.parse(hoursRaw);
+        if (typeof obj === "object" && obj !== null) {
+          const valid = Object.keys(obj).every(
+            (k) => VALID_DAYS.includes(k) && typeof obj[k] === "string"
+          );
+          if (valid) parsedHours = obj;
+        }
+      } catch {
+        // ignore invalid JSON — hours will be left unchanged
+      }
+    }
 
     if (!name?.trim() || !stateId?.trim() || !cityName?.trim()) {
       return { success: false, message: "Shop name, state, and city are required." };
@@ -97,6 +116,8 @@ export async function updateListing(
           hourlyRateMax: hourlyRateMax && !isNaN(hourlyRateMax) ? hourlyRateMax : null,
           acceptsWalkIns,
           piercingServices,
+          tattooRemoval,
+          hours: parsedHours ?? Prisma.JsonNull,
           photos: photos.length > 0 ? photos : Prisma.JsonNull,
           artists: artists.length > 0 ? artists : Prisma.JsonNull,
           // status is NOT changed (edits stay live if active, stay pending if pending)

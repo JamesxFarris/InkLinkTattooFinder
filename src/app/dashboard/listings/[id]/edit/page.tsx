@@ -52,6 +52,8 @@ export default async function EditListingPage({
     hourlyRateMax: listing.hourlyRateMax,
     acceptsWalkIns: listing.acceptsWalkIns,
     piercingServices: listing.piercingServices,
+    tattooRemoval: listing.tattooRemoval,
+    hours: listing.hours as Record<string, string> | null,
     categoryIds: listing.categories.map((c) => c.category.id),
     photos: listing.photos as string[] | null,
     artists: Array.isArray(listing.artists) ? (listing.artists as string[]) : [],

@@ -5,6 +5,7 @@ import { updateListing } from "./actions";
 import { Button } from "@/components/ui/Button";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
 import { ArtistEditor } from "@/components/ui/ArtistEditor";
+import { HoursEditor } from "@/components/ui/HoursEditor";
 import { inputClass, labelClass } from "@/lib/formClasses";
 
 type State = { id: number; name: string };
@@ -27,6 +28,8 @@ type ListingData = {
   categoryIds: number[];
   acceptsWalkIns: boolean;
   piercingServices: boolean;
+  tattooRemoval: boolean;
+  hours: Record<string, string> | null;
   photos: string[] | null;
   artists: string[];
 };
@@ -201,6 +204,14 @@ export function EditListingForm({
         />
       </div>
 
+      {/* Business Hours */}
+      <div>
+        <label className={labelClass}>Business Hours</label>
+        <div className="mt-1">
+          <HoursEditor existingHours={listing.hours} />
+        </div>
+      </div>
+
       {/* Photos */}
       <div>
         <label className={labelClass}>Photos (optional, up to 6)</label>
@@ -313,6 +324,15 @@ export function EditListingForm({
             className="rounded border-stone-300 text-teal-500 focus:ring-teal-500 dark:border-stone-600"
           />
           Offers piercing services
+        </label>
+        <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300">
+          <input
+            type="checkbox"
+            name="tattooRemoval"
+            defaultChecked={listing.tattooRemoval}
+            className="rounded border-stone-300 text-teal-500 focus:ring-teal-500 dark:border-stone-600"
+          />
+          Offers tattoo removal
         </label>
       </div>
 

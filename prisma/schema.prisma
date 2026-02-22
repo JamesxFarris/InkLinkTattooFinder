@@ -137,6 +137,7 @@ model Listing {
   acceptsWalkIns    Boolean         @default(false)
   minimumAge        Int?
   piercingServices  Boolean         @default(false)
+  tattooRemoval     Boolean         @default(false)
   portfolioUrl      String?
   amenities         Json?
   hours             Json?
