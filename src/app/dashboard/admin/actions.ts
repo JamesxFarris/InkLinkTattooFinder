@@ -50,6 +50,12 @@ export async function adminDeleteListing(id: number) {
   revalidatePath("/dashboard/admin");
 }
 
+export async function adminDeleteClaim(id: number) {
+  await requireAdmin();
+  await prisma.claim.delete({ where: { id } });
+  revalidatePath("/dashboard/admin/claims");
+}
+
 export async function adminDeleteCity(id: number) {
   await requireAdmin();
 

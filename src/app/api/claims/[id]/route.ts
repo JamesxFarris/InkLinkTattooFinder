@@ -91,11 +91,14 @@ export async function DELETE(request: Request, context: RouteContext) {
     return NextResponse.json({ error: "Claim not found" }, { status: 404 });
   }
 
-  if (claim.userId !== parseInt(session.user.id)) {
+  const isAdmin = session.user.role === "admin";
+  const isOwner = claim.userId === parseInt(session.user.id);
+
+  if (!isAdmin && !isOwner) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  if (claim.status !== "pending") {
+  if (!isAdmin && claim.status !== "pending") {
     return NextResponse.json(
       { error: "Only pending claims can be withdrawn" },
       { status: 400 }

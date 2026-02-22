@@ -11,18 +11,22 @@ export const metadata: Metadata = {
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; q?: string }>;
 }) {
   const session = await auth();
   if (!session || session.user.role !== "admin") redirect("/dashboard");
 
   const params = await searchParams;
   const filter = params.status || "all";
+  const query = params.q?.trim() || "";
 
-  const where =
-    filter === "all"
-      ? {}
-      : { status: filter as "active" | "pending" | "inactive" };
+  const where: Record<string, unknown> = {};
+  if (filter !== "all") {
+    where.status = filter as "active" | "pending" | "inactive";
+  }
+  if (query) {
+    where.name = { contains: query, mode: "insensitive" };
+  }
 
   const [listings, counts, recentPending] = await Promise.all([
     prisma.listing.findMany({
@@ -93,6 +97,34 @@ export default async function AdminPage({
         </div>
       )}
 
+      {/* Search */}
+      <form action="/dashboard/admin" method="GET" className="mb-6">
+        {filter !== "all" && <input type="hidden" name="status" value={filter} />}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            name="q"
+            defaultValue={query}
+            placeholder="Search listings by name..."
+            className="flex-1 rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm text-stone-900 placeholder-stone-400 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:placeholder-stone-500"
+          />
+          <button
+            type="submit"
+            className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-teal-700"
+          >
+            Search
+          </button>
+          {query && (
+            <a
+              href={filter === "all" ? "/dashboard/admin" : `/dashboard/admin?status=${filter}`}
+              className="rounded-lg bg-stone-100 px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700"
+            >
+              Clear
+            </a>
+          )}
+        </div>
+      </form>
+
       {/* Filter Tabs */}
       <div className="mb-6 flex gap-2">
         {tabs.map((tab) => (
@@ -100,8 +132,8 @@ export default async function AdminPage({
             key={tab.key}
             href={
               tab.key === "all"
-                ? "/dashboard/admin"
-                : `/dashboard/admin?status=${tab.key}`
+                ? `/dashboard/admin${query ? `?q=${encodeURIComponent(query)}` : ""}`
+                : `/dashboard/admin?status=${tab.key}${query ? `&q=${encodeURIComponent(query)}` : ""}`
             }
             className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
               filter === tab.key

@@ -30,6 +30,23 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  async function handleDelete() {
+    if (!confirm("Are you sure you want to delete this claim? This cannot be undone.")) return;
+    setLoading(true);
+    setError("");
+
+    const res = await fetch(`/api/claims/${claim.id}`, { method: "DELETE" });
+    setLoading(false);
+
+    if (!res.ok) {
+      const data = await res.json();
+      setError(data.error || "Delete failed");
+      return;
+    }
+
+    router.refresh();
+  }
+
   async function handleAction(status: "approved" | "denied") {
     setLoading(true);
     setError("");
@@ -145,14 +162,32 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
             >
               Deny
             </button>
+            <button
+              onClick={handleDelete}
+              disabled={loading}
+              className="ml-auto rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-600 transition-colors hover:bg-stone-100 disabled:opacity-50 dark:border-stone-600 dark:text-stone-400 dark:hover:bg-stone-700"
+            >
+              Delete
+            </button>
           </div>
         </div>
       )}
 
-      {!isPending && claim.adminNotes && (
-        <div className="mt-3">
-          <p className="text-xs font-medium text-stone-400 dark:text-stone-500">Admin Notes</p>
-          <p className="text-sm text-stone-600 dark:text-stone-400">{claim.adminNotes}</p>
+      {!isPending && (
+        <div className="mt-4 flex items-center justify-between">
+          {claim.adminNotes && (
+            <div>
+              <p className="text-xs font-medium text-stone-400 dark:text-stone-500">Admin Notes</p>
+              <p className="text-sm text-stone-600 dark:text-stone-400">{claim.adminNotes}</p>
+            </div>
+          )}
+          <button
+            onClick={handleDelete}
+            disabled={loading}
+            className="ml-auto rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-600 transition-colors hover:bg-stone-100 disabled:opacity-50 dark:border-stone-600 dark:text-stone-400 dark:hover:bg-stone-700"
+          >
+            Delete
+          </button>
         </div>
       )}
     </div>
