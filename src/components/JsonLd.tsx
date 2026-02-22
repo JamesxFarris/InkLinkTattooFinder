@@ -87,6 +87,8 @@ export function organizationJsonLd() {
 export function localBusinessJsonLd(listing: {
   name: string;
   slug: string;
+  stateSlug: string;
+  citySlug: string;
   description?: string | null;
   address?: string | null;
   city: string;
@@ -109,7 +111,7 @@ export function localBusinessJsonLd(listing: {
     "@type": "TattooParlor",
     name: listing.name,
     description: listing.description,
-    url: `${SITE_URL}/listing/${listing.slug}`,
+    url: `${SITE_URL}/tattoo-shops/${listing.stateSlug}/${listing.citySlug}/${listing.slug}`,
     address: {
       "@type": "PostalAddress",
       streetAddress: listing.address,

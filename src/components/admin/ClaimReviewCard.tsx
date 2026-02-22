@@ -18,7 +18,7 @@ type ClaimReviewCardProps = {
       id: number;
       name: string;
       slug: string;
-      city: { name: string; state: { abbreviation: string } };
+      city: { name: string; slug: string; state: { abbreviation: string; slug: string } };
     };
   };
 };
@@ -57,7 +57,7 @@ export function ClaimReviewCard({ claim }: ClaimReviewCardProps) {
       <div className="flex items-start justify-between">
         <div>
           <Link
-            href={`/listing/${claim.listing.slug}`}
+            href={`/tattoo-shops/${claim.listing.city.state.slug}/${claim.listing.city.slug}/${claim.listing.slug}`}
             className="font-medium text-stone-900 hover:text-teal-600 dark:text-stone-100 dark:hover:text-teal-400"
           >
             {claim.listing.name}

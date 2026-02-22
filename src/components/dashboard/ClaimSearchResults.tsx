@@ -8,7 +8,9 @@ type SearchResult = {
   name: string;
   slug: string;
   city: string;
+  citySlug: string;
   state: string;
+  stateSlug: string;
   ownerId: number | null;
 };
 
@@ -113,7 +115,7 @@ export function ClaimSearchResults() {
             >
               <div>
                 <Link
-                  href={`/listing/${listing.slug}`}
+                  href={`/tattoo-shops/${listing.stateSlug}/${listing.citySlug}/${listing.slug}`}
                   className="font-medium text-stone-900 hover:text-teal-600 dark:text-stone-100 dark:hover:text-teal-400"
                 >
                   {listing.name}

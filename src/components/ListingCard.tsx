@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "./ui/Badge";
 import { ImageCarousel } from "./ui/ImageCarousel";
+import { listingUrl } from "@/lib/utils";
 import type { ListingWithRelations } from "@/types";
 
 export function ListingCard({ listing }: { listing: ListingWithRelations }) {
@@ -10,7 +11,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
 
   return (
     <Link
-      href={`/listing/${listing.slug}`}
+      href={listingUrl(listing)}
       className={`group block overflow-hidden rounded-2xl bg-white shadow-[var(--card-shadow)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 ${listing.featured ? "ring-2 ring-amber-400 dark:ring-amber-500" : "ring-1 ring-stone-900/[0.04] dark:ring-stone-700"}`}
     >
       {/* Image */}

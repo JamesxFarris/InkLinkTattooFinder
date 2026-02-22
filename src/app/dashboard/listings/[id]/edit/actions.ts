@@ -19,7 +19,10 @@ export async function updateListing(
       return { success: false, message: "You must be signed in." };
     }
 
-    const listing = await prisma.listing.findUnique({ where: { id: listingId } });
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      include: { city: { select: { slug: true, state: { select: { slug: true } } } } },
+    });
     if (!listing) {
       return { success: false, message: "Listing not found." };
     }
@@ -95,7 +98,7 @@ export async function updateListing(
     });
 
     revalidatePath("/dashboard");
-    revalidatePath(`/listing/${listing.slug}`);
+    revalidatePath(`/tattoo-shops/${listing.city.state.slug}/${listing.city.slug}/${listing.slug}`);
 
     return {
       success: true,

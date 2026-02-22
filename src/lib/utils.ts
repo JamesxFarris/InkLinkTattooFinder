@@ -30,6 +30,10 @@ export function unslugify(slug: string): string {
     .join(" ");
 }
 
+export function listingUrl(listing: { slug: string; city: { slug: string; state: { slug: string } } }) {
+  return `/tattoo-shops/${listing.city.state.slug}/${listing.city.slug}/${listing.slug}`;
+}
+
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(" ");
 }

@@ -36,10 +36,20 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "InkLink Tattoo Finder",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "InkLink Tattoo Finder — Find Tattoo Artists & Shops Near You",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     site: "@InkLinkTattoo",
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,

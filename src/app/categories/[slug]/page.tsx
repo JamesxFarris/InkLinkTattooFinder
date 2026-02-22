@@ -49,7 +49,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       ])} />
       <JsonLd data={itemListJsonLd(listings.map((l, i) => ({
         name: l.name,
-        url: `https://inklinktattoofinder.com/listing/${l.slug}`,
+        url: `https://inklinktattoofinder.com/tattoo-shops/${l.city.state.slug}/${l.city.slug}/${l.slug}`,
         position: i + 1,
       })))} />
       <Breadcrumbs

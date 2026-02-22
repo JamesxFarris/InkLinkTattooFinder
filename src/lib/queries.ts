@@ -407,9 +407,16 @@ export async function getAllCitySlugs() {
 export async function getAllListingSlugs() {
   const listings = await prisma.listing.findMany({
     where: { status: "active" },
-    select: { slug: true },
+    select: {
+      slug: true,
+      city: { select: { slug: true, state: { select: { slug: true } } } },
+    },
   });
-  return listings.map((l) => l.slug);
+  return listings.map((l) => ({
+    slug: l.slug,
+    citySlug: l.city.slug,
+    stateSlug: l.city.state.slug,
+  }));
 }
 
 export async function getListingsByCategoryNational(

@@ -1,5 +1,8 @@
 import { ImageResponse } from "next/og";
 
+export const runtime = "edge";
+export const revalidate = 86400; // cache for 24 hours
+
 export const alt = "InkLink Tattoo Finder — Find Tattoo Artists & Shops Near You";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

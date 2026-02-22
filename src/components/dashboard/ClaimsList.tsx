@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { listingUrl } from "@/lib/utils";
 import type { ClaimWithRelations } from "@/types";
 
 export function ClaimsList({ claims }: { claims: ClaimWithRelations[] }) {
@@ -22,7 +23,7 @@ export function ClaimsList({ claims }: { claims: ClaimWithRelations[] }) {
         >
           <div>
             <Link
-              href={`/listing/${claim.listing.slug}`}
+              href={listingUrl(claim.listing)}
               className="font-medium text-stone-900 hover:text-teal-600 dark:text-stone-100 dark:hover:text-teal-400"
             >
               {claim.listing.name}

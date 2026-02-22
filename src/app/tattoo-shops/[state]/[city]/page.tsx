@@ -97,7 +97,7 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
         data={itemListJsonLd(
           listings.map((l, i) => ({
             name: l.name,
-            url: `${baseUrl}/listing/${l.slug}`,
+            url: `${baseUrl}/tattoo-shops/${stateSlug}/${citySlug}/${l.slug}`,
             position: i + 1,
           }))
         )}

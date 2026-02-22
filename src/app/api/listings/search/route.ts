@@ -25,7 +25,8 @@ export async function GET(request: NextRequest) {
       city: {
         select: {
           name: true,
-          state: { select: { abbreviation: true } },
+          slug: true,
+          state: { select: { abbreviation: true, slug: true } },
         },
       },
     },
@@ -39,7 +40,9 @@ export async function GET(request: NextRequest) {
       name: l.name,
       slug: l.slug,
       city: l.city.name,
+      citySlug: l.city.slug,
       state: l.city.state.abbreviation,
+      stateSlug: l.city.state.slug,
       ownerId: l.ownerId,
     })),
   });

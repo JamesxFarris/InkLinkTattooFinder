@@ -50,10 +50,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Listing pages
   const listings = await prisma.listing.findMany({
     where: { status: "active" },
-    select: { slug: true, updatedAt: true },
+    select: {
+      slug: true,
+      updatedAt: true,
+      city: { select: { slug: true, state: { select: { slug: true } } } },
+    },
   });
   const listingPages: MetadataRoute.Sitemap = listings.map((l) => ({
-    url: `${baseUrl}/listing/${l.slug}`,
+    url: `${baseUrl}/tattoo-shops/${l.city.state.slug}/${l.city.slug}/${l.slug}`,
     lastModified: l.updatedAt,
     changeFrequency: "weekly" as const,
     priority: 0.6,

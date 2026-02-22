@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { listingUrl } from "@/lib/utils";
 import type { ListingWithRelations } from "@/types";
 
 export function OwnedListingCard({ listing }: { listing: ListingWithRelations }) {
@@ -8,7 +9,7 @@ export function OwnedListingCard({ listing }: { listing: ListingWithRelations })
         <div>
           <div className="flex items-center gap-2">
             <Link
-              href={`/listing/${listing.slug}`}
+              href={listingUrl(listing)}
               className="font-medium text-stone-900 hover:text-teal-600 dark:text-stone-100 dark:hover:text-teal-400"
             >
               {listing.name}
