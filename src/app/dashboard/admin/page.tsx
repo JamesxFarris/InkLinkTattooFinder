@@ -1,8 +1,11 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { AdminListingRow } from "./AdminListingRow";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin Panel",
@@ -128,7 +131,7 @@ export default async function AdminPage({
       {/* Filter Tabs */}
       <div className="mb-6 flex gap-2">
         {tabs.map((tab) => (
-          <a
+          <Link
             key={tab.key}
             href={
               tab.key === "all"
@@ -143,7 +146,7 @@ export default async function AdminPage({
           >
             {tab.label}
             <span className="ml-1.5 text-xs opacity-70">({tab.count})</span>
-          </a>
+          </Link>
         ))}
       </div>
 

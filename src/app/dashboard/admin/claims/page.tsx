@@ -4,6 +4,8 @@ import { getPendingClaims, getAllClaims } from "@/lib/queries";
 import { ClaimReviewCard } from "@/components/admin/ClaimReviewCard";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Admin Panel",
 };

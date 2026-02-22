@@ -55,15 +55,21 @@ export async function PATCH(request: Request, context: RouteContext) {
       ]);
       return NextResponse.json(updatedClaim);
     } else {
-      // Deny
-      const updatedClaim = await prisma.claim.update({
-        where: { id: claimId },
-        data: {
-          status: "denied",
-          adminNotes: adminNotes || null,
-          reviewedAt: new Date(),
-        },
-      });
+      // Deny: update claim + clear listing owner if this claim had set it
+      const [updatedClaim] = await prisma.$transaction([
+        prisma.claim.update({
+          where: { id: claimId },
+          data: {
+            status: "denied",
+            adminNotes: adminNotes || null,
+            reviewedAt: new Date(),
+          },
+        }),
+        prisma.listing.update({
+          where: { id: claim.listingId },
+          data: { ownerId: null },
+        }),
+      ]);
       return NextResponse.json(updatedClaim);
     }
   } catch {
@@ -82,6 +88,7 @@ export async function DELETE(request: Request, context: RouteContext) {
 
   const { id } = await context.params;
   const claimId = parseInt(id);
+  const isAdmin = session.user.role === "admin";
 
   const claim = await prisma.claim.findUnique({
     where: { id: claimId },
@@ -91,21 +98,31 @@ export async function DELETE(request: Request, context: RouteContext) {
     return NextResponse.json({ error: "Claim not found" }, { status: 404 });
   }
 
-  const isAdmin = session.user.role === "admin";
-  const isOwner = claim.userId === parseInt(session.user.id);
-
-  if (!isAdmin && !isOwner) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  // Admins can delete any claim; users can only delete their own pending claims
+  if (!isAdmin) {
+    if (claim.userId !== parseInt(session.user.id)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    if (claim.status !== "pending") {
+      return NextResponse.json(
+        { error: "Only pending claims can be withdrawn" },
+        { status: 400 }
+      );
+    }
   }
 
-  if (!isAdmin && claim.status !== "pending") {
-    return NextResponse.json(
-      { error: "Only pending claims can be withdrawn" },
-      { status: 400 }
-    );
+  // If claim was approved, clear the listing's ownerId
+  if (claim.status === "approved") {
+    await prisma.$transaction([
+      prisma.claim.delete({ where: { id: claimId } }),
+      prisma.listing.update({
+        where: { id: claim.listingId },
+        data: { ownerId: null },
+      }),
+    ]);
+  } else {
+    await prisma.claim.delete({ where: { id: claimId } });
   }
-
-  await prisma.claim.delete({ where: { id: claimId } });
 
   return NextResponse.json({ success: true });
 }

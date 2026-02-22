@@ -17,6 +17,7 @@ type ListingRowProps = {
     slug: string;
     phone: string | null;
     status: string;
+    ownerId: number | null;
     createdAt: Date;
     city: { name: string; slug: string };
     state: { abbreviation: string; slug: string };
@@ -95,10 +96,10 @@ export function AdminListingRow({ listing }: ListingRowProps) {
               Reject
             </button>
           )}
-          {listing.owner && (
+          {listing.ownerId && (
             <button
               onClick={() => {
-                if (confirm(`Revoke ownership from ${listing.owner!.name ?? listing.owner!.email}?`)) {
+                if (confirm(`Revoke ownership from ${listing.owner?.name ?? listing.owner?.email ?? "owner"}?`)) {
                   handleAction(revokeOwnership);
                 }
               }}
