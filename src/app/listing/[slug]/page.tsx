@@ -129,9 +129,22 @@ export default async function ListingPage({ params }: Props) {
 
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
-                  {listing.name}
-                </h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
+                    {listing.name}
+                  </h1>
+                  {session?.user.role === "admin" && (
+                    <Link
+                      href={`/dashboard/listings/${listing.id}/edit`}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-teal-500/10 px-3 py-1.5 text-xs font-medium text-teal-600 transition-colors hover:bg-teal-500/20 dark:text-teal-400"
+                    >
+                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                      </svg>
+                      Edit
+                    </Link>
+                  )}
+                </div>
                 <p className="mt-1 text-stone-600 dark:text-stone-400">
                   {listing.address && `${listing.address}, `}
                   {listing.city.name}, {listing.city.state.abbreviation}
