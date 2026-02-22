@@ -37,6 +37,9 @@
   ],
   "exclude": [
     "node_modules",
-    "prisma/seed.ts"
+    "prisma/seed.ts",
+    "prisma/import.ts",
+    "prisma/geocode.ts",
+    "prisma/fetch-city-images.ts"
   ]
 }
