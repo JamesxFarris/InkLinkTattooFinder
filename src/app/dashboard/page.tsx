@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getClaimsByUser, getOwnedListings } from "@/lib/queries";
 import { ClaimsList } from "@/components/dashboard/ClaimsList";
 import { OwnedListingCard } from "@/components/dashboard/OwnedListingCard";
+import { ChangePasswordForm } from "./ChangePasswordForm";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -61,6 +62,21 @@ export default async function DashboardPage() {
         </h2>
         <div className="mt-4">
           <ClaimsList claims={claims} />
+        </div>
+      </section>
+
+      {/* Account Settings */}
+      <section className="mt-10">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
+          Account Settings
+        </h2>
+        <div className="mt-4 max-w-md rounded-2xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
+          <h3 className="text-sm font-medium text-stone-700 dark:text-stone-300">
+            Change Password
+          </h3>
+          <div className="mt-3">
+            <ChangePasswordForm />
+          </div>
         </div>
       </section>
     </div>
