@@ -44,6 +44,8 @@ export default async function EditListingPage({
     phone: listing.phone,
     email: listing.email,
     website: listing.website,
+    facebookUrl: listing.facebookUrl,
+    instagramUrl: listing.instagramUrl,
     address: listing.address,
     stateId: listing.stateId,
     cityName: listing.city.name,

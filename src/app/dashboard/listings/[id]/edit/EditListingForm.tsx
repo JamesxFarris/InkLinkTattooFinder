@@ -19,6 +19,8 @@ type ListingData = {
   phone: string | null;
   email: string | null;
   website: string | null;
+  facebookUrl: string | null;
+  instagramUrl: string | null;
   address: string | null;
   stateId: number;
   cityName: string;
@@ -187,6 +189,36 @@ export function EditListingForm({
           className={`mt-1 ${inputClass}`}
           placeholder="https://yourshop.com"
         />
+      </div>
+
+      {/* Social URLs */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="facebookUrl" className={labelClass}>
+            Facebook URL
+          </label>
+          <input
+            type="url"
+            id="facebookUrl"
+            name="facebookUrl"
+            defaultValue={listing.facebookUrl ?? ""}
+            className={`mt-1 ${inputClass}`}
+            placeholder="https://facebook.com/yourshop"
+          />
+        </div>
+        <div>
+          <label htmlFor="instagramUrl" className={labelClass}>
+            Instagram URL
+          </label>
+          <input
+            type="url"
+            id="instagramUrl"
+            name="instagramUrl"
+            defaultValue={listing.instagramUrl ?? ""}
+            className={`mt-1 ${inputClass}`}
+            placeholder="https://instagram.com/yourshop"
+          />
+        </div>
       </div>
 
       {/* Description */}

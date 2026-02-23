@@ -121,6 +121,8 @@ model Listing {
   type              ListingType
   phone             String?
   website           String?
+  facebookUrl       String?
+  instagramUrl      String?
   email             String?
   address           String?
   cityId            Int

@@ -166,6 +166,34 @@ export function SubmissionForm({ states }: { states: State[] }) {
         />
       </div>
 
+      {/* Social URLs */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="facebookUrl" className={labelClass}>
+            Facebook URL
+          </label>
+          <input
+            type="url"
+            id="facebookUrl"
+            name="facebookUrl"
+            className={`mt-1 ${inputClass}`}
+            placeholder="https://facebook.com/yourshop"
+          />
+        </div>
+        <div>
+          <label htmlFor="instagramUrl" className={labelClass}>
+            Instagram URL
+          </label>
+          <input
+            type="url"
+            id="instagramUrl"
+            name="instagramUrl"
+            className={`mt-1 ${inputClass}`}
+            placeholder="https://instagram.com/yourshop"
+          />
+        </div>
+      </div>
+
       {/* Description */}
       <div>
         <label htmlFor="description" className={labelClass}>

@@ -41,6 +41,8 @@ export async function updateListing(
     const phone = formData.get("phone") as string | null;
     const email = formData.get("email") as string | null;
     const website = formData.get("website") as string | null;
+    const facebookUrl = formData.get("facebookUrl") as string | null;
+    const instagramUrl = formData.get("instagramUrl") as string | null;
     const description = formData.get("description") as string | null;
     const type = (formData.get("type") as string) || "shop";
     const hourlyRateMinRaw = formData.get("hourlyRateMin") as string | null;
@@ -108,6 +110,8 @@ export async function updateListing(
           phone: phone?.trim() || null,
           email: email?.trim() || null,
           website: website?.trim() || null,
+          facebookUrl: facebookUrl?.trim() || null,
+          instagramUrl: instagramUrl?.trim() || null,
           address: address?.trim() || null,
           cityId: city.id,
           stateId: parsedStateId,
