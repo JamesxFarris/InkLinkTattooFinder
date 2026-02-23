@@ -40,6 +40,11 @@
     "prisma/seed.ts",
     "prisma/import.ts",
     "prisma/geocode.ts",
-    "prisma/fetch-city-images.ts"
+    "prisma/fetch-city-images.ts",
+    "prisma/check-data.ts",
+    "prisma/audit-images.ts",
+    "prisma/count-photos.ts",
+    "prisma/fetch-hours.ts",
+    "prisma/fetch-instagram-photos.ts"
   ]
 }
