@@ -31,6 +31,7 @@ export default async function sitemap({ id }: { id: number }): Promise<MetadataR
       { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
       { url: `${baseUrl}/privacy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
       { url: `${baseUrl}/list-your-shop`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+      { url: `${baseUrl}/for-shop-owners`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
       { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
       { url: `${baseUrl}/dmca`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
     ];
