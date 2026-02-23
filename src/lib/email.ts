@@ -37,3 +37,37 @@ export async function sendContactEmail({
 
   return { success: true as const };
 }
+
+export async function sendDmcaEmail({
+  name,
+  email,
+  businessName,
+  listingId,
+  requestType,
+  details,
+}: {
+  name: string;
+  email: string;
+  businessName: string;
+  listingId: string | null;
+  requestType: string;
+  details: string;
+}) {
+  if (!resend) {
+    return { success: false as const, error: "Email service not configured" };
+  }
+
+  const { error } = await resend.emails.send({
+    from: "InkLink DMCA <onboarding@resend.dev>",
+    to: "inklinktattoofinder@gmail.com",
+    replyTo: email,
+    subject: `[InkLink DMCA] ${businessName}`,
+    text: `Name: ${name}\nEmail: ${email}\nBusiness Name: ${businessName}\nListing ID: ${listingId ?? "N/A"}\nRequest Type: ${requestType}\n\nDetails:\n${details}\n\nSworn statement: Confirmed`,
+  });
+
+  if (error) {
+    return { success: false as const, error: error.message };
+  }
+
+  return { success: true as const };
+}

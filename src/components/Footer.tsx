@@ -138,6 +138,7 @@ export function Footer() {
                 { name: "List Your Shop", href: "/list-your-shop" },
                 { name: "Privacy Policy", href: "/privacy" },
                 { name: "Terms of Service", href: "/terms" },
+                { name: "DMCA / Takedown", href: "/dmca" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

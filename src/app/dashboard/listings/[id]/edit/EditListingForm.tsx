@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
 import { ArtistEditor } from "@/components/ui/ArtistEditor";
 import { HoursEditor } from "@/components/ui/HoursEditor";
+import { CityAutocomplete } from "@/components/ui/CityAutocomplete";
 import { inputClass, labelClass } from "@/lib/formClasses";
 
 type State = { id: number; name: string };
@@ -49,6 +50,7 @@ export function EditListingForm({
   const boundUpdate = updateListing.bind(null, listing.id);
   const [result, formAction, isPending] = useActionState(boundUpdate, null);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(listing.categoryIds);
+  const [stateId, setStateId] = useState<string | null>(String(listing.stateId));
 
   return (
     <form action={formAction} className="space-y-6">
@@ -92,6 +94,7 @@ export function EditListingForm({
             required
             defaultValue={listing.stateId}
             className={`mt-1 ${inputClass}`}
+            onChange={(e) => setStateId(e.target.value || null)}
           >
             <option value="">Select a state</option>
             {states.map((s) => (
@@ -105,14 +108,10 @@ export function EditListingForm({
           <label htmlFor="cityName" className={labelClass}>
             City <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
-            id="cityName"
-            name="cityName"
-            required
+          <CityAutocomplete
+            stateId={stateId}
             defaultValue={listing.cityName}
-            className={`mt-1 ${inputClass}`}
-            placeholder="e.g. Austin"
+            required
           />
         </div>
       </div>

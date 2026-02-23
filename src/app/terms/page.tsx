@@ -334,9 +334,39 @@ export default function TermsPage() {
           your violation of any rights of a third party.
         </p>
 
-        {/* 13. Termination */}
+        {/* 13. DMCA and Content Takedown */}
         <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
-          13. Termination
+          13. DMCA and Content Takedown
+        </h2>
+        <p>
+          InkLink Tattoo Finder respects the intellectual property rights of
+          content creators and business owners. Some photos displayed on our
+          listing pages may be sourced from publicly available social media
+          profiles. If you are a business owner or authorized representative and
+          believe that your content is displayed on our platform without
+          authorization, you may submit a formal takedown request through our{" "}
+          <a href="/dmca" className="text-teal-500 hover:underline">
+            DMCA / Takedown Request
+          </a>{" "}
+          page.
+        </p>
+        <p>
+          We will review all valid requests promptly, typically within 48
+          business hours, and remove the identified content if the request is
+          substantiated. For questions about our takedown process, please contact
+          us at{" "}
+          <a
+            href="mailto:inklinktattoofinder@gmail.com"
+            className="text-teal-500 hover:underline"
+          >
+            inklinktattoofinder@gmail.com
+          </a>
+          .
+        </p>
+
+        {/* 14. Termination */}
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
+          14. Termination
         </h2>
         <p>
           We may suspend or terminate your account and access to the service at
@@ -358,9 +388,9 @@ export default function TermsPage() {
           liability.
         </p>
 
-        {/* 14. Changes to Terms */}
+        {/* 15. Changes to Terms */}
         <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
-          14. Changes to Terms
+          15. Changes to Terms
         </h2>
         <p>
           We reserve the right to modify or replace these Terms at any time. If
@@ -370,9 +400,9 @@ export default function TermsPage() {
           encourage you to review these Terms periodically.
         </p>
 
-        {/* 15. Governing Law */}
+        {/* 16. Governing Law */}
         <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
-          15. Governing Law
+          16. Governing Law
         </h2>
         <p>
           These Terms shall be governed by and construed in accordance with the
@@ -381,9 +411,9 @@ export default function TermsPage() {
           service shall be resolved in accordance with applicable law.
         </p>
 
-        {/* 16. Severability */}
+        {/* 17. Severability */}
         <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
-          16. Severability
+          17. Severability
         </h2>
         <p>
           If any provision of these Terms is found to be unenforceable or
@@ -392,9 +422,9 @@ export default function TermsPage() {
           and effect.
         </p>
 
-        {/* 17. Contact */}
+        {/* 18. Contact */}
         <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
-          17. Contact
+          18. Contact
         </h2>
         <p>
           If you have any questions about these Terms of Service, please contact

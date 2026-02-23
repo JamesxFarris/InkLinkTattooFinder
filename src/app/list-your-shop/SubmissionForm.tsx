@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { submitListing } from "./actions";
 import { Button } from "@/components/ui/Button";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
 import { ArtistEditor } from "@/components/ui/ArtistEditor";
+import { CityAutocomplete } from "@/components/ui/CityAutocomplete";
 import { inputClass, labelClass } from "@/lib/formClasses";
 
 type State = { id: number; name: string };
@@ -18,6 +19,7 @@ async function handleSubmit(
 
 export function SubmissionForm({ states }: { states: State[] }) {
   const [result, formAction, isPending] = useActionState(handleSubmit, null);
+  const [stateId, setStateId] = useState<string | null>(null);
 
   if (result?.success) {
     return (
@@ -72,7 +74,13 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <label htmlFor="stateId" className={labelClass}>
             State <span className="text-red-500">*</span>
           </label>
-          <select id="stateId" name="stateId" required className={`mt-1 ${inputClass}`}>
+          <select
+            id="stateId"
+            name="stateId"
+            required
+            className={`mt-1 ${inputClass}`}
+            onChange={(e) => setStateId(e.target.value || null)}
+          >
             <option value="">Select a state</option>
             {states.map((s) => (
               <option key={s.id} value={s.id}>
@@ -85,14 +93,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <label htmlFor="cityName" className={labelClass}>
             City <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
-            id="cityName"
-            name="cityName"
-            required
-            className={`mt-1 ${inputClass}`}
-            placeholder="e.g. Austin"
-          />
+          <CityAutocomplete stateId={stateId} required />
         </div>
       </div>
 
