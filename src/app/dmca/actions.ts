@@ -1,6 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
 import { isEmailConfigured, sendDmcaEmail } from "@/lib/email";
+import { formLimiter } from "@/lib/rate-limit";
+import { sanitizeString, isValidEmail, MAX_NAME, MAX_EMAIL, MAX_BUSINESS_NAME, MAX_DETAILS, MAX_SUBJECT } from "@/lib/validation";
 
 type DmcaResult = { success: boolean; message: string };
 
@@ -8,19 +11,26 @@ export async function submitDmca(
   _prev: DmcaResult | null,
   formData: FormData
 ): Promise<DmcaResult> {
-  const name = (formData.get("name") as string | null)?.trim();
-  const email = (formData.get("email") as string | null)?.trim();
-  const businessName = (formData.get("businessName") as string | null)?.trim();
-  const listingId = (formData.get("listingId") as string | null)?.trim() || null;
-  const requestType = (formData.get("requestType") as string | null)?.trim();
-  const details = (formData.get("details") as string | null)?.trim();
+  const headersList = await headers();
+  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const { success: allowed } = formLimiter.check(ip);
+  if (!allowed) {
+    return { success: false, message: "Too many submissions. Please try again in a minute." };
+  }
+
+  const name = sanitizeString(formData.get("name") as string | null, MAX_NAME);
+  const email = sanitizeString(formData.get("email") as string | null, MAX_EMAIL);
+  const businessName = sanitizeString(formData.get("businessName") as string | null, MAX_BUSINESS_NAME);
+  const listingId = sanitizeString(formData.get("listingId") as string | null, 20);
+  const requestType = sanitizeString(formData.get("requestType") as string | null, MAX_SUBJECT);
+  const details = sanitizeString(formData.get("details") as string | null, MAX_DETAILS);
   const sworn = formData.get("sworn");
 
   if (!name || !email || !businessName || !requestType || !details) {
     return { success: false, message: "Please fill in all required fields." };
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isValidEmail(email)) {
     return { success: false, message: "Please enter a valid email address." };
   }
 

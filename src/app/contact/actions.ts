@@ -1,6 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
 import { isEmailConfigured, sendContactEmail } from "@/lib/email";
+import { formLimiter } from "@/lib/rate-limit";
+import { sanitizeString, isValidEmail, MAX_NAME, MAX_EMAIL, MAX_SUBJECT, MAX_MESSAGE } from "@/lib/validation";
 
 type ContactResult = { success: boolean; message: string };
 
@@ -8,16 +11,23 @@ export async function submitContact(
   _prev: ContactResult | null,
   formData: FormData
 ): Promise<ContactResult> {
-  const name = (formData.get("name") as string | null)?.trim();
-  const email = (formData.get("email") as string | null)?.trim();
-  const subject = (formData.get("subject") as string | null)?.trim();
-  const message = (formData.get("message") as string | null)?.trim();
+  const headersList = await headers();
+  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const { success: allowed } = formLimiter.check(ip);
+  if (!allowed) {
+    return { success: false, message: "Too many submissions. Please try again in a minute." };
+  }
+
+  const name = sanitizeString(formData.get("name") as string | null, MAX_NAME);
+  const email = sanitizeString(formData.get("email") as string | null, MAX_EMAIL);
+  const subject = sanitizeString(formData.get("subject") as string | null, MAX_SUBJECT);
+  const message = sanitizeString(formData.get("message") as string | null, MAX_MESSAGE);
 
   if (!name || !email || !subject || !message) {
     return { success: false, message: "Please fill in all required fields." };
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isValidEmail(email)) {
     return { success: false, message: "Please enter a valid email address." };
   }
 

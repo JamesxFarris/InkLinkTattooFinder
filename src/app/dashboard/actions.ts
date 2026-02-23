@@ -1,8 +1,10 @@
 "use server";
 
+import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { authLimiter } from "@/lib/rate-limit";
 
 type ChangePasswordResult = { success: boolean; message: string };
 
@@ -13,6 +15,13 @@ export async function changePassword(
   const session = await auth();
   if (!session) {
     return { success: false, message: "You must be logged in." };
+  }
+
+  const headersList = await headers();
+  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const { success: allowed } = authLimiter.check(ip);
+  if (!allowed) {
+    return { success: false, message: "Too many attempts. Please try again in a minute." };
   }
 
   const currentPassword = (formData.get("currentPassword") as string | null)?.trim();

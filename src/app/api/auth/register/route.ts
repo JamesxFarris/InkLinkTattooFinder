@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
+import { authLimiter } from "@/lib/rate-limit";
+import { sanitizeString, isValidEmail, MAX_NAME, MAX_EMAIL } from "@/lib/validation";
 
 // Admin emails from environment — auto-assigned admin on registration
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
@@ -10,12 +13,31 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
 
 export async function POST(request: Request) {
   try {
+    const headersList = await headers();
+    const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const { success: allowed } = authLimiter.check(ip);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many attempts. Please try again in a minute." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
-    const { name, email, password } = body;
+    const name = sanitizeString(body.name, MAX_NAME);
+    const email = sanitizeString(body.email, MAX_EMAIL)?.toLowerCase();
+    const password = body.password as string | undefined;
 
     if (!name || !email || !password) {
       return NextResponse.json(
         { error: "Name, email, and password are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidEmail(email)) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address" },
         { status: 400 }
       );
     }
@@ -36,7 +58,7 @@ export async function POST(request: Request) {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
-    const role = ADMIN_EMAILS.includes(email.toLowerCase()) ? "admin" : "owner";
+    const role = ADMIN_EMAILS.includes(email) ? "admin" : "owner";
 
     const user = await prisma.user.create({
       data: { name, email, passwordHash, role },
@@ -46,10 +68,8 @@ export async function POST(request: Request) {
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
     console.error("Registration error:", error);
-    const message =
-      error instanceof Error ? error.message : "Something went wrong";
     return NextResponse.json(
-      { error: message },
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }

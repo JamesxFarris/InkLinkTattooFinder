@@ -1,9 +1,25 @@
 "use server";
 
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { slugify } from "@/lib/utils";
+import { formLimiter } from "@/lib/rate-limit";
+import {
+  sanitizeString,
+  isValidEmail,
+  isValidUrl,
+  isValidPhone,
+  MAX_BUSINESS_NAME,
+  MAX_EMAIL,
+  MAX_DESCRIPTION,
+  MAX_ADDRESS,
+  MAX_URL,
+  MAX_PHONE,
+  MAX_ZIP,
+  MAX_NAME,
+} from "@/lib/validation";
 
 type SubmitResult = { success: boolean; message: string };
 
@@ -14,17 +30,24 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
       return { success: false, message: "You must be signed in to submit a listing." };
     }
 
-    const name = formData.get("name") as string | null;
-    const stateId = formData.get("stateId") as string | null;
-    const cityName = formData.get("cityName") as string | null;
-    const address = formData.get("address") as string | null;
-    const zipCode = formData.get("zipCode") as string | null;
-    const phone = formData.get("phone") as string | null;
-    const email = formData.get("email") as string | null;
-    const website = formData.get("website") as string | null;
-    const facebookUrl = formData.get("facebookUrl") as string | null;
-    const instagramUrl = formData.get("instagramUrl") as string | null;
-    const description = formData.get("description") as string | null;
+    const headersList = await headers();
+    const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const { success: allowed } = formLimiter.check(ip);
+    if (!allowed) {
+      return { success: false, message: "Too many submissions. Please try again in a minute." };
+    }
+
+    const name = sanitizeString(formData.get("name") as string | null, MAX_BUSINESS_NAME);
+    const stateId = sanitizeString(formData.get("stateId") as string | null, 10);
+    const cityName = sanitizeString(formData.get("cityName") as string | null, MAX_NAME);
+    const address = sanitizeString(formData.get("address") as string | null, MAX_ADDRESS);
+    const zipCode = sanitizeString(formData.get("zipCode") as string | null, MAX_ZIP);
+    const phone = sanitizeString(formData.get("phone") as string | null, MAX_PHONE);
+    const email = sanitizeString(formData.get("email") as string | null, MAX_EMAIL);
+    const website = sanitizeString(formData.get("website") as string | null, MAX_URL);
+    const facebookUrl = sanitizeString(formData.get("facebookUrl") as string | null, MAX_URL);
+    const instagramUrl = sanitizeString(formData.get("instagramUrl") as string | null, MAX_URL);
+    const description = sanitizeString(formData.get("description") as string | null, MAX_DESCRIPTION);
     const type = (formData.get("type") as string) || "shop";
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
@@ -49,8 +72,28 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     }
 
     // Validate required fields
-    if (!name?.trim() || !stateId?.trim() || !cityName?.trim()) {
+    if (!name || !stateId || !cityName) {
       return { success: false, message: "Shop name, state, and city are required." };
+    }
+
+    if (email && !isValidEmail(email)) {
+      return { success: false, message: "Please enter a valid email address." };
+    }
+
+    if (phone && !isValidPhone(phone)) {
+      return { success: false, message: "Please enter a valid phone number." };
+    }
+
+    if (website && !isValidUrl(website)) {
+      return { success: false, message: "Please enter a valid website URL (must start with http:// or https://)." };
+    }
+
+    if (facebookUrl && !isValidUrl(facebookUrl)) {
+      return { success: false, message: "Please enter a valid Facebook URL." };
+    }
+
+    if (instagramUrl && !isValidUrl(instagramUrl)) {
+      return { success: false, message: "Please enter a valid Instagram URL." };
     }
 
     const parsedStateId = parseInt(stateId, 10);
@@ -59,7 +102,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     }
 
     // Find or create city
-    const citySlug = slugify(cityName.trim());
+    const citySlug = slugify(cityName);
     let city = await prisma.city.findFirst({
       where: { slug: citySlug, stateId: parsedStateId },
     });
@@ -67,7 +110,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     if (!city) {
       city = await prisma.city.create({
         data: {
-          name: cityName.trim(),
+          name: cityName,
           slug: citySlug,
           stateId: parsedStateId,
         },
@@ -75,7 +118,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     }
 
     // Generate unique slug
-    let listingSlug = slugify(name.trim());
+    let listingSlug = slugify(name);
     const existing = await prisma.listing.findUnique({
       where: { slug: listingSlug },
     });
@@ -86,19 +129,19 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     // Create listing as pending
     await prisma.listing.create({
       data: {
-        name: name.trim(),
+        name,
         slug: listingSlug,
-        description: description?.trim() || null,
+        description: description || null,
         type: type as "shop" | "artist" | "supplier",
-        phone: phone?.trim() || null,
-        email: email?.trim() || null,
-        website: website?.trim() || null,
-        facebookUrl: facebookUrl?.trim() || null,
-        instagramUrl: instagramUrl?.trim() || null,
-        address: address?.trim() || null,
+        phone: phone || null,
+        email: email || null,
+        website: website || null,
+        facebookUrl: facebookUrl || null,
+        instagramUrl: instagramUrl || null,
+        address: address || null,
         cityId: city.id,
         stateId: parsedStateId,
-        zipCode: zipCode?.trim() || null,
+        zipCode: zipCode || null,
         acceptsWalkIns,
         piercingServices,
         photos: photos.length > 0 ? photos : Prisma.JsonNull,

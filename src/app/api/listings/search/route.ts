@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/db";
+import { searchLimiter } from "@/lib/rate-limit";
 
 export async function GET(request: NextRequest) {
-  const q = request.nextUrl.searchParams.get("q")?.trim();
+  const headersList = await headers();
+  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const { success: allowed } = searchLimiter.check(ip);
+  if (!allowed) {
+    return NextResponse.json({ listings: [] }, { status: 429 });
+  }
+
+  const q = request.nextUrl.searchParams.get("q")?.trim()?.slice(0, 100);
 
   if (!q || q.length < 2) {
     return NextResponse.json({ listings: [] });
