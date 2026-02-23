@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getTotalListingCount, formatApproxCount } from "@/lib/queries";
 import type { Metadata } from "next";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Claim & Manage Your Tattoo Shop Listing",
