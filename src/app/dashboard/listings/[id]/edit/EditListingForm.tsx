@@ -33,7 +33,8 @@ type ListingData = {
   tattooRemoval: boolean;
   hours: Record<string, string> | null;
   photos: string[] | null;
-  artists: string[];
+  artists: unknown[];
+  featured: boolean;
 };
 
 export function EditListingForm({
@@ -256,7 +257,7 @@ export function EditListingForm({
       <div>
         <label className={labelClass}>Artists</label>
         <div className="mt-1">
-          <ArtistEditor existing={listing.artists} />
+          <ArtistEditor existing={listing.artists} showInstagram={listing.featured} />
         </div>
       </div>
 

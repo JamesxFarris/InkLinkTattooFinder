@@ -58,7 +58,8 @@ export default async function EditListingPage({
     hours: listing.hours as Record<string, string> | null,
     categoryIds: listing.categories.map((c) => c.category.id),
     photos: listing.photos as string[] | null,
-    artists: Array.isArray(listing.artists) ? (listing.artists as string[]) : [],
+    artists: Array.isArray(listing.artists) ? (listing.artists as unknown[]) : [],
+    featured: listing.featured,
   };
 
   return (

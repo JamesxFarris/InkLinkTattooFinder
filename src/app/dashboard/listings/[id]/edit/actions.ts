@@ -80,7 +80,24 @@ export async function updateListing(
     const hoursRaw = formData.get("hours") as string | null;
     const categoryIds = formData.getAll("categoryIds").map((id) => parseInt(id as string, 10)).filter((id) => !isNaN(id));
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
-    const artists = formData.getAll("artists").filter((a) => typeof a === "string" && a.length > 0) as string[];
+    // Parse artists from JSON format
+    const artistsJsonRaw = formData.get("artistsJson") as string | null;
+    let artists: { name: string; instagramUrl?: string }[] = [];
+    if (artistsJsonRaw) {
+      try {
+        const parsed = JSON.parse(artistsJsonRaw);
+        if (Array.isArray(parsed)) {
+          artists = parsed
+            .filter((a: unknown) => typeof a === "object" && a !== null && "name" in a && typeof (a as { name: unknown }).name === "string" && (a as { name: string }).name.trim().length > 0)
+            .map((a: { name: string; instagramUrl?: string }) => ({
+              name: a.name.trim(),
+              ...(a.instagramUrl?.trim() ? { instagramUrl: a.instagramUrl.trim() } : {}),
+            }));
+        }
+      } catch {
+        // ignore invalid JSON
+      }
+    }
 
     // Parse hours JSON
     const VALID_DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
@@ -148,7 +165,7 @@ export async function updateListing(
           tattooRemoval,
           hours: parsedHours ?? Prisma.JsonNull,
           photos: photos.length > 0 ? photos : Prisma.JsonNull,
-          artists: artists.length > 0 ? artists : Prisma.JsonNull,
+          artists: artists.length > 0 ? (artists as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
           // status is NOT changed (edits stay live if active, stay pending if pending)
         },
       });

@@ -29,7 +29,24 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
-    const artists = formData.getAll("artists").filter((a) => typeof a === "string" && a.length > 0) as string[];
+    // Parse artists from JSON format
+    const artistsJsonRaw = formData.get("artistsJson") as string | null;
+    let artists: { name: string; instagramUrl?: string }[] = [];
+    if (artistsJsonRaw) {
+      try {
+        const parsed = JSON.parse(artistsJsonRaw);
+        if (Array.isArray(parsed)) {
+          artists = parsed
+            .filter((a: unknown) => typeof a === "object" && a !== null && "name" in a && typeof (a as { name: unknown }).name === "string" && (a as { name: string }).name.trim().length > 0)
+            .map((a: { name: string; instagramUrl?: string }) => ({
+              name: a.name.trim(),
+              ...(a.instagramUrl?.trim() ? { instagramUrl: a.instagramUrl.trim() } : {}),
+            }));
+        }
+      } catch {
+        // ignore invalid JSON
+      }
+    }
 
     // Validate required fields
     if (!name?.trim() || !stateId?.trim() || !cityName?.trim()) {
@@ -85,7 +102,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
         acceptsWalkIns,
         piercingServices,
         photos: photos.length > 0 ? photos : Prisma.JsonNull,
-        artists: artists.length > 0 ? artists : Prisma.JsonNull,
+        artists: artists.length > 0 ? (artists as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
         status: "pending",
         ownerId: parseInt(session.user.id),
       },
