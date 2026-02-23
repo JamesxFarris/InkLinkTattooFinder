@@ -72,6 +72,45 @@ const BLOCKED_DOMAINS = new Set([
   "email.com",
   "domain.com",
   "sampledomain.com",
+  // Website builder / template / font emails that appear in page source
+  "eyebytes.com",
+  "webador.com",
+  "latinotype.com",
+  "latofonts.com",
+  "godaddy.com",
+  "secureserver.net",
+  "weebly.com",
+  "wixsite.com",
+  "jimdo.com",
+  "hubspot.com",
+  "constantcontact.com",
+  "shopify.com",
+  "bigcommerce.com",
+  "duda.co",
+  "ionos.com",
+  "bluehost.com",
+  "hostgator.com",
+  "namecheap.com",
+  "att.net",
+  "ndiscovered.com",
+  "mysite.com",
+  "rfuenzalida.com",
+  "sudtipos.com",
+  "indiantypefoundry.com",
+  "sansoxygen.com",
+  "triadmarketingsolutions.com",
+  "iginomarini.com",
+  "astigmatic.com",
+  "relativedigitalmarketing.com",
+  "examle.com",
+  "doe.com",
+  "sheri.sterup.com",
+  "demolink.org",
+  "booksy.com",
+  "stagheaddesigns.com",
+  "typemade.mx",
+  "fuulala.com",
+  "yourbusiness.com",
 ]);
 
 const BLOCKED_PREFIXES = [
@@ -158,6 +197,47 @@ function isBlockedEmail(email: string): boolean {
 
   // Filter out emails that look like CSS/JS artifacts (contain unusual patterns)
   if (email.includes("..") || email.startsWith(".") || email.endsWith(".")) return true;
+
+  // Filter out image filenames that match email regex (e.g. name@2x.png)
+  if (/\.(png|jpg|jpeg|gif|svg|webp|ico|css|js)$/i.test(email)) return true;
+
+  // Filter out emails with typical font/template author patterns
+  const local = email.split("@")[0];
+  if (local.length > 40) return true; // absurdly long local part = probably not real
+
+  // Block common font foundry / template emails
+  const blockedEmails = new Set([
+    // Font foundry / template author emails embedded in page source
+    "impallari@gmail.com",
+    "typesetit@att.net",
+    "luciano@latinotype.com",
+    "filler@godaddy.com",
+    "hello@rfuenzalida.com",
+    "info@mysite.com",
+    "sudtipos@sudtipos.com",
+    "info@indiantypefoundry.com",
+    "jonpinhorn.typedesign@gmail.com",
+    "anapbm@gmail.com",
+    "amkryukov@gmail.com",
+    "contact@sansoxygen.com",
+    "support@triadmarketingsolutions.com",
+    "jeanmarie_elroy@sheri.sterup.com",
+    "micah@micahrich.com",
+    "mail@iginomarini.com",
+    "email@examle.com",
+    "john@doe.com",
+    "chris@relativedigitalmarketing.com",
+    "astigma@astigmatic.com",
+    "nkarasart@gmail.com",
+    "example@gmail.com",
+    "email@yourbusiness.com",
+    "hi@typemade.mx",
+    "info@demolink.org",
+    "info.us@booksy.com",
+    "info@stagheaddesigns.com",
+    "contact@fuulala.com",
+  ]);
+  if (blockedEmails.has(lower)) return true;
 
   return false;
 }

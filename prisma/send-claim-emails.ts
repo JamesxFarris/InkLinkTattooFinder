@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 const SENT_FILE = path.join(__dirname, "outreach-sent.json");
 const BASE_URL = "https://inklinktattoofinder.com";
+const PHYSICAL_ADDRESS = "InkLink Tattoo Finder, 1942 Broadway STE 314C, Boulder, CO 80302";
 
 function loadSentIds(): Set<number> {
   try {
@@ -22,7 +23,9 @@ function saveSentIds(ids: Set<number>) {
   fs.writeFileSync(SENT_FILE, JSON.stringify([...ids], null, 2));
 }
 
-function buildEmailHtml(name: string, city: string, state: string, listingUrl: string): string {
+function buildEmailHtml(name: string, city: string, state: string, listingUrl: string, listingId: number): string {
+  const unsubscribeUrl = `${BASE_URL}/api/unsubscribe?id=${listingId}&token=${Buffer.from(String(listingId) + ":unsub").toString("base64")}`;
+
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -66,8 +69,14 @@ function buildEmailHtml(name: string, city: string, state: string, listingUrl: s
     </tr>
     <tr>
       <td style="background:#f3f4f6;padding:16px 32px;text-align:center;">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 8px;">
+          ${PHYSICAL_ADDRESS}
+        </p>
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 4px;">
+          You received this email because your business is listed on <a href="${BASE_URL}" style="color:#9ca3af;">inklinktattoofinder.com</a>.
+        </p>
         <p style="color:#9ca3af;font-size:12px;margin:0;">
-          InkLink Tattoo Finder &mdash; <a href="${BASE_URL}" style="color:#9ca3af;">inklinktattoofinder.com</a>
+          <a href="${unsubscribeUrl}" style="color:#9ca3af;">Unsubscribe</a> &mdash; you can also reply &ldquo;unsubscribe&rdquo; to opt out of future emails.
         </p>
       </td>
     </tr>
@@ -162,8 +171,11 @@ async function main() {
       listing.name,
       listing.city.name,
       listing.city.state.name,
-      listingUrl
+      listingUrl,
+      listing.id
     );
+
+    const unsubscribeUrl = `${BASE_URL}/api/unsubscribe?id=${listing.id}&token=${Buffer.from(String(listing.id) + ":unsub").toString("base64")}`;
 
     try {
       const { error } = await resend!.emails.send({
@@ -171,6 +183,10 @@ async function main() {
         to: listing.email!,
         subject,
         html,
+        headers: {
+          "List-Unsubscribe": `<${unsubscribeUrl}>, <mailto:hello@inklinktattoofinder.com?subject=Unsubscribe%20${listing.id}>`,
+          "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        },
       });
 
       if (error) {

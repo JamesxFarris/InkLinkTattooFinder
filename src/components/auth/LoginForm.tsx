@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { inputClass, labelClass } from "@/lib/formClasses";
+import { gtagEvent } from "@/lib/gtag";
 
 function EyeIcon({ open }: { open: boolean }) {
   return open ? (
@@ -43,6 +44,7 @@ export function LoginForm() {
     if (result?.error) {
       setError("Invalid email or password");
     } else {
+      gtagEvent("login", { method: "credentials" });
       router.push(callbackUrl);
       router.refresh();
     }

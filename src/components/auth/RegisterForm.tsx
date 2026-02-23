@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { inputClass, labelClass } from "@/lib/formClasses";
+import { gtagEvent } from "@/lib/gtag";
 
 function EyeIcon({ open }: { open: boolean }) {
   return open ? (
@@ -69,6 +70,7 @@ export function RegisterForm() {
     if (result?.error) {
       setError("Account created but sign-in failed. Please log in.");
     } else {
+      gtagEvent("sign_up", { method: "credentials" });
       router.push(callbackUrl);
       router.refresh();
     }
