@@ -3,6 +3,23 @@ import { ITEMS_PER_PAGE } from "./utils";
 import { haversineDistance, boundingBox } from "./geo";
 import type { ListingStatus, ListingType } from "@prisma/client";
 
+// ── Aggregate Counts ─────────────────────────────────────
+
+export async function getTotalListingCount(): Promise<number> {
+  try {
+    return await prisma.listing.count({ where: { status: "active" } });
+  } catch {
+    // DB unavailable at build time — return fallback; ISR will update on first request
+    return 3000;
+  }
+}
+
+/** Round a count down to the nearest 100 and add "+", e.g. 3147 → "3,100+" */
+export function formatApproxCount(count: number): string {
+  const rounded = Math.floor(count / 100) * 100;
+  return `${rounded.toLocaleString("en-US")}+`;
+}
+
 // ── States ──────────────────────────────────────────────
 
 export async function getAllStates() {

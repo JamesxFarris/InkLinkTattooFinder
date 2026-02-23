@@ -1,13 +1,17 @@
 import { ImageResponse } from "next/og";
+import { getTotalListingCount, formatApproxCount } from "@/lib/queries";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const revalidate = 86400;
 
 export const alt = "InkLink Tattoo Finder — Find Tattoo Artists & Shops Near You";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const totalCount = await getTotalListingCount();
+  const shopCount = formatApproxCount(totalCount);
+
   return new ImageResponse(
     (
       <div
@@ -219,7 +223,7 @@ export default function OpenGraphImage() {
               }}
             >
               <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#14B8A6", display: "flex" }} />
-              <span style={{ fontSize: "16px", color: "#94A3B8", fontFamily: "system-ui, sans-serif" }}>Nationwide</span>
+              <span style={{ fontSize: "16px", color: "#94A3B8", fontFamily: "system-ui, sans-serif" }}>{shopCount} Shops Nationwide</span>
             </div>
           </div>
         </div>

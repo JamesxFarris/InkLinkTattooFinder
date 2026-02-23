@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 import Link from "next/link";
 import { SearchBar } from "@/components/SearchBar";
@@ -6,7 +6,7 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { CityImageCard } from "@/components/CityImageCard";
 import { JsonLd, websiteJsonLd, organizationJsonLd, faqJsonLd } from "@/components/JsonLd";
 import { HERO_IMAGE, getCityImageUrl } from "@/lib/images";
-import { getAllCategories, getTopCities, getAllStates, getPopularSearchCombos } from "@/lib/queries";
+import { getAllCategories, getTopCities, getAllStates, getPopularSearchCombos, getTotalListingCount, formatApproxCount } from "@/lib/queries";
 import type { FaqItem } from "@/lib/faq";
 import type { Metadata } from "next";
 
@@ -50,12 +50,15 @@ const homepageFaq: FaqItem[] = [
 ];
 
 export default async function HomePage() {
-  const [categories, cities, states, popularSearches] = await Promise.all([
+  const [categories, cities, states, popularSearches, totalCount] = await Promise.all([
     getAllCategories(),
     getTopCities(12),
     getAllStates(),
     getPopularSearchCombos(12),
+    getTotalListingCount(),
   ]);
+
+  const shopCount = formatApproxCount(totalCount);
 
   return (
     <>
@@ -79,7 +82,7 @@ export default async function HomePage() {
             Near You
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-stone-300">
-            Search thousands of shops and artists by style, city, and ratings.
+            Browse {shopCount} tattoo shops and artists by style, city, and ratings.
           </p>
           <div className="mt-8 flex justify-center">
             <SearchBar size="large" />
@@ -103,7 +106,7 @@ export default async function HomePage() {
               <svg className="h-4 w-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
               </svg>
-              Nationwide
+              {shopCount} shops nationwide
             </span>
           </div>
 
@@ -258,15 +261,24 @@ export default async function HomePage() {
             Own a tattoo shop?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-stone-400">
-            Get listed on InkLink Tattoo Finder and reach thousands of people
-            looking for their next tattoo artist.
+            Join {shopCount} shops already listed on InkLink. Claim your listing,
+            update your info, and reach thousands of people looking for their
+            next tattoo artist.
           </p>
-          <a
-            href="/register"
-            className="mt-8 inline-flex rounded-full bg-teal-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:bg-teal-600 hover:shadow-xl hover:shadow-teal-500/30"
-          >
-            Claim Your Shop
-          </a>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/for-shop-owners"
+              className="inline-flex rounded-full bg-teal-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:bg-teal-600 hover:shadow-xl hover:shadow-teal-500/30"
+            >
+              Claim Your Shop
+            </Link>
+            <Link
+              href="/list-your-shop"
+              className="inline-flex rounded-full border border-stone-600 px-8 py-3.5 text-sm font-semibold text-stone-300 transition-all hover:border-stone-500 hover:text-white"
+            >
+              Add a New Listing
+            </Link>
+          </div>
         </div>
       </section>
     </>

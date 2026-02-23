@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { gtagEvent } from "@/lib/gtag";
+import { gtagEvent, gtagConversion } from "@/lib/gtag";
 
 type SearchResult = {
   id: number;
@@ -62,6 +62,7 @@ export function ClaimSearchResults() {
 
       setClaimedIds((prev) => new Set(prev).add(listingId));
       gtagEvent("claim_submit", { listing_id: listingId });
+      gtagConversion("claim_submit");
     } catch {
       setError("Failed to submit claim. Please try again.");
     } finally {

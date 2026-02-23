@@ -7,6 +7,7 @@ import { SessionProvider } from "@/components/auth/SessionProvider";
 import "./globals.css";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID;
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -78,7 +79,10 @@ export default function RootLayout({
               {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${GA_ID}');`}
+gtag('config', '${GA_ID}', {
+  allow_enhanced_conversions: true,
+  link_attribution: true
+});${GOOGLE_ADS_ID ? `\ngtag('config', '${GOOGLE_ADS_ID}', { allow_enhanced_conversions: true });` : ""}`}
             </Script>
           </>
         )}
