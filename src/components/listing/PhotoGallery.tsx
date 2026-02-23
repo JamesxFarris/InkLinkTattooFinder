@@ -38,7 +38,7 @@ export function PhotoGallery({
         {items.map((src, i) => (
           <div
             key={src}
-            className="relative aspect-square cursor-pointer overflow-hidden"
+            className="relative aspect-square cursor-pointer overflow-hidden bg-stone-100 dark:bg-stone-800"
             onClick={() => setLightboxIndex(i)}
           >
             <Image

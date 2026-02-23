@@ -58,7 +58,7 @@ export function ImageCarousel({
 
   return (
     <div
-      className={`group/carousel relative h-full w-full ${className}`}
+      className={`group/carousel relative h-full w-full bg-stone-100 dark:bg-stone-800 ${className}`}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}

@@ -8,7 +8,7 @@ import { AdminListingRow } from "./AdminListingRow";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin Panel",
+  title: "Review Listings — Admin",
 };
 
 export default async function AdminPage({
@@ -20,7 +20,7 @@ export default async function AdminPage({
   if (!session || session.user.role !== "admin") redirect("/dashboard");
 
   const params = await searchParams;
-  const filter = params.status || "all";
+  const filter = params.status || "pending";
   const query = params.q?.trim() || "";
 
   const where: Record<string, unknown> = {};
@@ -31,21 +31,16 @@ export default async function AdminPage({
     where.name = { contains: query, mode: "insensitive" };
   }
 
-  const [listings, counts, recentPending] = await Promise.all([
+  const [listings, counts] = await Promise.all([
     prisma.listing.findMany({
       where,
       include: { city: true, state: true, owner: { select: { email: true, name: true } } },
       orderBy: { createdAt: "desc" },
+      ...(filter === "all" ? { take: 50 } : {}),
     }),
     prisma.listing.groupBy({
       by: ["status"],
       _count: true,
-    }),
-    prisma.listing.findMany({
-      where: { status: "pending" },
-      include: { city: true, state: true, owner: { select: { email: true, name: true } } },
-      orderBy: { createdAt: "desc" },
-      take: 5,
     }),
   ]);
 
@@ -59,50 +54,41 @@ export default async function AdminPage({
   const pendingCount = countMap["pending"] ?? 0;
 
   const tabs = [
-    { key: "all", label: "All", count: total },
     { key: "pending", label: "Pending", count: pendingCount },
     { key: "active", label: "Active", count: countMap["active"] ?? 0 },
     { key: "inactive", label: "Inactive", count: countMap["inactive"] ?? 0 },
+    { key: "all", label: "All", count: total },
   ];
 
   return (
     <div>
       <h1 className="mb-6 font-display text-2xl font-bold text-stone-900 dark:text-stone-100">
-        Admin Panel
+        Review Listings
       </h1>
 
-      {/* Pending Listings Banner */}
-      {pendingCount > 0 && (
-        <div className="mb-6 rounded-xl bg-amber-50 p-5 ring-1 ring-amber-200 dark:bg-amber-950/30 dark:ring-amber-800">
+      {/* Pending count banner */}
+      {pendingCount > 0 && filter !== "pending" && (
+        <div className="mb-6 rounded-xl bg-amber-50 p-4 ring-1 ring-amber-200 dark:bg-amber-950/30 dark:ring-amber-800">
           <div className="flex items-center gap-3">
             <svg className="h-5 w-5 shrink-0 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
             </svg>
-            <div className="flex flex-1 items-center justify-between">
-              <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
-                {pendingCount} new {pendingCount === 1 ? "listing" : "listings"} awaiting review
-              </p>
-              <a
-                href="/dashboard/admin?status=pending"
-                className="text-sm font-medium text-amber-700 underline hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100"
-              >
-                View All Pending
-              </a>
-            </div>
+            <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
+              {pendingCount} new {pendingCount === 1 ? "listing" : "listings"} awaiting review
+            </p>
+            <Link
+              href="/dashboard/admin?status=pending"
+              className="ml-auto text-sm font-medium text-amber-700 underline hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100"
+            >
+              View Pending
+            </Link>
           </div>
-          {recentPending.length > 0 && (
-            <div className="mt-4 space-y-2">
-              {recentPending.map((listing) => (
-                <AdminListingRow key={listing.id} listing={listing} />
-              ))}
-            </div>
-          )}
         </div>
       )}
 
       {/* Search */}
       <form action="/dashboard/admin" method="GET" className="mb-6">
-        {filter !== "all" && <input type="hidden" name="status" value={filter} />}
+        {filter !== "pending" && <input type="hidden" name="status" value={filter} />}
         <div className="flex gap-2">
           <input
             type="text"
@@ -119,7 +105,7 @@ export default async function AdminPage({
           </button>
           {query && (
             <a
-              href={filter === "all" ? "/dashboard/admin" : `/dashboard/admin?status=${filter}`}
+              href={filter === "pending" ? "/dashboard/admin" : `/dashboard/admin?status=${filter}`}
               className="rounded-lg bg-stone-100 px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700"
             >
               Clear
@@ -134,7 +120,7 @@ export default async function AdminPage({
           <Link
             key={tab.key}
             href={
-              tab.key === "all"
+              tab.key === "pending"
                 ? `/dashboard/admin${query ? `?q=${encodeURIComponent(query)}` : ""}`
                 : `/dashboard/admin?status=${tab.key}${query ? `&q=${encodeURIComponent(query)}` : ""}`
             }
@@ -152,10 +138,17 @@ export default async function AdminPage({
 
       {listings.length === 0 ? (
         <div className="rounded-xl border border-stone-200 bg-stone-50 p-12 text-center dark:border-stone-800 dark:bg-stone-900">
-          <p className="text-stone-500 dark:text-stone-400">No listings found.</p>
+          <p className="text-stone-500 dark:text-stone-400">
+            {filter === "pending" ? "No pending listings to review." : "No listings found."}
+          </p>
         </div>
       ) : (
         <div className="space-y-3">
+          {filter === "all" && listings.length === 50 && (
+            <p className="text-sm text-stone-500 dark:text-stone-400">
+              Showing first 50 results. Use search or filters to narrow down.
+            </p>
+          )}
           {listings.map((listing) => (
             <AdminListingRow key={listing.id} listing={listing} />
           ))}
