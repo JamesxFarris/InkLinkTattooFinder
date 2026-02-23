@@ -4,11 +4,10 @@ import { useState, useRef, useCallback, DragEvent } from "react";
 
 type PhotoUploadProps = {
   existingPhotos?: string[];
+  maxPhotos?: number;
 };
 
-const MAX_PHOTOS = 6;
-
-export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
+export function PhotoUpload({ existingPhotos = [], maxPhotos = 6 }: PhotoUploadProps) {
   const [photos, setPhotos] = useState<string[]>(existingPhotos);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,9 +22,9 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
       if (!files || files.length === 0) return;
       setError(null);
 
-      const remaining = MAX_PHOTOS - photos.length;
+      const remaining = maxPhotos - photos.length;
       if (remaining <= 0) {
-        setError(`Maximum ${MAX_PHOTOS} photos allowed.`);
+        setError(`Maximum ${maxPhotos} photos allowed.`);
         return;
       }
 
@@ -138,7 +137,7 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
             : "Drag & drop photos here, or click to browse"}
         </p>
         <p className="mt-1 text-xs text-stone-400 dark:text-stone-500">
-          JPEG, PNG, or WebP &middot; Max 5MB each &middot; Up to {MAX_PHOTOS} photos
+          JPEG, PNG, or WebP &middot; Max 5MB each &middot; Up to {maxPhotos} photos
         </p>
         <input
           ref={inputRef}

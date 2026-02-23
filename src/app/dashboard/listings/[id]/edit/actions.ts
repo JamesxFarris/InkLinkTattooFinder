@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { auditLog } from "@/lib/audit";
 import { Prisma } from "@prisma/client";
 import { slugify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
@@ -27,6 +28,13 @@ export async function deleteListing(listingId: number): Promise<{ success: boole
   }
 
   await prisma.listing.delete({ where: { id: listingId } });
+  await auditLog({
+    userId: parseInt(session.user.id),
+    action: "listing.delete",
+    targetType: "listing",
+    targetId: listingId,
+    details: { name: listing.name },
+  });
   revalidatePath("/dashboard");
   redirect("/dashboard");
 }
@@ -177,6 +185,14 @@ export async function updateListing(
           data: categoryIds.map((categoryId) => ({ listingId, categoryId })),
         });
       }
+    });
+
+    await auditLog({
+      userId: parseInt(session.user.id),
+      action: "listing.update",
+      targetType: "listing",
+      targetId: listingId,
+      details: { name: name.trim() },
     });
 
     revalidatePath("/dashboard");

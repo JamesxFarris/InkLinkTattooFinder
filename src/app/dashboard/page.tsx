@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { getClaimsByUser, getOwnedListings } from "@/lib/queries";
 import { ClaimsList } from "@/components/dashboard/ClaimsList";
 import { OwnedListingCard } from "@/components/dashboard/OwnedListingCard";
+import { ManageSubscriptionButton } from "@/components/dashboard/ManageSubscriptionButton";
 import { ChangePasswordForm } from "./ChangePasswordForm";
+import { getUserPlanInfo } from "@/lib/premium";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -16,9 +18,10 @@ export default async function DashboardPage() {
   if (!session) redirect("/login");
 
   const userId = parseInt(session.user.id);
-  const [claims, ownedListings] = await Promise.all([
+  const [claims, ownedListings, planInfo] = await Promise.all([
     getClaimsByUser(userId),
     getOwnedListings(userId),
+    getUserPlanInfo(userId),
   ]);
 
   return (
@@ -41,7 +44,7 @@ export default async function DashboardPage() {
         <div className="mt-4 space-y-3">
           {ownedListings.length > 0 ? (
             ownedListings.map((listing) => (
-              <OwnedListingCard key={listing.id} listing={listing} />
+              <OwnedListingCard key={listing.id} listing={listing} isPremium={planInfo.isPremium} />
             ))
           ) : (
             <p className="text-sm text-stone-500 dark:text-stone-400">
@@ -51,6 +54,50 @@ export default async function DashboardPage() {
               </Link>{" "}
               to get started.
             </p>
+          )}
+        </div>
+      </section>
+
+      {/* Your Plan */}
+      <section className="mt-10">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
+          Your Plan
+        </h2>
+        <div className="mt-4">
+          {planInfo.isPremium ? (
+            <div className="rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-50 to-amber-100/50 p-5 dark:from-amber-950/30 dark:to-amber-900/20 dark:border-amber-600">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-amber-500">&#9733;</span>
+                    <span className="font-semibold text-stone-900 dark:text-stone-100">Premium Plan</span>
+                  </div>
+                  {planInfo.planExpiresAt && (
+                    <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+                      Renews {planInfo.planExpiresAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                    </p>
+                  )}
+                </div>
+                <ManageSubscriptionButton />
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-stone-200 bg-white p-5 dark:border-stone-700 dark:bg-stone-900">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="font-semibold text-stone-900 dark:text-stone-100">Free Plan</span>
+                  <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+                    Upgrade to get featured placement, more photos, and analytics.
+                  </p>
+                </div>
+                <Link
+                  href="/dashboard/upgrade"
+                  className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+                >
+                  Upgrade to Premium
+                </Link>
+              </div>
+            </div>
           )}
         </div>
       </section>

@@ -14,6 +14,8 @@ import { ClaimButton } from "@/components/listing/ClaimButton";
 import { AdminDeleteButton } from "@/components/listing/AdminDeleteButton";
 import { MapEmbed } from "@/components/listing/MapEmbed";
 import { PhotoGallery } from "@/components/listing/PhotoGallery";
+import { ViewTracker } from "@/components/listing/ViewTracker";
+import { isOpenNow } from "@/lib/hours";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ state: string; city: string; slug: string }> };
@@ -90,6 +92,7 @@ export default async function ListingPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <ViewTracker listingId={listing.id} />
       <JsonLd
         data={localBusinessJsonLd({
           name: listing.name,
@@ -434,9 +437,19 @@ export default async function ListingPage({ params }: Props) {
           {/* Hours */}
           {hours && (
             <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
-              <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
-                Hours
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100">
+                  Hours
+                </h2>
+                {listing.featured && (() => {
+                  const status = isOpenNow(hours);
+                  return status.label ? (
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${status.open ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400" : "bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400"}`}>
+                      {status.label}
+                    </span>
+                  ) : null;
+                })()}
+              </div>
               <div className="mt-4 space-y-2">
                 {Object.entries(hours).map(([day, time]) => (
                   <div

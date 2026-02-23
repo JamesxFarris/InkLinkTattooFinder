@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import { getListingById, getAllStates, getAllCategories } from "@/lib/queries";
+import { getUserPlanInfo } from "@/lib/premium";
 import { EditListingForm } from "./EditListingForm";
 import type { Metadata } from "next";
 
@@ -27,9 +28,10 @@ export default async function EditListingPage({
   const isAdmin = session.user.role === "admin";
   if (!isOwner && !isAdmin) redirect("/dashboard");
 
-  const [allStates, allCategories] = await Promise.all([
+  const [allStates, allCategories, planInfo] = await Promise.all([
     getAllStates(),
     getAllCategories(),
+    getUserPlanInfo(parseInt(session.user.id)),
   ]);
   const states = allStates.map((s) => ({ id: s.id, name: s.name }));
   const categories = allCategories
@@ -72,7 +74,13 @@ export default async function EditListingPage({
       </p>
 
       <div className="mt-8 rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">
-        <EditListingForm listing={listingData} states={states} categories={categories} />
+        <EditListingForm
+          listing={listingData}
+          states={states}
+          categories={categories}
+          maxPhotos={planInfo.photoLimit}
+          showInstagram={planInfo.isPremium || listing.featured}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import cloudinary, { isCloudinaryConfigured } from "@/lib/cloudinary";
+import { getUserPlanInfo } from "@/lib/premium";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -18,6 +19,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const { photoLimit } = await getUserPlanInfo(parseInt(session.user.id));
+
   const formData = await req.formData();
   const files = formData.getAll("files") as File[];
 
@@ -25,9 +28,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No files provided." }, { status: 400 });
   }
 
-  if (files.length > 6) {
+  if (files.length > photoLimit) {
     return NextResponse.json(
-      { error: "Maximum 6 photos allowed." },
+      { error: `Maximum ${photoLimit} photos allowed.` },
       { status: 400 }
     );
   }

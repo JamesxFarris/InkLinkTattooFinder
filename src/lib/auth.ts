@@ -48,6 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: user.email,
           name: user.name,
           role: user.role,
+          plan: user.plan,
         };
       },
     }),
@@ -61,14 +62,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id!;
         token.role = user.role;
+        token.plan = user.plan;
       } else if (token.id) {
-        // Refresh role from DB so admin promotions take effect immediately
+        // Refresh role + plan from DB so changes take effect immediately
         const dbUser = await prisma.user.findUnique({
           where: { id: parseInt(token.id as string, 10) },
-          select: { role: true },
+          select: { role: true, plan: true },
         });
         if (dbUser) {
           token.role = dbUser.role;
+          token.plan = dbUser.plan;
         }
       }
       return token;
@@ -76,6 +79,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session({ session, token }) {
       session.user.id = token.id as string;
       session.user.role = token.role as "owner" | "admin";
+      session.user.plan = token.plan as "free" | "premium";
       return session;
     },
   },

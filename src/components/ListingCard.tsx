@@ -2,12 +2,15 @@ import Link from "next/link";
 import { Badge } from "./ui/Badge";
 import { ImageCarousel } from "./ui/ImageCarousel";
 import { listingUrl, formatPhone } from "@/lib/utils";
+import { isOpenNow } from "@/lib/hours";
 import type { ListingWithRelations } from "@/types";
 
 export function ListingCard({ listing }: { listing: ListingWithRelations }) {
   const categoryNames = listing.categories.map((c) => c.category.name);
   const photos = listing.photos as string[] | null;
   const hasPhotos = photos && photos.length >= 1;
+  const hours = listing.hours as Record<string, string> | null;
+  const openStatus = listing.featured && hours ? isOpenNow(hours) : null;
 
   if (!hasPhotos) {
     return <NoPhotoCard listing={listing} categoryNames={categoryNames} />;
@@ -58,6 +61,13 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
             Not rated
           </div>
         )}
+
+        {/* Open Now badge for featured listings */}
+        {openStatus?.label && (
+          <span className={`absolute bottom-3 right-3 rounded-full px-2.5 py-1 text-xs font-semibold shadow-lg ${openStatus.open ? "bg-green-500 text-white" : "bg-stone-400 text-white"}`}>
+            {openStatus.label}
+          </span>
+        )}
       </div>
 
       <CardContent listing={listing} categoryNames={categoryNames} />
@@ -72,6 +82,9 @@ function NoPhotoCard({
   listing: ListingWithRelations;
   categoryNames: string[];
 }) {
+  const hours = listing.hours as Record<string, string> | null;
+  const openStatus = listing.featured && hours ? isOpenNow(hours) : null;
+
   return (
     <Link
       href={listingUrl(listing)}
@@ -104,6 +117,13 @@ function NoPhotoCard({
             )}
           </div>
         ) : null}
+
+        {/* Open Now badge for featured listings */}
+        {openStatus?.label && (
+          <span className={`absolute bottom-3 right-3 rounded-full px-2.5 py-1 text-xs font-semibold shadow-lg ${openStatus.open ? "bg-green-500 text-white" : "bg-stone-400 text-white"}`}>
+            {openStatus.label}
+          </span>
+        )}
       </div>
 
       {/* Content */}

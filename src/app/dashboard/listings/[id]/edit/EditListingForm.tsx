@@ -42,10 +42,14 @@ export function EditListingForm({
   listing,
   states,
   categories,
+  maxPhotos = 6,
+  showInstagram = false,
 }: {
   listing: ListingData;
   states: State[];
   categories: CategoryOption[];
+  maxPhotos?: number;
+  showInstagram?: boolean;
 }) {
   const boundUpdate = updateListing.bind(null, listing.id);
   const [result, formAction, isPending] = useActionState(boundUpdate, null);
@@ -246,9 +250,9 @@ export function EditListingForm({
 
       {/* Photos */}
       <div>
-        <label className={labelClass}>Photos (optional, up to 6)</label>
+        <label className={labelClass}>Photos (optional, up to {maxPhotos})</label>
         <div className="mt-1">
-          <PhotoUpload existingPhotos={listing.photos ?? []} />
+          <PhotoUpload existingPhotos={listing.photos ?? []} maxPhotos={maxPhotos} />
         </div>
       </div>
 
@@ -256,7 +260,7 @@ export function EditListingForm({
       <div>
         <label className={labelClass}>Artists</label>
         <div className="mt-1">
-          <ArtistEditor existing={listing.artists} showInstagram={listing.featured} />
+          <ArtistEditor existing={listing.artists} showInstagram={showInstagram} />
         </div>
       </div>
 

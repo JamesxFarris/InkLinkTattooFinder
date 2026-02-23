@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { auditLog } from "@/lib/audit";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -53,6 +54,13 @@ export async function PATCH(request: Request, context: RouteContext) {
           data: { ownerId: claim.userId },
         }),
       ]);
+      await auditLog({
+        userId: parseInt(session.user.id),
+        action: "claim.approve",
+        targetType: "claim",
+        targetId: claimId,
+        details: { listingId: claim.listingId, claimUserId: claim.userId },
+      });
       return NextResponse.json(updatedClaim);
     } else {
       // Deny: update claim + clear listing owner if this claim had set it
@@ -70,6 +78,13 @@ export async function PATCH(request: Request, context: RouteContext) {
           data: { ownerId: null },
         }),
       ]);
+      await auditLog({
+        userId: parseInt(session.user.id),
+        action: "claim.deny",
+        targetType: "claim",
+        targetId: claimId,
+        details: { listingId: claim.listingId, claimUserId: claim.userId },
+      });
       return NextResponse.json(updatedClaim);
     }
   } catch {

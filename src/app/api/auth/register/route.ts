@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
+import { auditLog } from "@/lib/audit";
 import { authLimiter } from "@/lib/rate-limit";
 import { sanitizeString, isValidEmail, MAX_NAME, MAX_EMAIL } from "@/lib/validation";
 
@@ -63,6 +64,14 @@ export async function POST(request: Request) {
     const user = await prisma.user.create({
       data: { name, email, passwordHash, role },
       select: { id: true, email: true, name: true, role: true },
+    });
+
+    await auditLog({
+      userId: user.id,
+      action: "user.register",
+      targetType: "user",
+      targetId: user.id,
+      details: { email: user.email },
     });
 
     return NextResponse.json(user, { status: 201 });
