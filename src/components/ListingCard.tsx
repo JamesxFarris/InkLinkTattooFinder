@@ -77,48 +77,49 @@ function NoPhotoCard({
       href={listingUrl(listing)}
       className={`group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[var(--card-shadow)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 ${listing.featured ? "ring-2 ring-amber-400 dark:ring-amber-500" : "ring-1 ring-stone-900/[0.04] dark:ring-stone-700"}`}
     >
-      {/* Top section — name, badges, rating */}
-      <div className="flex flex-1 flex-col justify-between p-5">
-        <div>
-          <div className="flex items-start justify-between gap-3">
-            <h3 className="text-lg font-semibold text-stone-900 transition-colors group-hover:text-teal-500 dark:text-stone-100 dark:group-hover:text-teal-400">
-              {listing.name}
-            </h3>
-            {listing.googleRating ? (
-              <div className="flex shrink-0 items-center gap-1 text-sm font-medium text-stone-700 dark:text-stone-300">
-                <span className="text-amber-500" aria-hidden="true">&#9733;</span>
-                {listing.googleRating}
-              </div>
-            ) : (
-              <span className="shrink-0 text-sm text-stone-400 dark:text-stone-500">Not rated</span>
+      {/* Visual header band */}
+      <div className="relative flex h-28 items-center justify-center bg-gradient-to-br from-stone-100 via-stone-50 to-teal-50 dark:from-stone-800 dark:via-stone-850 dark:to-teal-950">
+        <svg className="h-12 w-12 text-stone-300 dark:text-stone-600" fill="none" stroke="currentColor" strokeWidth={1} viewBox="0 0 24 24" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+        </svg>
+        {listing.featured && (
+          <span className="absolute top-3 left-3 rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white shadow-lg">
+            Featured
+          </span>
+        )}
+        {listing.ownerId && (
+          <span className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-teal-600 px-2.5 py-1 text-xs font-semibold text-white shadow-lg">
+            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Verified
+          </span>
+        )}
+        {listing.googleRating ? (
+          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-1 text-sm font-medium text-stone-900 backdrop-blur-sm dark:bg-stone-900/90 dark:text-stone-100">
+            <span className="text-amber-500" aria-hidden="true">&#9733;</span>
+            <span>{listing.googleRating}</span>
+            {listing.googleReviewCount && (
+              <span className="text-stone-400">({listing.googleReviewCount})</span>
             )}
           </div>
+        ) : null}
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-1 flex-col justify-between p-5">
+        <div>
+          <h3 className="text-lg font-semibold text-stone-900 transition-colors group-hover:text-teal-500 dark:text-stone-100 dark:group-hover:text-teal-400">
+            {listing.name}
+          </h3>
 
           <p className="mt-1.5 flex items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400">
             <svg className="h-3.5 w-3.5 shrink-0 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            {listing.address ? `${listing.address}, ` : ""}{listing.city.name}, {listing.state.abbreviation}
+            {listing.city.name}, {listing.state.abbreviation}
           </p>
-
-          {(listing.featured || listing.ownerId) && (
-            <div className="mt-2.5 flex items-center gap-2">
-              {listing.featured && (
-                <span className="rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-semibold text-white">
-                  Featured
-                </span>
-              )}
-              {listing.ownerId && (
-                <span className="flex items-center gap-1 rounded-full bg-teal-600 px-2 py-0.5 text-xs font-semibold text-white">
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Verified
-                </span>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Middle — description fills available space */}
