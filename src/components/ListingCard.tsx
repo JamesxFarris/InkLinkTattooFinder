@@ -75,61 +75,62 @@ function NoPhotoCard({
   return (
     <Link
       href={listingUrl(listing)}
-      className={`group block overflow-hidden rounded-2xl bg-white shadow-[var(--card-shadow)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 ${listing.featured ? "ring-2 ring-amber-400 dark:ring-amber-500" : "ring-1 ring-stone-900/[0.04] dark:ring-stone-700"}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[var(--card-shadow)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--card-shadow-hover)] dark:bg-stone-900 ${listing.featured ? "ring-2 ring-amber-400 dark:ring-amber-500" : "ring-1 ring-stone-900/[0.04] dark:ring-stone-700"}`}
     >
-      {/* Header bar */}
-      <div className="flex items-center justify-between gap-3 border-b border-stone-100 bg-stone-50 px-5 py-3 dark:border-stone-700 dark:bg-stone-800/50">
-        <div className="flex items-center gap-2">
-          {listing.featured && (
-            <span className="rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-semibold text-white">
-              Featured
-            </span>
-          )}
-          {listing.ownerId && (
-            <span className="flex items-center gap-1 rounded-full bg-teal-600 px-2 py-0.5 text-xs font-semibold text-white">
-              <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Verified
-            </span>
-          )}
-        </div>
-        {listing.googleRating ? (
-          <div className="flex items-center gap-1.5 text-sm font-medium text-stone-700 dark:text-stone-300">
-            <span className="text-amber-500" aria-hidden="true">&#9733;</span>
-            <span>{listing.googleRating}</span>
-            {listing.googleReviewCount && (
-              <span className="text-stone-400">({listing.googleReviewCount})</span>
+      {/* Top section — name, badges, rating */}
+      <div className="flex flex-1 flex-col justify-between p-5">
+        <div>
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="text-lg font-semibold text-stone-900 transition-colors group-hover:text-teal-500 dark:text-stone-100 dark:group-hover:text-teal-400">
+              {listing.name}
+            </h3>
+            {listing.googleRating ? (
+              <div className="flex shrink-0 items-center gap-1 text-sm font-medium text-stone-700 dark:text-stone-300">
+                <span className="text-amber-500" aria-hidden="true">&#9733;</span>
+                {listing.googleRating}
+              </div>
+            ) : (
+              <span className="shrink-0 text-sm text-stone-400 dark:text-stone-500">Not rated</span>
             )}
           </div>
-        ) : (
-          <span className="text-sm text-stone-400 dark:text-stone-500">Not rated</span>
-        )}
-      </div>
 
-      {/* Content — more spacious without the image eating half the card */}
-      <div className="p-5">
-        <h3 className="text-lg font-semibold text-stone-900 transition-colors group-hover:text-teal-500 dark:text-stone-100 dark:group-hover:text-teal-400">
-          {listing.name}
-        </h3>
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400">
+            <svg className="h-3.5 w-3.5 shrink-0 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {listing.address ? `${listing.address}, ` : ""}{listing.city.name}, {listing.state.abbreviation}
+          </p>
 
-        <p className="mt-1 flex items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400">
-          <svg className="h-3.5 w-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          {listing.address ? `${listing.address}, ` : ""}{listing.city.name}, {listing.state.abbreviation}
-        </p>
+          {(listing.featured || listing.ownerId) && (
+            <div className="mt-2.5 flex items-center gap-2">
+              {listing.featured && (
+                <span className="rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-semibold text-white">
+                  Featured
+                </span>
+              )}
+              {listing.ownerId && (
+                <span className="flex items-center gap-1 rounded-full bg-teal-600 px-2 py-0.5 text-xs font-semibold text-white">
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Verified
+                </span>
+              )}
+            </div>
+          )}
+        </div>
 
+        {/* Middle — description fills available space */}
         {listing.description && (
-          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+          <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
             {listing.description}
           </p>
         )}
 
         {/* Contact info */}
         {(listing.phone || listing.website) && (
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-stone-500 dark:text-stone-400">
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-stone-500 dark:text-stone-400">
             {listing.phone && (
               <span className="flex items-center gap-1.5">
                 <svg className="h-3.5 w-3.5 text-stone-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
@@ -162,27 +163,28 @@ function NoPhotoCard({
             )}
           </div>
         )}
+      </div>
 
-        <div className="mt-4 flex items-center gap-2 overflow-hidden border-t border-stone-100 pt-3 text-xs font-medium text-stone-500 dark:border-stone-700 dark:text-stone-400">
-          {(listing.hourlyRateMin || listing.hourlyRateMax) && (
-            <span className="rounded-md bg-stone-100 px-2 py-0.5 dark:bg-stone-800">
-              {listing.hourlyRateMin && listing.hourlyRateMax
-                ? `$${listing.hourlyRateMin}–$${listing.hourlyRateMax}/hr`
-                : listing.hourlyRateMin
-                  ? `From $${listing.hourlyRateMin}/hr`
-                  : `Up to $${listing.hourlyRateMax}/hr`}
-            </span>
-          )}
-          {listing.acceptsWalkIns && (
-            <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              Walk-ins
-            </span>
-          )}
-          {listing.piercingServices && <span>Piercings</span>}
-        </div>
+      {/* Footer — pinned to bottom */}
+      <div className="flex items-center gap-2 border-t border-stone-100 px-5 py-3 text-xs font-medium text-stone-500 dark:border-stone-700 dark:text-stone-400">
+        {(listing.hourlyRateMin || listing.hourlyRateMax) && (
+          <span className="rounded-md bg-stone-100 px-2 py-0.5 dark:bg-stone-800">
+            {listing.hourlyRateMin && listing.hourlyRateMax
+              ? `$${listing.hourlyRateMin}–$${listing.hourlyRateMax}/hr`
+              : listing.hourlyRateMin
+                ? `From $${listing.hourlyRateMin}/hr`
+                : `Up to $${listing.hourlyRateMax}/hr`}
+          </span>
+        )}
+        {listing.acceptsWalkIns && (
+          <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+            <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Walk-ins
+          </span>
+        )}
+        {listing.piercingServices && <span>Piercings</span>}
       </div>
     </Link>
   );
