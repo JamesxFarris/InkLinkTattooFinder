@@ -3,16 +3,16 @@ export const revalidate = 3600;
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ListingSearch } from "@/components/ListingSearch";
-import { Pagination } from "@/components/Pagination";
+import { CategoryListings } from "./CategoryListings";
 import { JsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { getCategoryBySlug, getListingsByCategoryNational, getTopCitiesForCategory } from "@/lib/queries";
 import { categoryPageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
+const INITIAL_PAGE_SIZE = 24;
+
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ page?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -28,16 +28,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: Props) {
+export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
-  const { page: pageStr } = await searchParams;
-  const page = Math.max(1, parseInt(pageStr || "1", 10));
 
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
-  const [{ listings, totalPages }, topCities] = await Promise.all([
-    getListingsByCategoryNational(category.id, page),
+  const [{ listings, total }, topCities] = await Promise.all([
+    getListingsByCategoryNational(category.id, 1, INITIAL_PAGE_SIZE),
     getTopCitiesForCategory(category.id, 10),
   ]);
 
@@ -71,15 +69,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       </p>
 
       <section className="mt-8">
-        <ListingSearch
-          listings={listings}
-          placeholder={`Search ${category.name} shops by name, city, or state...`}
-          emptyMessage={`No ${category.name.toLowerCase()} tattoo shops found.`}
-        />
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          basePath={`/categories/${slug}`}
+        <CategoryListings
+          initialListings={listings}
+          categoryId={category.id}
+          totalCount={total}
+          categoryName={category.name}
         />
       </section>
 

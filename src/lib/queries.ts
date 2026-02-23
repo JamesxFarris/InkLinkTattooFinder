@@ -152,7 +152,7 @@ export async function getListingsByCity(
         state: true,
         categories: { include: { category: true } },
       },
-      orderBy: [{ featured: "desc" }, { googleRating: "desc" }],
+      orderBy: [{ featured: "desc" }, { googleRating: "desc" }, { id: "asc" }],
       skip: (page - 1) * perPage,
       take: perPage,
     }),
@@ -180,7 +180,7 @@ export async function getListingsByCityAndCategory(
         state: true,
         categories: { include: { category: true } },
       },
-      orderBy: [{ featured: "desc" }, { googleRating: "desc" }],
+      orderBy: [{ featured: "desc" }, { googleRating: "desc" }, { id: "asc" }],
       skip: (page - 1) * perPage,
       take: perPage,
     }),
@@ -345,7 +345,7 @@ export async function getAllListingsByCity(cityId: number) {
       state: true,
       categories: { include: { category: true } },
     },
-    orderBy: [{ featured: "desc" }, { googleRating: "desc" }],
+    orderBy: [{ featured: "desc" }, { googleRating: "desc" }, { id: "asc" }],
   });
 }
 
@@ -431,7 +431,7 @@ export async function getListingsByCategoryNational(
         state: true,
         categories: { include: { category: true } },
       },
-      orderBy: [{ featured: "desc" }, { googleRating: "desc" }],
+      orderBy: [{ featured: "desc" }, { googleRating: "desc" }, { id: "asc" }],
       skip: (page - 1) * perPage,
       take: perPage,
     }),
