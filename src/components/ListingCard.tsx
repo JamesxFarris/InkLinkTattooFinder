@@ -129,6 +129,9 @@ function NoPhotoCard({
         )}
 
         {/* Contact info */}
+        {!listing.phone && !listing.website && !listing.facebookUrl && !listing.instagramUrl && (
+          <p className="mt-3 text-sm text-stone-400 dark:text-stone-500">No website or socials found</p>
+        )}
         {(listing.phone || listing.website || listing.facebookUrl || listing.instagramUrl) && (
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-stone-500 dark:text-stone-400">
             {listing.phone && (

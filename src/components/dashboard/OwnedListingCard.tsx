@@ -4,12 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { listingUrl } from "@/lib/utils";
 import { getProfileCompleteness } from "@/lib/listing-completeness";
+import { deleteListing } from "@/app/dashboard/listings/[id]/edit/actions";
 import type { ListingWithRelations } from "@/types";
 
 export function OwnedListingCard({ listing }: { listing: ListingWithRelations }) {
   const { score, missing } = getProfileCompleteness(listing);
   const [showBadge, setShowBadge] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const badgeUrl = `https://inklinktattoofinder.com/api/badge/${listing.slug}`;
   const listingLink = `https://inklinktattoofinder.com${listingUrl(listing)}`;
@@ -70,6 +72,17 @@ export function OwnedListingCard({ listing }: { listing: ListingWithRelations })
           >
             Edit Listing
           </Link>
+          <button
+            onClick={async () => {
+              if (!confirm("Are you sure you want to permanently delete this listing? This cannot be undone.")) return;
+              setDeleting(true);
+              await deleteListing(listing.id);
+            }}
+            disabled={deleting}
+            className="rounded-lg border border-red-300 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20"
+          >
+            {deleting ? "Deleting..." : "Delete"}
+          </button>
         </div>
       </div>
 

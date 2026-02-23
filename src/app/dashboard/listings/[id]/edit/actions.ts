@@ -5,6 +5,31 @@ import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { slugify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+export async function deleteListing(listingId: number): Promise<{ success: boolean; message: string }> {
+  const session = await auth();
+  if (!session) {
+    return { success: false, message: "You must be signed in." };
+  }
+
+  const listing = await prisma.listing.findUnique({
+    where: { id: listingId },
+  });
+  if (!listing) {
+    return { success: false, message: "Listing not found." };
+  }
+
+  const isOwner = listing.ownerId === parseInt(session.user.id);
+  const isAdmin = session.user.role === "admin";
+  if (!isOwner && !isAdmin) {
+    return { success: false, message: "You are not authorized to delete this listing." };
+  }
+
+  await prisma.listing.delete({ where: { id: listingId } });
+  revalidatePath("/dashboard");
+  redirect("/dashboard");
+}
 
 type UpdateResult = { success: boolean; message: string };
 

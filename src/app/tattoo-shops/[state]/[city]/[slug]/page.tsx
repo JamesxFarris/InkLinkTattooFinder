@@ -304,6 +304,9 @@ export default async function ListingPage({ params }: Props) {
                 {listing.address}, {listing.city.name}, {listing.city.state.abbreviation} {listing.zipCode}
               </span>
             )}
+            {!listing.phone && !listing.website && !listing.facebookUrl && !listing.instagramUrl && !listing.address && (
+              <span className="text-sm text-stone-400 dark:text-stone-500">No website or socials found</span>
+            )}
           </div>
 
           {/* Photos */}
@@ -389,6 +392,9 @@ export default async function ListingPage({ params }: Props) {
                     {listing.zipCode}
                   </span>
                 </div>
+              )}
+              {!listing.phone && !listing.website && !listing.facebookUrl && !listing.instagramUrl && !listing.address && (
+                <p className="text-sm text-stone-400 dark:text-stone-500">No website or socials found</p>
               )}
             </div>
           </div>
