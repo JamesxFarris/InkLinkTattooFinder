@@ -15,6 +15,8 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [didDrag, setDidDrag] = useState(false);
 
   const handleFiles = useCallback(
     async (files: FileList | null) => {
@@ -70,6 +72,7 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
   // --- Thumbnail reorder drag handlers ---
   const onThumbDragStart = (e: DragEvent, index: number) => {
     setDragIndex(index);
+    setDidDrag(true);
     e.dataTransfer.effectAllowed = "move";
   };
 
@@ -98,6 +101,8 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
   const onThumbDragEnd = () => {
     setDragIndex(null);
     setDragOverIndex(null);
+    // Reset didDrag after a tick so the click handler can check it
+    setTimeout(() => setDidDrag(false), 0);
   };
 
   return (
@@ -172,7 +177,11 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
                 <img
                   src={url}
                   alt={`Photo ${i + 1}`}
-                  className="h-24 w-full rounded-lg object-cover ring-1 ring-stone-200 dark:ring-stone-700"
+                  className="h-24 w-full cursor-pointer rounded-lg object-cover ring-1 ring-stone-200 dark:ring-stone-700"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!didDrag) setPreviewIndex(i);
+                  }}
                 />
                 <button
                   type="button"
@@ -193,6 +202,72 @@ export function PhotoUpload({ existingPhotos = [] }: PhotoUploadProps) {
             </p>
           )}
         </>
+      )}
+
+      {/* Lightbox preview */}
+      {previewIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+          onClick={() => setPreviewIndex(null)}
+        >
+          <button
+            onClick={() => setPreviewIndex(null)}
+            className="absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
+            aria-label="Close preview"
+          >
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {photos.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setPreviewIndex((prev) =>
+                  prev === 0 ? photos.length - 1 : (prev ?? 0) - 1
+                );
+              }}
+              className="absolute left-4 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
+              aria-label="Previous photo"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+            </button>
+          )}
+
+          <div
+            className="relative max-h-[85vh] max-w-[90vw]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={photos[previewIndex]}
+              alt={`Photo ${previewIndex + 1}`}
+              className="max-h-[85vh] w-auto rounded-lg object-contain"
+            />
+            <div className="mt-2 text-center text-sm text-white/60">
+              {previewIndex + 1} / {photos.length}
+            </div>
+          </div>
+
+          {photos.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setPreviewIndex((prev) =>
+                  prev === photos.length - 1 ? 0 : (prev ?? 0) + 1
+                );
+              }}
+              className="absolute right-4 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
+              aria-label="Next photo"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

@@ -27,7 +27,7 @@ export default function MapEmbedInner({
   const mapLink = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
 
   return (
-    <div className="mt-6 overflow-hidden rounded-xl border border-stone-200 dark:border-stone-700">
+    <div className="relative z-0 mt-6 overflow-hidden rounded-xl border border-stone-200 dark:border-stone-700">
       <MapContainer
         center={[latitude, longitude]}
         zoom={15}
