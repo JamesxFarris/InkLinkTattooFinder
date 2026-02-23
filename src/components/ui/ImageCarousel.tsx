@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import Image from "next/image";
+import { ensureHttps } from "@/lib/utils";
 
 export function ImageCarousel({
-  images,
+  images: rawImages,
   alt,
   className = "",
 }: {
@@ -12,6 +13,7 @@ export function ImageCarousel({
   alt: string;
   className?: string;
 }) {
+  const images = useMemo(() => rawImages.map(ensureHttps), [rawImages]);
   const [current, setCurrent] = useState(0);
   const touchStart = useRef(0);
   const touchEnd = useRef(0);

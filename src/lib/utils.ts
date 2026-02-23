@@ -43,6 +43,11 @@ export function truncate(text: string, length: number): string {
   return text.slice(0, length).trimEnd() + "...";
 }
 
+export function ensureHttps(url: string): string {
+  if (url.startsWith("http://")) return url.replace("http://", "https://");
+  return url;
+}
+
 export const SITE_NAME = "InkLink Tattoo Finder";
 export const SITE_DESCRIPTION =
   "Find the best tattoo artists and shops near you. Browse by style, city, and read reviews.";

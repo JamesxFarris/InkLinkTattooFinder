@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import Image from "next/image";
+import { ensureHttps } from "@/lib/utils";
 
 export function PhotoGallery({
-  photos,
+  photos: rawPhotos,
   featured = false,
 }: {
   photos: string[] | null;
   featured?: boolean;
 }) {
+  const photos = useMemo(() => rawPhotos?.map(ensureHttps) ?? null, [rawPhotos]);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [failedUrls, setFailedUrls] = useState<Set<string>>(new Set());
 
