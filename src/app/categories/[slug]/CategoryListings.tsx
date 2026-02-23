@@ -12,11 +12,13 @@ export function CategoryListings({
   categoryId,
   totalCount,
   categoryName,
+  pageSize,
 }: {
   initialListings: ListingWithRelations[];
   categoryId: number;
   totalCount: number;
   categoryName: string;
+  pageSize: number;
 }) {
   const [listings, setListings] = useState(initialListings);
   const [hasMore, setHasMore] = useState(initialListings.length < totalCount);
@@ -54,7 +56,7 @@ export function CategoryListings({
 
   function handleLoadMore() {
     startTransition(async () => {
-      const result = await loadMoreListings(categoryId, page);
+      const result = await loadMoreListings(categoryId, page, pageSize);
       setListings((prev) => [...prev, ...result.listings]);
       setHasMore(result.hasMore);
       setPage((p) => p + 1);

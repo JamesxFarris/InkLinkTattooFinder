@@ -74,6 +74,7 @@ export default async function CategoryPage({ params }: Props) {
           categoryId={category.id}
           totalCount={total}
           categoryName={category.name}
+          pageSize={INITIAL_PAGE_SIZE}
         />
       </section>
 
