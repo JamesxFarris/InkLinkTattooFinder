@@ -168,9 +168,19 @@ export default async function ListingPage({ params }: Props) {
                   {listing.zipCode && ` ${listing.zipCode}`}
                 </p>
               </div>
-              {listing.featured && (
-                <Badge variant="primary">Featured</Badge>
-              )}
+              <div className="flex shrink-0 items-center gap-2">
+                {listing.ownerId && (
+                  <span className="flex items-center gap-1 rounded-full bg-teal-600 px-2.5 py-1 text-xs font-semibold text-white">
+                    <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Verified
+                  </span>
+                )}
+                {listing.featured && (
+                  <Badge variant="primary">Featured</Badge>
+                )}
+              </div>
             </div>
 
             {listing.googleRating ? (
