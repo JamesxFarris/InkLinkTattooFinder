@@ -478,7 +478,10 @@ export default async function ListingPage({ params }: Props) {
                 })()}
               </div>
               <div className="mt-4 space-y-2">
-                {Object.entries(hours).map(([day, time]) => (
+                {["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+                  .filter((d) => d in hours)
+                  .map((day) => [day, hours[day]] as const)
+                  .map(([day, time]) => (
                   <div
                     key={day}
                     className="flex justify-between text-sm"
