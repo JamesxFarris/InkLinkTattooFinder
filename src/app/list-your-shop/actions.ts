@@ -21,6 +21,7 @@ import {
   MAX_NAME,
 } from "@/lib/validation";
 import { enrichListingFromGoogle } from "@/lib/google-places";
+import { notifyAdmin } from "@/lib/email";
 
 type SubmitResult = { success: boolean; message: string };
 
@@ -181,6 +182,11 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     if (state) {
       enrichListingFromGoogle(newListing.id, name, cityName, state.abbreviation);
     }
+
+    notifyAdmin(
+      `New listing: ${name}`,
+      `A new shop listing has been submitted.\n\nShop: ${name}\nCity: ${cityName}\nSubmitted by: ${session.user.name} (${session.user.email})\n\nReview it: https://inklinktattoofinder.com/dashboard/admin`
+    );
 
     return {
       success: true,

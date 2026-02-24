@@ -147,6 +147,18 @@ export async function sendClaimApprovedEmail({
   return { success: true as const };
 }
 
+const ADMIN_EMAIL = "inklinktattoofinder@gmail.com";
+
+export async function notifyAdmin(subject: string, body: string) {
+  if (!resend) return;
+  resend.emails.send({
+    from: "InkLink Alerts <hello@inklinktattoofinder.com>",
+    to: ADMIN_EMAIL,
+    subject: `[InkLink] ${subject}`,
+    text: body,
+  }).catch((err) => console.error("[email error] Admin notification:", err));
+}
+
 export async function sendDmcaEmail({
   name,
   email,

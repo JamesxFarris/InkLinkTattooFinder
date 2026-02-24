@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { notifyAdmin } from "@/lib/email";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -51,6 +52,11 @@ export async function POST(request: Request) {
         message: message?.trim() || null,
       },
     });
+
+    notifyAdmin(
+      `New claim: ${listing.name}`,
+      `A new claim has been submitted.\n\nShop: ${listing.name}\nUser: ${session.user.name} (${session.user.email})\nPhone: ${phone || "N/A"}\nMessage: ${message || "N/A"}\n\nReview it: https://inklinktattoofinder.com/dashboard/admin/claims`
+    );
 
     return NextResponse.json(claim, { status: 201 });
   } catch {
