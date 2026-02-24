@@ -22,9 +22,10 @@ export async function approveListing(id: number) {
     select: {
       id: true,
       name: true,
+      slug: true,
       googlePlaceId: true,
-      city: { select: { name: true } },
-      state: { select: { abbreviation: true } },
+      city: { select: { name: true, slug: true } },
+      state: { select: { abbreviation: true, slug: true } },
     },
   });
   await auditLog({
@@ -45,13 +46,21 @@ export async function approveListing(id: number) {
   }
 
   revalidatePath("/dashboard/admin");
+  revalidatePath(`/tattoo-shops/${listing.state.slug}/${listing.city.slug}`);
+  revalidatePath(`/tattoo-shops/${listing.state.slug}/${listing.city.slug}/${listing.slug}`);
+  revalidatePath(`/tattoo-shops/${listing.state.slug}`);
 }
 
 export async function rejectListing(id: number) {
   const session = await requireAdmin();
-  await prisma.listing.update({
+  const listing = await prisma.listing.update({
     where: { id },
     data: { status: "inactive" },
+    select: {
+      slug: true,
+      city: { select: { slug: true } },
+      state: { select: { slug: true } },
+    },
   });
   await auditLog({
     userId: parseInt(session.user.id),
@@ -60,6 +69,9 @@ export async function rejectListing(id: number) {
     targetId: id,
   });
   revalidatePath("/dashboard/admin");
+  revalidatePath(`/tattoo-shops/${listing.state.slug}/${listing.city.slug}`);
+  revalidatePath(`/tattoo-shops/${listing.state.slug}/${listing.city.slug}/${listing.slug}`);
+  revalidatePath(`/tattoo-shops/${listing.state.slug}`);
 }
 
 export async function revokeOwnership(id: number) {
@@ -86,7 +98,12 @@ export async function adminDeleteListing(id: number) {
   const session = await requireAdmin();
   const listing = await prisma.listing.findUnique({
     where: { id },
-    select: { name: true },
+    select: {
+      name: true,
+      slug: true,
+      city: { select: { slug: true } },
+      state: { select: { slug: true } },
+    },
   });
   await prisma.listing.delete({ where: { id } });
   await auditLog({
@@ -97,6 +114,10 @@ export async function adminDeleteListing(id: number) {
     details: { name: listing?.name },
   });
   revalidatePath("/dashboard/admin");
+  if (listing) {
+    revalidatePath(`/tattoo-shops/${listing.state.slug}/${listing.city.slug}`);
+    revalidatePath(`/tattoo-shops/${listing.state.slug}`);
+  }
 }
 
 export async function adminDeleteClaim(id: number) {
