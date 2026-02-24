@@ -39,6 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: "/",
     siteName: "InkLink Tattoo Finder",
     images: [
       {
