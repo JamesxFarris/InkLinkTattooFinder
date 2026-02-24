@@ -20,6 +20,7 @@ import {
   MAX_ZIP,
   MAX_NAME,
 } from "@/lib/validation";
+import { enrichListingFromGoogle } from "@/lib/google-places";
 
 type SubmitResult = { success: boolean; message: string };
 
@@ -117,6 +118,27 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
       });
     }
 
+    // Server-side duplicate check (unless user already dismissed client-side warning)
+    const confirmedNoDuplicate = formData.get("confirmedNoDuplicate") === "1";
+    if (!confirmedNoDuplicate) {
+      const similar = await prisma.listing.findMany({
+        where: {
+          name: { contains: name, mode: "insensitive" },
+          stateId: parsedStateId,
+          cityId: city.id,
+        },
+        select: { name: true },
+        take: 5,
+      });
+      if (similar.length > 0) {
+        const names = similar.map((s) => s.name).join(", ");
+        return {
+          success: false,
+          message: `A similar listing may already exist: ${names}. If this is a different shop, please try again.`,
+        };
+      }
+    }
+
     // Generate unique slug
     let listingSlug = slugify(name);
     const existing = await prisma.listing.findUnique({
@@ -127,7 +149,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     }
 
     // Create listing as pending
-    await prisma.listing.create({
+    const newListing = await prisma.listing.create({
       data: {
         name,
         slug: listingSlug,
@@ -150,6 +172,15 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
         ownerId: parseInt(session.user.id),
       },
     });
+
+    // Fire-and-forget: enrich with Google Places data
+    const state = await prisma.state.findUnique({
+      where: { id: parsedStateId },
+      select: { abbreviation: true },
+    });
+    if (state) {
+      enrichListingFromGoogle(newListing.id, name, cityName, state.abbreviation);
+    }
 
     return {
       success: true,

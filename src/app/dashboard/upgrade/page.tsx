@@ -42,7 +42,7 @@ export default async function UpgradePageWrapper({
             </h1>
           </div>
           <p className="mt-2 text-stone-600 dark:text-stone-400">
-            Enjoy all premium benefits including 12 photos, featured placement, artist Instagram handles, priority search, listing analytics, and Open Now badges.
+            Enjoy all premium benefits including 24 photos, featured badge &amp; placement, custom CTA button, and priority in search results.
           </p>
           {planInfo.planExpiresAt && (
             <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">

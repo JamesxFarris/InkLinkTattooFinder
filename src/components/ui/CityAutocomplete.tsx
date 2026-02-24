@@ -7,12 +7,14 @@ type CityAutocompleteProps = {
   stateId: string | null;
   defaultValue?: string;
   required?: boolean;
+  onCityChange?: (city: string) => void;
 };
 
 export function CityAutocomplete({
   stateId,
   defaultValue = "",
   required,
+  onCityChange,
 }: CityAutocompleteProps) {
   const [query, setQuery] = useState(defaultValue);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -83,6 +85,7 @@ export function CityAutocomplete({
     setIsOpen(false);
     setSuggestions([]);
     setHasFetched(false);
+    onCityChange?.(name);
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -122,6 +125,7 @@ export function CityAutocomplete({
         onChange={(e) => {
           setQuery(e.target.value);
           fetchSuggestions(e.target.value);
+          onCityChange?.(e.target.value);
         }}
         onFocus={() => {
           if (suggestions.length > 0) setIsOpen(true);

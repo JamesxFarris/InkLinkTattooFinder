@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect, useRef, useCallback } from "react";
 import { submitListing } from "./actions";
 import { Button } from "@/components/ui/Button";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
@@ -9,6 +9,18 @@ import { CityAutocomplete } from "@/components/ui/CityAutocomplete";
 import { inputClass, labelClass } from "@/lib/formClasses";
 
 type State = { id: number; name: string };
+
+type DuplicateMatch = {
+  id: number;
+  name: string;
+  slug: string;
+  city: string;
+  citySlug: string;
+  stateSlug: string;
+  stateAbbr: string;
+  ownerId: number | null;
+  url: string;
+};
 
 async function handleSubmit(
   _prev: { success: boolean; message: string } | null,
@@ -20,6 +32,49 @@ async function handleSubmit(
 export function SubmissionForm({ states }: { states: State[] }) {
   const [result, formAction, isPending] = useActionState(handleSubmit, null);
   const [stateId, setStateId] = useState<string | null>(null);
+  const [shopName, setShopName] = useState("");
+  const [cityName, setCityName] = useState("");
+  const [duplicates, setDuplicates] = useState<DuplicateMatch[]>([]);
+  const [dismissed, setDismissed] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  const checkDuplicates = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    if (!shopName || shopName.length < 3 || !stateId) {
+      setDuplicates([]);
+      setChecking(false);
+      return;
+    }
+
+    setChecking(true);
+    timerRef.current = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams({
+          name: shopName,
+          stateId,
+          ...(cityName ? { cityName } : {}),
+        });
+        const res = await fetch(`/api/listings/check-duplicate?${params}`);
+        if (res.ok) {
+          const data = await res.json();
+          setDuplicates(data.matches || []);
+          setDismissed(false);
+        }
+      } catch {
+        // ignore
+      } finally {
+        setChecking(false);
+      }
+    }, 500);
+  }, [shopName, stateId, cityName]);
+
+  useEffect(() => {
+    checkDuplicates();
+  }, [checkDuplicates]);
+
+  const showWarning = duplicates.length > 0 && !dismissed;
 
   if (result?.success) {
     return (
@@ -53,6 +108,11 @@ export function SubmissionForm({ states }: { states: State[] }) {
         </div>
       )}
 
+      {/* Hidden field: user confirmed no duplicate */}
+      {dismissed && (
+        <input type="hidden" name="confirmedNoDuplicate" value="1" />
+      )}
+
       {/* Shop Name */}
       <div>
         <label htmlFor="name" className={labelClass}>
@@ -63,6 +123,8 @@ export function SubmissionForm({ states }: { states: State[] }) {
           id="name"
           name="name"
           required
+          value={shopName}
+          onChange={(e) => setShopName(e.target.value)}
           className={`mt-1 ${inputClass}`}
           placeholder="e.g. Iron Rose Tattoo"
         />
@@ -93,9 +155,77 @@ export function SubmissionForm({ states }: { states: State[] }) {
           <label htmlFor="cityName" className={labelClass}>
             City <span className="text-red-500">*</span>
           </label>
-          <CityAutocomplete stateId={stateId} required />
+          <CityAutocomplete
+            stateId={stateId}
+            required
+            onCityChange={setCityName}
+          />
         </div>
       </div>
+
+      {/* Duplicate Warning Banner */}
+      {showWarning && (
+        <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-4 dark:border-amber-700 dark:bg-amber-900/20">
+          <div className="flex items-start gap-3">
+            <svg
+              className="mt-0.5 h-5 w-5 shrink-0 text-amber-500"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+              />
+            </svg>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
+                We found similar listings that may already exist:
+              </p>
+              <ul className="mt-2 space-y-2">
+                {duplicates.map((d) => (
+                  <li
+                    key={d.id}
+                    className="flex items-center justify-between rounded-md bg-white/60 px-3 py-2 text-sm dark:bg-stone-800/60"
+                  >
+                    <span className="text-stone-800 dark:text-stone-200">
+                      <span className="font-medium">{d.name}</span>
+                      <span className="ml-1 text-stone-500 dark:text-stone-400">
+                        &mdash; {d.city}, {d.stateAbbr}
+                      </span>
+                    </span>
+                    <a
+                      href={d.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-3 shrink-0 text-sm font-medium text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300"
+                    >
+                      {d.ownerId ? "View listing" : "Claim this listing"}
+                      <span className="ml-0.5">&rarr;</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                onClick={() => setDismissed(true)}
+                className="mt-3 text-sm font-medium text-amber-700 underline underline-offset-2 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300"
+              >
+                This is a different shop &mdash; continue submitting
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Checking indicator */}
+      {checking && shopName.length >= 3 && stateId && (
+        <p className="text-xs text-stone-500 dark:text-stone-400">
+          Checking for duplicates...
+        </p>
+      )}
 
       {/* Address & Zip */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

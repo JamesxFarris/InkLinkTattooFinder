@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { auditLog } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
+import { enrichListingFromGoogle } from "@/lib/google-places";
 
 async function requireAdmin() {
   const session = await auth();
@@ -15,9 +16,16 @@ async function requireAdmin() {
 
 export async function approveListing(id: number) {
   const session = await requireAdmin();
-  await prisma.listing.update({
+  const listing = await prisma.listing.update({
     where: { id },
     data: { status: "active" },
+    select: {
+      id: true,
+      name: true,
+      googlePlaceId: true,
+      city: { select: { name: true } },
+      state: { select: { abbreviation: true } },
+    },
   });
   await auditLog({
     userId: parseInt(session.user.id),
@@ -25,6 +33,17 @@ export async function approveListing(id: number) {
     targetType: "listing",
     targetId: id,
   });
+
+  // Fire-and-forget: enrich with Google Places data if missing
+  if (!listing.googlePlaceId) {
+    enrichListingFromGoogle(
+      listing.id,
+      listing.name,
+      listing.city.name,
+      listing.state.abbreviation
+    );
+  }
+
   revalidatePath("/dashboard/admin");
 }
 

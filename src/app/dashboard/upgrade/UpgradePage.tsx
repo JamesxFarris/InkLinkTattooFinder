@@ -6,12 +6,10 @@ const MONTHLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || "";
 const YEARLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRICE_YEARLY || "";
 
 const features = [
-  { name: "Photos per listing", free: "6", premium: "12" },
-  { name: "Featured placement", free: false, premium: true },
-  { name: "Artist Instagram handles", free: false, premium: true },
+  { name: "Photos per listing", free: "12", premium: "24" },
+  { name: "Featured badge & placement", free: false, premium: true },
+  { name: "Custom CTA button", free: false, premium: true },
   { name: "Priority in search results", free: false, premium: true },
-  { name: "Listing analytics", free: false, premium: true },
-  { name: "Open Now badge", free: false, premium: true },
 ];
 
 export function UpgradePage() {
