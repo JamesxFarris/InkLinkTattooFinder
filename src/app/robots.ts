@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
+import { generateSitemaps } from "./sitemap";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const sitemaps = await generateSitemaps();
   return {
     rules: [
       {
@@ -9,6 +11,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/dashboard/", "/api/", "/login", "/register"],
       },
     ],
-    sitemap: "https://inklinktattoofinder.com/sitemap.xml",
+    sitemap: sitemaps.map(
+      (s) => `https://inklinktattoofinder.com/sitemap/${s.id}.xml`
+    ),
   };
 }
