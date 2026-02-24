@@ -340,11 +340,10 @@ export default function TermsPage() {
         </h2>
         <p>
           InkLink Tattoo Finder respects the intellectual property rights of
-          content creators and business owners. Some photos displayed on our
-          listing pages may be sourced from publicly available social media
-          profiles. If you are a business owner or authorized representative and
-          believe that your content is displayed on our platform without
-          authorization, you may submit a formal takedown request through our{" "}
+          content creators and business owners. If you are a business owner or
+          authorized representative and believe that your content is displayed
+          on our platform without authorization, you may submit a formal
+          takedown request through our{" "}
           <a href="/dmca" className="text-teal-500 hover:underline">
             DMCA / Takedown Request
           </a>{" "}
