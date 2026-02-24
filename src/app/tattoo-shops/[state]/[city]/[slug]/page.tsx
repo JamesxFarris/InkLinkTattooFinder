@@ -264,7 +264,6 @@ export default async function ListingPage({ params }: Props) {
                           href={artist.instagramUrl}
                           target="_blank"
                           rel="noopener noreferrer nofollow"
-                          onClick={(e) => e.stopPropagation()}
                           className="ml-0.5 text-pink-500 transition-colors hover:text-pink-600"
                           title={`${artist.name} on Instagram`}
                         >

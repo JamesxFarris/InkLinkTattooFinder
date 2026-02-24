@@ -44,7 +44,10 @@ export async function getStateBySlug(slug: string) {
 
 export async function getCitiesByState(stateId: number) {
   return prisma.city.findMany({
-    where: { stateId },
+    where: {
+      stateId,
+      listings: { some: { status: "active" } },
+    },
     include: {
       state: true,
       _count: {
@@ -53,7 +56,7 @@ export async function getCitiesByState(stateId: number) {
         },
       },
     },
-    orderBy: { population: "desc" },
+    orderBy: { listings: { _count: "desc" } },
   });
 }
 
