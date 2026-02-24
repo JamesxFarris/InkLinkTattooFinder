@@ -66,7 +66,7 @@ export default async function DashboardPage() {
         <div className="mt-4">
           {planInfo.isPremium ? (
             <div className="rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-50 to-amber-100/50 p-5 dark:from-amber-950/30 dark:to-amber-900/20 dark:border-amber-600">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-amber-500">&#9733;</span>
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="rounded-2xl border border-stone-200 bg-white p-5 dark:border-stone-700 dark:bg-stone-900">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <span className="font-semibold text-stone-900 dark:text-stone-100">Free Plan</span>
                   <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
                 </div>
                 <Link
                   href="/dashboard/upgrade"
-                  className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+                  className="shrink-0 rounded-lg bg-amber-500 px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-amber-600"
                 >
                   Upgrade to Premium
                 </Link>
