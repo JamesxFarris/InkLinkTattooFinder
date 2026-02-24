@@ -21,7 +21,7 @@ export function PhotoGallery({
 
   if (!photos || photos.length === 0) return null;
 
-  const limit = featured ? 12 : 6;
+  const limit = featured ? 24 : 12;
   // Filter out broken images, then take up to `limit`
   const items = photos.filter((src) => !failedUrls.has(src)).slice(0, limit);
 
