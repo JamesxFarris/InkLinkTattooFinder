@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { auditLog } from "@/lib/audit";
+import { sendClaimApprovedEmail } from "@/lib/email";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -61,6 +62,26 @@ export async function PATCH(request: Request, context: RouteContext) {
         targetId: claimId,
         details: { listingId: claim.listingId, claimUserId: claim.userId },
       });
+
+      // Send approval email (fire-and-forget)
+      const claimUser = await prisma.user.findUnique({
+        where: { id: claim.userId },
+        select: { email: true, name: true },
+      });
+      const listing = await prisma.listing.findUnique({
+        where: { id: claim.listingId },
+        select: { name: true },
+      });
+      if (claimUser && listing) {
+        sendClaimApprovedEmail({
+          userEmail: claimUser.email,
+          userName: claimUser.name,
+          listingName: listing.name,
+          listingId: claim.listingId,
+          editUrl: `https://inklinktattoofinder.com/dashboard/listings/${claim.listingId}/edit`,
+        }).catch(() => {});
+      }
+
       return NextResponse.json(updatedClaim);
     } else {
       // Deny: update claim + clear listing owner if this claim had set it
