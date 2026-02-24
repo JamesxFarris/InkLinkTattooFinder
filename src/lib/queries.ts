@@ -362,7 +362,7 @@ export async function getAllListingsByCity(cityId: number) {
       state: true,
       categories: { include: { category: true } },
     },
-    orderBy: [{ featured: "desc" }, { googleRating: "desc" }, { id: "asc" }],
+    orderBy: [{ featured: "desc" }, { googleRating: "desc" }, { ownerId: { sort: "desc", nulls: "last" } }, { id: "asc" }],
   });
 }
 
