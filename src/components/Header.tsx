@@ -40,7 +40,7 @@ export async function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-4 md:flex lg:gap-6" aria-label="Main navigation">
           {[
             { href: "/tattoo-shops", label: "Browse States" },
             { href: "/categories", label: "Styles" },
@@ -76,7 +76,7 @@ export async function Header() {
           </Link>
           <Link
             href="/list-your-shop"
-            className="hidden rounded-full bg-teal-500 px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-500/20 md:inline-flex"
+            className="hidden rounded-full bg-teal-500 px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-500/20 lg:inline-flex"
           >
             List Your Shop
           </Link>

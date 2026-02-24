@@ -25,7 +25,7 @@ export function UserMenu() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-full border border-stone-300 bg-stone-100 px-3 py-1.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-900 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-stone-600 dark:hover:text-stone-100"
+        className="flex items-center gap-2 rounded-full border border-stone-300 bg-stone-100 px-3 py-1.5 text-sm font-medium text-stone-700 transition-colors hover:border-teal-500 hover:text-stone-900 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:text-stone-100"
       >
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-500/20 text-xs font-bold text-teal-400">
           {session.user.name?.[0]?.toUpperCase() || "U"}
@@ -41,7 +41,7 @@ export function UserMenu() {
           <Link
             href="/dashboard"
             onClick={() => setOpen(false)}
-            className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
+            className="block border-l-2 border-transparent px-4 py-2 text-sm text-stone-700 hover:border-teal-500 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:bg-stone-700 dark:hover:text-stone-100"
           >
             Dashboard
           </Link>
@@ -49,7 +49,7 @@ export function UserMenu() {
             <Link
               href="/dashboard/admin/claims"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
+              className="block border-l-2 border-transparent px-4 py-2 text-sm text-stone-700 hover:border-teal-500 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:bg-stone-700 dark:hover:text-stone-100"
             >
               Admin Panel
             </Link>
@@ -60,7 +60,7 @@ export function UserMenu() {
               await signOut({ redirect: false });
               window.location.href = "/";
             }}
-            className="block w-full px-4 py-2 text-left text-sm text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-700 dark:hover:text-stone-100"
+            className="block w-full border-l-2 border-transparent px-4 py-2 text-left text-sm text-stone-700 hover:border-teal-500 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:border-teal-500 dark:hover:bg-stone-700 dark:hover:text-stone-100"
           >
             Sign Out
           </button>

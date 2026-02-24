@@ -87,6 +87,11 @@ gtag('config', '${GA_ID}', {
             </Script>
           </>
         )}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="DDuYLpll8VzMdUzVsBDFyw"
+          strategy="afterInteractive"
+        />
       </head>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <SessionProvider>
