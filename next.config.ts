@@ -26,6 +26,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/sitemap.xml",
+        destination: "/api/sitemap-index",
+      },
+    ];
+  },
   async redirects() {
     return [
       // /:state/:city/:category → /tattoo-shops/:state/:city/style/:category
