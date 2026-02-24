@@ -70,13 +70,14 @@ export async function PATCH(request: Request, context: RouteContext) {
       });
       const listing = await prisma.listing.findUnique({
         where: { id: claim.listingId },
-        select: { name: true },
+        select: { name: true, slug: true },
       });
       if (claimUser && listing) {
         sendClaimApprovedEmail({
           userEmail: claimUser.email,
           userName: claimUser.name,
           listingName: listing.name,
+          listingSlug: listing.slug,
           listingId: claim.listingId,
           editUrl: `https://inklinktattoofinder.com/dashboard/listings/${claim.listingId}/edit`,
         }).catch(() => {});

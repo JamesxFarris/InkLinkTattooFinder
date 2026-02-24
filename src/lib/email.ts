@@ -42,12 +42,14 @@ export async function sendClaimApprovedEmail({
   userEmail,
   userName,
   listingName,
+  listingSlug,
   listingId,
   editUrl,
 }: {
   userEmail: string;
   userName: string;
   listingName: string;
+  listingSlug: string;
   listingId: number;
   editUrl: string;
 }) {
@@ -55,6 +57,9 @@ export async function sendClaimApprovedEmail({
     console.log(`[email skip] Claim approved email for ${listingName} — Resend not configured`);
     return { success: false as const, error: "Email service not configured" };
   }
+
+  const badgeUrl = `https://inklinktattoofinder.com/api/badge/${listingSlug}`;
+  const embedCode = `&lt;a href=&quot;https://inklinktattoofinder.com&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;&lt;img src=&quot;${badgeUrl}&quot; alt=&quot;Find ${listingName} on InkLink Tattoo Finder&quot; width=&quot;240&quot; height=&quot;52&quot; /&gt;&lt;/a&gt;`;
 
   const html = `<!DOCTYPE html>
 <html>
@@ -90,7 +95,28 @@ export async function sendClaimApprovedEmail({
             </td>
           </tr>
         </table>
-        <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:0;">
+
+        <!-- Badge Section -->
+        <div style="margin:24px 0 0;padding:20px;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;">
+          <p style="color:#0f766e;font-size:14px;font-weight:600;margin:0 0 8px;">
+            Show off your listing on your website
+          </p>
+          <p style="color:#374151;font-size:14px;line-height:1.5;margin:0 0 12px;">
+            Add this badge to your website to display your Google rating and link customers to your InkLink profile.
+          </p>
+          <p style="margin:0 0 12px;">
+            <img src="${badgeUrl}" alt="InkLink badge" width="240" height="52" style="border-radius:6px;" />
+          </p>
+          <p style="color:#6b7280;font-size:12px;margin:0 0 4px;">Copy and paste this code into your website:</p>
+          <div style="background:#1c1917;border-radius:6px;padding:12px;overflow-x:auto;">
+            <code style="color:#a8a29e;font-size:12px;line-height:1.4;word-break:break-all;">${embedCode}</code>
+          </div>
+          <p style="color:#6b7280;font-size:12px;margin:8px 0 0;">
+            You can also find this in your <a href="https://inklinktattoofinder.com/dashboard" style="color:#14b8a6;text-decoration:underline;">dashboard</a> anytime.
+          </p>
+        </div>
+
+        <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:24px 0 0;">
           A complete profile with photos and hours gets significantly more views. Questions? Just reply to this email.
         </p>
       </td>
