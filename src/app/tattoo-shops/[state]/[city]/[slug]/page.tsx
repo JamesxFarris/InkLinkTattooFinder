@@ -459,7 +459,7 @@ export default async function ListingPage({ params }: Props) {
                   Hours
                 </h2>
                 {(() => {
-                  const status = isOpenNow(hours);
+                  const status = isOpenNow(hours, listing.city.state.abbreviation);
                   return status.label ? (
                     <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${status.open ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400" : "bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400"}`}>
                       {status.label}

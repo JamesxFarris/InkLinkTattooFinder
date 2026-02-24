@@ -10,7 +10,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
   const photos = listing.photos as string[] | null;
   const hasPhotos = photos && photos.length >= 1;
   const hours = listing.hours as Record<string, string> | null;
-  const openStatus = hours ? isOpenNow(hours) : null;
+  const openStatus = hours ? isOpenNow(hours, listing.state.abbreviation) : null;
 
   if (!hasPhotos) {
     return <NoPhotoCard listing={listing} categoryNames={categoryNames} />;
@@ -83,7 +83,7 @@ function NoPhotoCard({
   categoryNames: string[];
 }) {
   const hours = listing.hours as Record<string, string> | null;
-  const openStatus = hours ? isOpenNow(hours) : null;
+  const openStatus = hours ? isOpenNow(hours, listing.state.abbreviation) : null;
 
   return (
     <Link
