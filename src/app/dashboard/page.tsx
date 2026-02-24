@@ -87,7 +87,7 @@ export default async function DashboardPage() {
                 <div>
                   <span className="font-semibold text-stone-900 dark:text-stone-100">Free Plan</span>
                   <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-                    Upgrade to get featured placement, more photos, and analytics.
+                    Upgrade for a featured badge &amp; priority placement in search results.
                   </p>
                 </div>
                 <Link

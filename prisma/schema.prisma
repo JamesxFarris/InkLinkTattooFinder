@@ -161,6 +161,13 @@ model Listing {
   status            ListingStatus   @default(active)
   viewCount         Int             @default(0)
   featured          Boolean         @default(false)
+  ctaLabel          String?
+  ctaUrl            String?
+  phoneClicks       Int             @default(0)
+  websiteClicks     Int             @default(0)
+  instagramClicks   Int             @default(0)
+  facebookClicks    Int             @default(0)
+  ctaClicks         Int             @default(0)
   ownerId           Int?
   owner             User?           @relation("OwnedListings", fields: [ownerId], references: [id], onDelete: SetNull)
   categories        ListingCategory[]

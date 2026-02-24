@@ -85,6 +85,8 @@ export async function updateListing(
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
     const tattooRemoval = formData.get("tattooRemoval") === "on";
+    const ctaLabel = formData.get("ctaLabel") as string | null;
+    const ctaUrl = formData.get("ctaUrl") as string | null;
     const hoursRaw = formData.get("hours") as string | null;
     const categoryIds = formData.getAll("categoryIds").map((id) => parseInt(id as string, 10)).filter((id) => !isNaN(id));
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
@@ -174,6 +176,8 @@ export async function updateListing(
           hours: parsedHours ?? Prisma.JsonNull,
           photos: photos.length > 0 ? photos : Prisma.JsonNull,
           artists: artists.length > 0 ? (artists as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
+          ctaLabel: ctaLabel?.trim() || null,
+          ctaUrl: ctaUrl?.trim() || null,
           // status is NOT changed (edits stay live if active, stay pending if pending)
         },
       });

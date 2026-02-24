@@ -10,7 +10,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
   const photos = listing.photos as string[] | null;
   const hasPhotos = photos && photos.length >= 1;
   const hours = listing.hours as Record<string, string> | null;
-  const openStatus = listing.featured && hours ? isOpenNow(hours) : null;
+  const openStatus = hours ? isOpenNow(hours) : null;
 
   if (!hasPhotos) {
     return <NoPhotoCard listing={listing} categoryNames={categoryNames} />;
@@ -62,7 +62,7 @@ export function ListingCard({ listing }: { listing: ListingWithRelations }) {
           </div>
         )}
 
-        {/* Open Now badge for featured listings */}
+        {/* Open Now badge */}
         {openStatus?.label && (
           <span className={`absolute bottom-3 right-3 rounded-full px-2.5 py-1 text-xs font-semibold shadow-lg ${openStatus.open ? "bg-green-500 text-white" : "bg-stone-400 text-white"}`}>
             {openStatus.label}
@@ -83,7 +83,7 @@ function NoPhotoCard({
   categoryNames: string[];
 }) {
   const hours = listing.hours as Record<string, string> | null;
-  const openStatus = listing.featured && hours ? isOpenNow(hours) : null;
+  const openStatus = hours ? isOpenNow(hours) : null;
 
   return (
     <Link
@@ -118,7 +118,7 @@ function NoPhotoCard({
           </div>
         ) : null}
 
-        {/* Open Now badge for featured listings */}
+        {/* Open Now badge */}
         {openStatus?.label && (
           <span className={`absolute bottom-3 right-3 rounded-full px-2.5 py-1 text-xs font-semibold shadow-lg ${openStatus.open ? "bg-green-500 text-white" : "bg-stone-400 text-white"}`}>
             {openStatus.label}

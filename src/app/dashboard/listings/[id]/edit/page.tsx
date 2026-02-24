@@ -62,6 +62,8 @@ export default async function EditListingPage({
     photos: listing.photos as string[] | null,
     artists: Array.isArray(listing.artists) ? (listing.artists as unknown[]) : [],
     featured: listing.featured,
+    ctaLabel: listing.ctaLabel,
+    ctaUrl: listing.ctaUrl,
   };
 
   return (
@@ -79,7 +81,8 @@ export default async function EditListingPage({
           states={states}
           categories={categories}
           maxPhotos={planInfo.photoLimit}
-          showInstagram={planInfo.isPremium || listing.featured}
+          showInstagram
+          isPremium={planInfo.isPremium || listing.featured}
         />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 
-export const FREE_PHOTO_LIMIT = 6;
-export const PREMIUM_PHOTO_LIMIT = 12;
+export const FREE_PHOTO_LIMIT = 12;
+export const PREMIUM_PHOTO_LIMIT = 24;
 
 export type PlanInfo = {
   plan: "free" | "premium";

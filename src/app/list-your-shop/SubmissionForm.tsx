@@ -211,9 +211,9 @@ export function SubmissionForm({ states }: { states: State[] }) {
 
       {/* Photos */}
       <div>
-        <label className={labelClass}>Photos (optional, up to 6)</label>
+        <label className={labelClass}>Photos (optional, up to 12)</label>
         <div className="mt-1">
-          <PhotoUpload />
+          <PhotoUpload maxPhotos={12} />
         </div>
       </div>
 
@@ -221,7 +221,7 @@ export function SubmissionForm({ states }: { states: State[] }) {
       <div>
         <label className={labelClass}>Artists</label>
         <div className="mt-1">
-          <ArtistEditor />
+          <ArtistEditor showInstagram />
         </div>
       </div>
 

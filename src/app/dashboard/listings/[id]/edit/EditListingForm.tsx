@@ -36,6 +36,8 @@ type ListingData = {
   photos: string[] | null;
   artists: unknown[];
   featured: boolean;
+  ctaLabel: string | null;
+  ctaUrl: string | null;
 };
 
 export function EditListingForm({
@@ -44,12 +46,14 @@ export function EditListingForm({
   categories,
   maxPhotos = 6,
   showInstagram = false,
+  isPremium = false,
 }: {
   listing: ListingData;
   states: State[];
   categories: CategoryOption[];
   maxPhotos?: number;
   showInstagram?: boolean;
+  isPremium?: boolean;
 }) {
   const boundUpdate = updateListing.bind(null, listing.id);
   const [result, formAction, isPending] = useActionState(boundUpdate, null);
@@ -371,6 +375,50 @@ export function EditListingForm({
           Offers tattoo removal
         </label>
       </div>
+
+      {/* Call-to-Action Button (Premium) */}
+      {isPremium && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50/30 p-4 dark:border-amber-800 dark:bg-amber-900/10">
+          <label className={labelClass}>
+            <span className="flex items-center gap-1.5">
+              <span className="text-amber-500">&#9733;</span>
+              Call-to-Action Button
+            </span>
+          </label>
+          <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+            Add a prominent &ldquo;Book Now&rdquo; or &ldquo;Get a Quote&rdquo; button to your listing page.
+          </p>
+          <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label htmlFor="ctaLabel" className="text-xs font-medium text-stone-600 dark:text-stone-400">
+                Button Text
+              </label>
+              <input
+                type="text"
+                id="ctaLabel"
+                name="ctaLabel"
+                maxLength={30}
+                defaultValue={listing.ctaLabel ?? ""}
+                className={`mt-1 ${inputClass}`}
+                placeholder="e.g. Book Now"
+              />
+            </div>
+            <div>
+              <label htmlFor="ctaUrl" className="text-xs font-medium text-stone-600 dark:text-stone-400">
+                Button Link
+              </label>
+              <input
+                type="url"
+                id="ctaUrl"
+                name="ctaUrl"
+                defaultValue={listing.ctaUrl ?? ""}
+                className={`mt-1 ${inputClass}`}
+                placeholder="https://booking.yourshop.com"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Submit */}
       <Button

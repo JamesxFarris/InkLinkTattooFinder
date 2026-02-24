@@ -61,7 +61,8 @@ export function ClaimButton({ listingId, existingClaimStatus, isOwned }: ClaimBu
       <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-700 dark:bg-stone-900">
         <h3 className="font-semibold text-stone-900 dark:text-stone-100">Own this business?</h3>
         <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
-          Your previous claim was not approved. Contact us if you believe this was an error.
+          Your previous claim was not approved.{" "}
+          <Link href="/contact" className="text-teal-600 hover:underline dark:text-teal-400">Contact us</Link> if you believe this was an error.
         </p>
       </div>
     );
