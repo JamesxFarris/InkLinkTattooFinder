@@ -43,10 +43,9 @@ export default function DmcaPage() {
           <p className="mt-2">
             InkLink Tattoo Finder respects the intellectual property rights of
             others and complies with the Digital Millennium Copyright Act (DMCA).
-            Some photos displayed on our listing pages are sourced from publicly
-            available social media profiles. If you believe your content has been
-            displayed without authorization, you may submit a takedown request
-            using the form below.
+            If you believe your content has been displayed without
+            authorization, you may submit a takedown request using the form
+            below.
           </p>
         </div>
 
