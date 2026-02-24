@@ -2,9 +2,6 @@
 
 import { useState } from "react";
 
-const MONTHLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || "";
-const YEARLY_PRICE_ID = process.env.NEXT_PUBLIC_STRIPE_PRICE_YEARLY || "";
-
 const features = [
   { name: "Photos per listing", free: "12", premium: "24" },
   { name: "Featured badge & placement", free: false, premium: true },
@@ -22,9 +19,7 @@ export function UpgradePage() {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          priceId: yearly ? YEARLY_PRICE_ID : MONTHLY_PRICE_ID,
-        }),
+        body: JSON.stringify({ yearly }),
       });
       const data = await res.json();
       if (data.url) {

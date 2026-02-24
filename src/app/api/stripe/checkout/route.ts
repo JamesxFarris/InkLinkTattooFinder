@@ -9,7 +9,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { priceId } = await req.json();
+  const body = await req.json();
+  const priceId =
+    body.priceId ||
+    (body.yearly === false
+      ? process.env.STRIPE_PRICE_MONTHLY
+      : process.env.STRIPE_PRICE_YEARLY);
   if (!priceId) {
     return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
   }
