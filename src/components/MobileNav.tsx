@@ -107,6 +107,13 @@ export function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
           >
             List Your Shop
           </Link>
+          <Link
+            href="/for-shop-owners"
+            onClick={() => setOpen(false)}
+            className="mt-2 rounded-full border border-teal-500 px-5 py-3 text-center text-sm font-semibold text-teal-600 transition-colors hover:bg-teal-50 dark:text-teal-400 dark:hover:bg-teal-500/10"
+          >
+            Claim Your Shop
+          </Link>
         </nav>
       </div>
     </div>

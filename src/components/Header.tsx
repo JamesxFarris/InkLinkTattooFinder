@@ -69,6 +69,12 @@ export async function Header() {
             </Link>
           )}
           <Link
+            href="/for-shop-owners"
+            className="hidden rounded-full border border-teal-500 px-4 py-1.5 text-sm font-semibold text-teal-600 transition-all hover:bg-teal-50 hover:shadow-lg hover:shadow-teal-500/10 md:inline-flex dark:text-teal-400 dark:hover:bg-teal-500/10"
+          >
+            Claim Your Shop
+          </Link>
+          <Link
             href="/list-your-shop"
             className="hidden rounded-full bg-teal-500 px-4 py-1.5 text-sm font-semibold text-white transition-all hover:bg-teal-600 hover:shadow-lg hover:shadow-teal-500/20 md:inline-flex"
           >
