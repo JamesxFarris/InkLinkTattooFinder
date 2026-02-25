@@ -57,11 +57,11 @@ async function main() {
   if (dryRun) console.log("=== DRY RUN MODE ===\n");
 
   const listings = await prisma.listing.findMany({
-    where: { status: "active", photos: { not: { equals: null } } },
+    where: { status: "active", ownerId: null, photos: { not: { equals: null } } },
     select: { id: true, name: true, photos: true },
   });
 
-  console.log(`Checking images for ${listings.length} listings...\n`);
+  console.log(`Checking images for ${listings.length} unverified listings (skipping verified shops)...\n`);
 
   // Collect all unique URLs
   const urlToListings = new Map<string, number[]>();
