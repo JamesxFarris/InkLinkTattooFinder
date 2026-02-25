@@ -3,10 +3,9 @@ export const revalidate = 3600;
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { CityGrid } from "@/components/CityGrid";
+import { StatePageClient } from "@/components/StatePageClient";
 import { StatsBar } from "@/components/StatsBar";
 import { BrowseStates } from "@/components/BrowseStates";
-import { ListingCard } from "@/components/ListingCard";
 import {
   JsonLd,
   itemListJsonLd,
@@ -58,12 +57,10 @@ export default async function StatePillarPage({ params }: Props) {
   const smallCityIds = smallCities.map((c) => c.id);
   const smallCityListings = await getListingsForCities(smallCityIds);
 
-  // Group listings by city ID
-  const listingsByCityId = new Map<number, typeof smallCityListings>();
+  // Group listings by city ID (plain object for client serialization)
+  const listingsByCityId: Record<number, typeof smallCityListings> = {};
   for (const listing of smallCityListings) {
-    const group = listingsByCityId.get(listing.cityId) ?? [];
-    group.push(listing);
-    listingsByCityId.set(listing.cityId, group);
+    (listingsByCityId[listing.cityId] ??= []).push(listing);
   }
 
   const baseUrl = "https://inklinktattoofinder.com";
@@ -115,62 +112,14 @@ export default async function StatePillarPage({ params }: Props) {
         />
       </div>
 
-      {/* Major cities — link to their own pages */}
-      {bigCities.length > 0 && (
-        <section className="mt-10">
-          <h2 className="mb-4 text-xl font-semibold text-stone-900 dark:text-stone-100">
-            Major Cities in {state.name}
-          </h2>
-          <CityGrid cities={bigCities} />
-        </section>
-      )}
-
-      {/* Small cities — listings shown inline */}
-      {smallCities.length > 0 && (
-        <section className="mt-16">
-          <h2 className="mb-2 text-xl font-semibold text-stone-900 dark:text-stone-100">
-            More Tattoo Shops in {state.name}
-          </h2>
-          <p className="mb-8 text-sm text-stone-500 dark:text-stone-400">
-            {smallCityListings.length}{" "}
-            {smallCityListings.length === 1 ? "shop" : "shops"} across{" "}
-            {smallCities.length}{" "}
-            {smallCities.length === 1 ? "city" : "cities"}
-          </p>
-
-          <div className="space-y-12">
-            {smallCities
-              .sort((a, b) => b._count.listings - a._count.listings)
-              .map((city) => {
-                const cityListings = listingsByCityId.get(city.id) ?? [];
-                if (cityListings.length === 0) return null;
-                return (
-                  <div key={city.id} id={`city-${city.slug}`}>
-                    <h3 className="mb-4 text-lg font-semibold text-stone-800 dark:text-stone-200">
-                      {city.name}{" "}
-                      <span className="text-sm font-normal text-stone-500 dark:text-stone-400">
-                        &middot; {cityListings.length}{" "}
-                        {cityListings.length === 1 ? "shop" : "shops"}
-                      </span>
-                    </h3>
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {cityListings.map((listing) => (
-                        <ListingCard key={listing.id} listing={listing} />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        </section>
-      )}
-
-      {/* No listings at all */}
-      {bigCities.length === 0 && smallCities.length === 0 && (
-        <p className="mt-8 text-center text-stone-500">
-          No cities with listings found in {state.name} yet. Check back soon!
-        </p>
-      )}
+      <div className="mt-10">
+        <StatePageClient
+          bigCities={bigCities}
+          smallCities={smallCities}
+          listingsByCityId={listingsByCityId}
+          stateName={state.name}
+        />
+      </div>
 
       {/* Popular Tattoo Styles */}
       {popularCategories.length > 0 && (
