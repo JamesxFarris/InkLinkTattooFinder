@@ -5,13 +5,14 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
 import { getAllCategories } from "@/lib/queries";
 import type { Metadata } from "next";
+import { fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Tattoo Styles Guide — Every Style Explained | InkLink Tattoo Finder",
+export const metadata: Metadata = fullMeta({
+  title: "Tattoo Styles Guide — Every Style Explained",
   description:
     "Learn about every tattoo style from Traditional to Biomechanical. See what makes each style unique, what to expect, and find artists who specialize in it.",
-  alternates: { canonical: "/styles" },
-};
+  url: "/styles",
+});
 
 type StyleGuide = {
   slug: string;

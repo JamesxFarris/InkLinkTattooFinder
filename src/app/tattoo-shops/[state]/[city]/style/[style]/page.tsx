@@ -17,7 +17,7 @@ import {
   getCategoryBySlug,
   getTopCitiesForCategory,
 } from "@/lib/queries";
-import { cityCategoryPageMeta } from "@/lib/seo";
+import { cityCategoryPageMeta, fullMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
 type Props = {
@@ -36,14 +36,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     city.state.abbreviation,
     category.name
   );
-  return {
-    title: meta.title,
-    description: meta.description,
-    openGraph: { title: meta.title, description: meta.description },
-    alternates: {
-      canonical: `/tattoo-shops/${stateSlug}/${citySlug}/style/${styleSlug}`,
-    },
-  };
+  return fullMeta({
+    ...meta,
+    url: `/tattoo-shops/${stateSlug}/${citySlug}/style/${styleSlug}`,
+  });
 }
 
 export default async function CityStylePage({ params }: Props) {

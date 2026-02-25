@@ -18,7 +18,7 @@ import {
   getAllStates,
   getPopularCategoriesInState,
 } from "@/lib/queries";
-import { statePageMeta } from "@/lib/seo";
+import { statePageMeta, fullMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ state: string }> };
@@ -28,12 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const state = await getStateBySlug(stateSlug);
   if (!state) return {};
   const meta = statePageMeta(state.name, state._count.listings);
-  return {
-    title: meta.title,
-    description: meta.description,
-    openGraph: { title: meta.title, description: meta.description },
-    alternates: { canonical: `/tattoo-shops/${stateSlug}` },
-  };
+  return fullMeta({ ...meta, url: `/tattoo-shops/${stateSlug}` });
 }
 
 export default async function StatePillarPage({ params }: Props) {

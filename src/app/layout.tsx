@@ -24,7 +24,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: {
     default: "InkLink Tattoo Finder — Find Tattoo Artists & Shops Near You",
-    template: "%s | InkLink Tattoo Finder",
+    template: "%s | InkLink",
   },
   description:
     "Discover the best tattoo artists and shops in your area. Browse by style, city, and read reviews to find your next tattoo artist.",

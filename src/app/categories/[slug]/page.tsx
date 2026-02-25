@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CategoryListings } from "./CategoryListings";
 import { JsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { getCategoryBySlug, getListingsByCategoryNational, getTopCitiesForCategory } from "@/lib/queries";
-import { categoryPageMeta } from "@/lib/seo";
+import { categoryPageMeta, fullMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
 const INITIAL_PAGE_SIZE = 24;
@@ -20,12 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = await getCategoryBySlug(slug);
   if (!category) return {};
   const meta = categoryPageMeta(category.name);
-  return {
-    title: meta.title,
-    description: meta.description,
-    openGraph: { title: meta.title, description: meta.description },
-    alternates: { canonical: `/categories/${slug}` },
-  };
+  return fullMeta({ ...meta, url: `/categories/${slug}` });
 }
 
 export default async function CategoryPage({ params }: Props) {

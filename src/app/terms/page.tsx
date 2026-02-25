@@ -1,19 +1,14 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import type { Metadata } from "next";
+import { fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = fullMeta({
   title: "Terms of Service",
   description:
     "Terms of Service for InkLink Tattoo Finder — the rules and guidelines governing your use of our tattoo shop directory.",
-  alternates: { canonical: "/terms" },
-  openGraph: {
-    title: "Terms of Service | InkLink Tattoo Finder",
-    description:
-      "Terms of Service for InkLink Tattoo Finder — the rules and guidelines governing your use of our tattoo shop directory.",
-    url: "/terms",
-  },
-};
+  url: "/terms",
+});
 
 export default function TermsPage() {
   return (

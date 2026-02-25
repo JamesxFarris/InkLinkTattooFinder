@@ -5,13 +5,14 @@ import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import { getAllStates } from "@/lib/queries";
 import { SubmissionForm } from "./SubmissionForm";
 import type { Metadata } from "next";
+import { fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "List Your Shop | InkLink Tattoo Finder",
+export const metadata: Metadata = fullMeta({
+  title: "List Your Tattoo Shop",
   description:
     "Submit your tattoo shop to be listed on InkLink Tattoo Finder. Reach thousands of people searching for tattoo artists in your area.",
-  alternates: { canonical: "/list-your-shop" },
-};
+  url: "/list-your-shop",
+});
 
 type StateOption = { id: number; name: string };
 

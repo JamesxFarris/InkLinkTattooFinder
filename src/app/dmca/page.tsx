@@ -2,19 +2,14 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import { DmcaForm } from "./DmcaForm";
 import type { Metadata } from "next";
+import { fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = fullMeta({
   title: "DMCA / Takedown Request",
   description:
     "Submit a DMCA or content takedown request to InkLink Tattoo Finder. Shop owners can request removal of photos or listings.",
-  alternates: { canonical: "/dmca" },
-  openGraph: {
-    title: "DMCA / Takedown Request | InkLink Tattoo Finder",
-    description:
-      "Submit a DMCA or content takedown request to InkLink Tattoo Finder. Shop owners can request removal of photos or listings.",
-    url: "/dmca",
-  },
-};
+  url: "/dmca",
+});
 
 export default function DmcaPage() {
   return (

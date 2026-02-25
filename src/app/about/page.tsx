@@ -3,18 +3,14 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import { prisma } from "@/lib/db";
 import type { Metadata } from "next";
+import { fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About InkLink Tattoo Finder | Our Mission to Connect You With Great Tattoo Artists",
+export const metadata: Metadata = fullMeta({
+  title: "About Us — Our Mission",
   description:
-    "InkLink Tattoo Finder was built to make finding a quality tattoo artist easy — no matter where you live. Browse shops by style, city, and ratings across all 50 states.",
-  openGraph: {
-    title: "About InkLink Tattoo Finder",
-    description:
-      "We built InkLink to make finding a quality tattoo artist easy — no matter where you live.",
-  },
-  alternates: { canonical: "/about" },
-};
+    "InkLink Tattoo Finder helps you find a quality tattoo artist — no matter where you live. Browse shops by style, city, and ratings across all 50 states.",
+  url: "/about",
+});
 
 const features = [
   {

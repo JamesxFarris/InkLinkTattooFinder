@@ -9,7 +9,7 @@ import { Pagination } from "@/components/Pagination";
 import { SearchBar } from "@/components/SearchBar";
 import { searchListings, searchListingsNearby, getAllCategories } from "@/lib/queries";
 import { isZipCode, geocodeZip } from "@/lib/geo";
-import { searchPageMeta } from "@/lib/seo";
+import { searchPageMeta, fullMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 import type { ListingWithRelations } from "@/types";
 
@@ -30,11 +30,7 @@ type Props = {
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { q } = await searchParams;
   const meta = searchPageMeta(q);
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: { canonical: "/search" },
-  };
+  return fullMeta({ ...meta, url: "/search" });
 }
 
 async function SearchResults({ searchParams }: { searchParams: Props["searchParams"] }) {

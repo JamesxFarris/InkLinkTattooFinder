@@ -2,19 +2,14 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import { ContactForm } from "./ContactForm";
 import type { Metadata } from "next";
+import { fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = fullMeta({
   title: "Contact Us",
   description:
     "Get in touch with InkLink Tattoo Finder. Reach out about listing your shop, updating information, or general inquiries.",
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    title: "Contact Us | InkLink Tattoo Finder",
-    description:
-      "Get in touch with InkLink Tattoo Finder. Reach out about listing your shop, updating information, or general inquiries.",
-    url: "/contact",
-  },
-};
+  url: "/contact",
+});
 
 export default function ContactPage() {
   return (

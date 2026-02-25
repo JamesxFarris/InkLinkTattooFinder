@@ -9,10 +9,9 @@ import { HERO_IMAGE, getCityImageUrl } from "@/lib/images";
 import { getAllCategories, getTopCities, getAllStates, getPopularSearchCombos, getTotalListingCount, formatApproxCount } from "@/lib/queries";
 import type { FaqItem } from "@/lib/faq";
 import type { Metadata } from "next";
+import { homePageMeta, fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = fullMeta({ ...homePageMeta(), url: "/" });
 
 const homepageFaq: FaqItem[] = [
   {

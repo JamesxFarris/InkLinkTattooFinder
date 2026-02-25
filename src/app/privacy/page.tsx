@@ -2,17 +2,13 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/components/JsonLd";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { fullMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = fullMeta({
   title: "Privacy Policy",
-  description: "InkLink Tattoo Finder privacy policy — how we collect, use, and protect your information.",
-  alternates: { canonical: "/privacy" },
-  openGraph: {
-    title: "Privacy Policy | InkLink Tattoo Finder",
-    description: "InkLink Tattoo Finder privacy policy — how we collect, use, and protect your information.",
-    url: "/privacy",
-  },
-};
+  description: "InkLink Tattoo Finder privacy policy — how we collect, use, and protect your personal information when you browse our tattoo shop directory.",
+  url: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

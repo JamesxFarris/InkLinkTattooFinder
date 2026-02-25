@@ -4,14 +4,13 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd, breadcrumbJsonLd, collectionPageJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { getAllCategories } from "@/lib/queries";
-import { categoriesPageMeta } from "@/lib/seo";
+import { categoriesPageMeta, fullMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = fullMeta({
   ...categoriesPageMeta(),
-  openGraph: categoriesPageMeta(),
-  alternates: { canonical: "/categories" },
-};
+  url: "/categories",
+});
 
 const removedSlugs = new Set(["color-specialist", "black-and-grey", "custom-design", "tattoo-supplies", "aftercare-products"]);
 

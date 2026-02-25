@@ -5,17 +5,12 @@ import { StateGrid } from "@/components/StateGrid";
 import { StatsBar } from "@/components/StatsBar";
 import { JsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { getAllStates } from "@/lib/queries";
-import { statesIndexMeta } from "@/lib/seo";
+import { statesIndexMeta, fullMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
 export function generateMetadata(): Metadata {
   const meta = statesIndexMeta();
-  return {
-    title: meta.title,
-    description: meta.description,
-    openGraph: { title: meta.title, description: meta.description },
-    alternates: { canonical: "/tattoo-shops" },
-  };
+  return fullMeta({ ...meta, url: "/tattoo-shops" });
 }
 
 export default async function StatesIndexPage() {

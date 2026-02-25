@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { getTotalListingCount, formatApproxCount } from "@/lib/queries";
 import type { Metadata } from "next";
+import { fullMeta } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = fullMeta({
   title: "Claim & Manage Your Tattoo Shop Listing",
   description:
     "Claim your free listing on InkLink Tattoo Finder. Update your hours, photos, and services to reach thousands of people searching for tattoo artists.",
-  alternates: { canonical: "/for-shop-owners" },
-};
+  url: "/for-shop-owners",
+});
 
 export default async function ForShopOwnersPage() {
   const totalCount = await getTotalListingCount();
