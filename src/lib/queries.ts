@@ -460,6 +460,42 @@ export async function getListingsByCategoryNational(
   return { listings, total, totalPages: Math.ceil(total / perPage) };
 }
 
+// ── Adjacent Listing Navigation ──────────────────────────
+
+export async function getAdjacentListings(listingId: number, cityId: number) {
+  const listings = await prisma.listing.findMany({
+    where: { cityId, status: "active" },
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      featured: true,
+      googleRating: true,
+      ownerId: true,
+      city: { select: { slug: true, state: { select: { slug: true } } } },
+    },
+    orderBy: [
+      { featured: "desc" },
+      { googleRating: "desc" },
+      { ownerId: { sort: "desc", nulls: "last" } },
+      { id: "asc" },
+    ],
+  });
+
+  const idx = listings.findIndex((l) => l.id === listingId);
+  if (idx === -1) return { prev: null, next: null };
+
+  const pick = (i: number) => {
+    const l = listings[i];
+    return { slug: l.slug, name: l.name, city: l.city };
+  };
+
+  return {
+    prev: idx > 0 ? pick(idx - 1) : null,
+    next: idx < listings.length - 1 ? pick(idx + 1) : null,
+  };
+}
+
 // ── Internal Linking Queries ─────────────────────────────
 
 export async function getRelatedListings(

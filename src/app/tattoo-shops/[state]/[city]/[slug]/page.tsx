@@ -5,11 +5,13 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { JsonLd, localBusinessJsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
-import { getListingBySlug, getRelatedListings, getCategoriesForCity } from "@/lib/queries";
-import { listingPageMeta } from "@/lib/seo";
+import { getListingBySlug, getRelatedListings, getCategoriesForCity, getAdjacentListings } from "@/lib/queries";
+import { listingPageMeta, fullMeta } from "@/lib/seo";
+import { ensureHttps } from "@/lib/utils";
 import { formatPhone, listingUrl } from "@/lib/utils";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { PrevNextNav } from "@/components/listing/PrevNextNav";
 import { ClaimButton } from "@/components/listing/ClaimButton";
 import { AdminDeleteButton } from "@/components/listing/AdminDeleteButton";
 import { MapEmbed } from "@/components/listing/MapEmbed";
@@ -30,12 +32,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     listing.city.name,
     listing.city.state.abbreviation
   );
-  return {
-    title: meta.title,
-    description: meta.description,
-    openGraph: { title: meta.title, description: meta.description },
-    alternates: { canonical: `/tattoo-shops/${state}/${city}/${slug}` },
-  };
+  const photos = listing.photos as string[] | null;
+  const ogImage = photos?.[0] ? ensureHttps(photos[0]) : undefined;
+  return fullMeta({
+    ...meta,
+    url: `/tattoo-shops/${state}/${city}/${slug}`,
+    image: ogImage,
+  });
 }
 
 
@@ -86,9 +89,10 @@ export default async function ListingPage({ params }: Props) {
   const services = listing.services as string[] | null;
 
   const categoryIds = listing.categories.map((c) => c.category.id);
-  const [relatedListings, cityCategories] = await Promise.all([
+  const [relatedListings, cityCategories, adjacentListings] = await Promise.all([
     getRelatedListings(listing.id, listing.cityId, categoryIds, 6),
     getCategoriesForCity(listing.cityId),
+    getAdjacentListings(listing.id, listing.cityId),
   ]);
 
   return (
@@ -514,6 +518,8 @@ export default async function ListingPage({ params }: Props) {
           )}
         </div>
       </div>
+
+      <PrevNextNav prev={adjacentListings.prev} next={adjacentListings.next} />
 
       {/* Related Listings */}
       {relatedListings.length > 0 && (
