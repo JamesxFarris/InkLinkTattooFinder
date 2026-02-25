@@ -1,6 +1,6 @@
 export const revalidate = 3600;
 
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ListingSearch } from "@/components/ListingSearch";
@@ -18,6 +18,7 @@ import {
   getTopCitiesForCategory,
 } from "@/lib/queries";
 import { cityCategoryPageMeta, fullMeta } from "@/lib/seo";
+import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
 import type { Metadata } from "next";
 
 type Props = {
@@ -28,6 +29,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { state: stateSlug, city: citySlug, style: styleSlug } = await params;
   const city = await getCityBySlug(citySlug, stateSlug);
   if (!city) return {};
+
+  // Small cities are shown on the state page — don't index style subpages
+  if (city._count.listings < CITY_PAGE_MIN_LISTINGS) {
+    return { robots: { index: false, follow: true } };
+  }
+
   const category = await getCategoryBySlug(styleSlug);
   if (!category) return {};
 
@@ -47,6 +54,11 @@ export default async function CityStylePage({ params }: Props) {
   const city = await getCityBySlug(citySlug, stateSlug);
   if (!city) notFound();
 
+  // Small cities don't have dedicated pages — redirect to state page
+  if (city._count.listings < CITY_PAGE_MIN_LISTINGS) {
+    redirect(`/tattoo-shops/${stateSlug}#city-${citySlug}`);
+  }
+
   const category = await getCategoryBySlug(styleSlug);
   if (!category) notFound();
 
@@ -63,7 +75,9 @@ export default async function CityStylePage({ params }: Props) {
   const baseUrl = "https://inklinktattoofinder.com";
   const basePath = `/tattoo-shops/${stateSlug}/${citySlug}`;
 
-  const crossLinkCities = otherCities.filter((c) => c.id !== city.id).slice(0, 6);
+  const crossLinkCities = otherCities
+    .filter((c) => c.id !== city.id && c._count.listings >= CITY_PAGE_MIN_LISTINGS)
+    .slice(0, 6);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

@@ -52,3 +52,7 @@ export const SITE_NAME = "InkLink Tattoo Finder";
 export const SITE_DESCRIPTION =
   "Find the best tattoo artists and shops near you. Browse by style, city, and read reviews.";
 export const ITEMS_PER_PAGE = 12;
+
+/** Minimum active listings for a city to get its own dedicated page.
+ *  Cities below this threshold have their shops shown inline on the state page. */
+export const CITY_PAGE_MIN_LISTINGS = 10;

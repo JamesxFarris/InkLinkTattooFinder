@@ -646,6 +646,22 @@ export async function getPopularSearchCombos(limit = 8) {
     .slice(0, limit);
 }
 
+// ── Batch Listings for Multiple Cities ───────────────────
+
+/** Fetch all active listings for a set of city IDs (used for inlining small cities on state pages). */
+export async function getListingsForCities(cityIds: number[]) {
+  if (cityIds.length === 0) return [];
+  return prisma.listing.findMany({
+    where: { cityId: { in: cityIds }, status: "active" },
+    include: {
+      city: { include: { state: true } },
+      state: true,
+      categories: { include: { category: true } },
+    },
+    orderBy: [{ featured: "desc" }, { googleRating: "desc" }, { id: "asc" }],
+  });
+}
+
 // ── Proximity / Zip Code Search ──────────────────────────
 
 /**

@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { auditLog } from "@/lib/audit";
 import { sendClaimApprovedEmail } from "@/lib/email";
+import { notifyIndexNow, listingChangedUrls } from "@/lib/indexnow";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -70,8 +71,16 @@ export async function PATCH(request: Request, context: RouteContext) {
       });
       const listing = await prisma.listing.findUnique({
         where: { id: claim.listingId },
-        select: { name: true, slug: true },
+        select: {
+          name: true,
+          slug: true,
+          city: { select: { slug: true, state: { select: { slug: true } } } },
+        },
       });
+      if (listing) {
+        // Notify search engines — listing now shows verified badge
+        notifyIndexNow(listingChangedUrls(listing));
+      }
       if (claimUser && listing) {
         sendClaimApprovedEmail({
           userEmail: claimUser.email,

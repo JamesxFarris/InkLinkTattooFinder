@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { auditLog } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 import { enrichListingFromGoogle } from "@/lib/google-places";
+import { notifyIndexNow, listingChangedUrls } from "@/lib/indexnow";
 
 async function requireAdmin() {
   const session = await auth();
@@ -22,8 +23,9 @@ export async function approveListing(id: number) {
     select: {
       id: true,
       name: true,
+      slug: true,
       googlePlaceId: true,
-      city: { select: { name: true } },
+      city: { select: { name: true, slug: true, state: { select: { slug: true } } } },
       state: { select: { abbreviation: true } },
     },
   });
@@ -43,6 +45,9 @@ export async function approveListing(id: number) {
       listing.state.abbreviation
     );
   }
+
+  // Notify search engines about the new page
+  notifyIndexNow(listingChangedUrls(listing));
 
   revalidatePath("/dashboard/admin");
 }

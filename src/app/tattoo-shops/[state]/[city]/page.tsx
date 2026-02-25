@@ -25,6 +25,7 @@ import {
   getCitiesByState,
 } from "@/lib/queries";
 import { cityPageMeta, fullMeta } from "@/lib/seo";
+import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
 import type { Metadata } from "next";
 
 type Props = {
@@ -36,6 +37,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { state: stateSlug, city: citySlug } = await params;
   const city = await getCityBySlug(citySlug, stateSlug);
   if (!city) return {};
+
+  // Small cities are shown inline on the state page — don't index this page
+  if (city._count.listings < CITY_PAGE_MIN_LISTINGS) {
+    return { robots: { index: false, follow: true } };
+  }
+
   const meta = cityPageMeta(
     city.name,
     city.state.abbreviation,
@@ -56,6 +63,11 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
   const city = await getCityBySlug(citySlug, stateSlug);
   if (!city) notFound();
 
+  // Small cities are shown inline on the state page — redirect there
+  if (city._count.listings < CITY_PAGE_MIN_LISTINGS) {
+    redirect(`/tattoo-shops/${stateSlug}#city-${citySlug}`);
+  }
+
   const [listings, stats, categories, siblingCities] = await Promise.all([
     getAllListingsByCity(city.id),
     getCityStats(city.id),
@@ -70,7 +82,11 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
   const uniqueStyleCount = categories.length;
 
   const otherCities = siblingCities
-    .filter((c) => c.id !== city.id)
+    .filter(
+      (c) =>
+        c.id !== city.id &&
+        c._count.listings >= CITY_PAGE_MIN_LISTINGS
+    )
     .sort((a, b) => b._count.listings - a._count.listings)
     .slice(0, 6);
 

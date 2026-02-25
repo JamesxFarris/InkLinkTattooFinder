@@ -2,13 +2,14 @@ export const dynamic = "force-dynamic";
 
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
+import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
 
 const baseUrl = "https://inklinktattoofinder.com";
 const URLS_PER_SITEMAP = 2000;
 
-// id 0 = static + states + cities + categories
+// id 0 = static + states + cities (above threshold) + categories
 // id 1..2 = listing chunks (2000 each, covers ~3500 listings)
-// id 3..6 = city+category combo chunks (covers ~8000 combos)
+// id 3..6 = city+category combo chunks (only for cities above threshold)
 // Empty sitemaps are harmless — Google just ignores them.
 // Increase these if listings grow past 4000 or combos past 8000.
 export async function generateSitemaps() {
@@ -20,7 +21,7 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   const listingCount = await prisma.listing.count({ where: { status: "active" } });
   const listingChunks = Math.ceil(listingCount / URLS_PER_SITEMAP);
 
-  // ID 0: static pages + states + cities + categories
+  // ID 0: static pages + states + qualifying cities + categories
   if (id === 0) {
     const staticPages: MetadataRoute.Sitemap = [
       { url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
@@ -45,15 +46,25 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       priority: 0.8,
     }));
 
+    // Only include cities that meet the minimum listing threshold
     const cities = await prisma.city.findMany({
-      select: { slug: true, state: { select: { slug: true } } },
+      where: {
+        listings: { some: { status: "active" } },
+      },
+      select: {
+        slug: true,
+        state: { select: { slug: true } },
+        _count: { select: { listings: { where: { status: "active" } } } },
+      },
     });
-    const cityPages: MetadataRoute.Sitemap = cities.map((c) => ({
-      url: `${baseUrl}/tattoo-shops/${c.state.slug}/${c.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.9,
-    }));
+    const cityPages: MetadataRoute.Sitemap = cities
+      .filter((c) => c._count.listings >= CITY_PAGE_MIN_LISTINGS)
+      .map((c) => ({
+        url: `${baseUrl}/tattoo-shops/${c.state.slug}/${c.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.9,
+      }));
 
     const categories = await prisma.category.findMany({ select: { slug: true } });
     const categoryPages: MetadataRoute.Sitemap = categories.map((c) => ({
@@ -89,25 +100,50 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
     }));
   }
 
-  // Remaining IDs: city+category combo pages
+  // Remaining IDs: city+category combo pages (only for cities above threshold)
   const comboChunkIndex = id - listingChunks - 1;
+
+  // Get city IDs that meet the threshold
+  const qualifyingCities = await prisma.city.findMany({
+    where: {
+      listings: { some: { status: "active" } },
+    },
+    select: {
+      id: true,
+      slug: true,
+      state: { select: { slug: true } },
+      _count: { select: { listings: { where: { status: "active" } } } },
+    },
+  });
+  const qualifyingCityIds = new Set(
+    qualifyingCities
+      .filter((c) => c._count.listings >= CITY_PAGE_MIN_LISTINGS)
+      .map((c) => c.id)
+  );
+  const cityLookup = new Map(
+    qualifyingCities.map((c) => [c.id, { slug: c.slug, stateSlug: c.state.slug }])
+  );
+
   const cityCategoryCombos = await prisma.listingCategory.findMany({
     where: { listing: { status: "active" } },
     select: {
       category: { select: { slug: true } },
       listing: {
         select: {
-          city: { select: { slug: true, state: { select: { slug: true } } } },
+          cityId: true,
         },
       },
     },
   });
 
-  // Deduplicate by city+state+category combo
+  // Deduplicate by city+category combo, only for qualifying cities
   const comboSet = new Set<string>();
   const allCombos: MetadataRoute.Sitemap = [];
   for (const combo of cityCategoryCombos) {
-    const key = `${combo.listing.city.state.slug}/${combo.listing.city.slug}/style/${combo.category.slug}`;
+    if (!qualifyingCityIds.has(combo.listing.cityId)) continue;
+    const cityInfo = cityLookup.get(combo.listing.cityId);
+    if (!cityInfo) continue;
+    const key = `${cityInfo.stateSlug}/${cityInfo.slug}/style/${combo.category.slug}`;
     if (!comboSet.has(key)) {
       comboSet.add(key);
       allCombos.push({

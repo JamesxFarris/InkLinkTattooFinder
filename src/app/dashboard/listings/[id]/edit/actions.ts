@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { slugify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { notifyIndexNow, listingChangedUrls } from "@/lib/indexnow";
 
 export async function deleteListing(listingId: number): Promise<{ success: boolean; message: string }> {
   const session = await auth();
@@ -201,6 +202,11 @@ export async function updateListing(
 
     revalidatePath("/dashboard");
     revalidatePath(`/tattoo-shops/${listing.city.state.slug}/${listing.city.slug}/${listing.slug}`);
+
+    // Notify search engines about the updated content
+    if (listing.status === "active") {
+      notifyIndexNow(listingChangedUrls(listing));
+    }
 
     return {
       success: true,
