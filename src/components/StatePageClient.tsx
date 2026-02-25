@@ -173,7 +173,7 @@ export function StatePageClient({
                     .getElementById(`letter-${letter}`)
                     ?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
-                className={`flex h-8 w-8 items-center justify-center rounded text-xs font-medium transition-colors ${
+                className={`flex h-10 w-10 sm:h-8 sm:w-8 items-center justify-center rounded text-sm sm:text-xs font-medium transition-colors ${
                   active
                     ? "bg-teal-50 text-teal-700 hover:bg-teal-100 dark:bg-teal-900/30 dark:text-teal-400 dark:hover:bg-teal-900/50"
                     : "text-stone-300 dark:text-stone-600 cursor-default"
