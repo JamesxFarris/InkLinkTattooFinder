@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
-import { JsonLd, localBusinessJsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
+import { JsonLd, localBusinessJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/components/JsonLd";
+import { getListingFaqData, ListingFaq } from "@/components/listing/ListingFaq";
 import { getListingBySlug, getRelatedListings, getCategoriesForCity, getAdjacentListings } from "@/lib/queries";
 import { listingPageMeta, fullMeta } from "@/lib/seo";
 import { ensureHttps } from "@/lib/utils";
@@ -95,6 +96,21 @@ export default async function ListingPage({ params }: Props) {
     getAdjacentListings(listing.id, listing.cityId),
   ]);
 
+  const listingFaqs = getListingFaqData({
+    name: listing.name,
+    city: listing.city.name,
+    stateAbbr: listing.city.state.abbreviation,
+    categories: listing.categories.map(({ category }) => category.name),
+    acceptsWalkIns: listing.acceptsWalkIns,
+    piercingServices: listing.piercingServices,
+    tattooRemoval: listing.tattooRemoval,
+    hourlyRateMin: listing.hourlyRateMin,
+    hourlyRateMax: listing.hourlyRateMax,
+    googleRating: listing.googleRating,
+    googleReviewCount: listing.googleReviewCount,
+    hours,
+  });
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <ViewTracker listingId={listing.id} />
@@ -129,6 +145,7 @@ export default async function ListingPage({ params }: Props) {
           { label: listing.name },
         ])}
       />
+      {listingFaqs.length > 0 && <JsonLd data={faqJsonLd(listingFaqs)} />}
 
       <Breadcrumbs
         items={[
@@ -372,7 +389,7 @@ export default async function ListingPage({ params }: Props) {
 
           {/* Photos */}
           {photos && photos.length > 0 && (
-            <PhotoGallery photos={photos} featured={listing.featured} />
+            <PhotoGallery photos={photos} featured={listing.featured} shopName={listing.name} />
           )}
 
           {/* Map */}
@@ -570,6 +587,8 @@ export default async function ListingPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      <ListingFaq faqs={listingFaqs} />
     </div>
   );
 }

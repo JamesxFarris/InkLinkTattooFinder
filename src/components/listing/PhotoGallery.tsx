@@ -7,9 +7,11 @@ import { ensureHttps } from "@/lib/utils";
 export function PhotoGallery({
   photos: rawPhotos,
   featured = false,
+  shopName,
 }: {
   photos: string[] | null;
   featured?: boolean;
+  shopName?: string;
 }) {
   const photos = useMemo(() => rawPhotos?.map(ensureHttps) ?? null, [rawPhotos]);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -45,7 +47,7 @@ export function PhotoGallery({
           >
             <Image
               src={src}
-              alt={`Photo ${i + 1}`}
+              alt={shopName ? `Tattoo work by ${shopName} — photo ${i + 1} of ${items.length}` : `Tattoo photo ${i + 1}`}
               fill
               unoptimized
               className="object-cover transition-transform duration-300 hover:scale-105"
@@ -95,7 +97,7 @@ export function PhotoGallery({
           >
             <Image
               src={items[safeLightboxIndex]}
-              alt={`Photo ${safeLightboxIndex + 1}`}
+              alt={shopName ? `Tattoo work by ${shopName} — photo ${safeLightboxIndex + 1} of ${items.length}` : `Tattoo photo ${safeLightboxIndex + 1}`}
               width={1200}
               height={800}
               unoptimized
