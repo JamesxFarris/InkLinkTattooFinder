@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { JsonLd, localBusinessJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/components/JsonLd";
 import { getListingFaqData, ListingFaq } from "@/components/listing/ListingFaq";
+import { ShareButtons } from "@/components/listing/ShareButtons";
 import { getListingBySlug, getRelatedListings, getCategoriesForCity, getAdjacentListings } from "@/lib/queries";
 import { listingPageMeta, fullMeta } from "@/lib/seo";
 import { ensureHttps } from "@/lib/utils";
@@ -201,6 +202,10 @@ export default async function ListingPage({ params }: Props) {
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-2">
+                <ShareButtons
+                  path={`/tattoo-shops/${stateSlug}/${citySlug}/${listing.slug}`}
+                  title={`${listing.name} — Tattoo Shop in ${listing.city.name}, ${listing.city.state.abbreviation}`}
+                />
                 {listing.ownerId && (
                   <span className="flex items-center gap-1 rounded-full bg-teal-600 px-2.5 py-1 text-xs font-semibold text-white">
                     <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
