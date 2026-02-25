@@ -174,9 +174,9 @@ export default async function ListingPage({ params }: Props) {
           {/* Header */}
           <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
 
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-start justify-between gap-2">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-3">
                   <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-100">
                     {listing.name}
                   </h1>
@@ -202,10 +202,6 @@ export default async function ListingPage({ params }: Props) {
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-2">
-                <ShareButtons
-                  path={`/tattoo-shops/${stateSlug}/${citySlug}/${listing.slug}`}
-                  title={`${listing.name} — Tattoo Shop in ${listing.city.name}, ${listing.city.state.abbreviation}`}
-                />
                 {listing.ownerId && (
                   <span className="flex items-center gap-1 rounded-full bg-teal-600 px-2.5 py-1 text-xs font-semibold text-white">
                     <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
@@ -217,6 +213,10 @@ export default async function ListingPage({ params }: Props) {
                 {listing.featured && (
                   <Badge variant="primary">Featured</Badge>
                 )}
+                <ShareButtons
+                  path={`/tattoo-shops/${stateSlug}/${citySlug}/${listing.slug}`}
+                  title={`${listing.name} — Tattoo Shop in ${listing.city.name}, ${listing.city.state.abbreviation}`}
+                />
               </div>
             </div>
 
