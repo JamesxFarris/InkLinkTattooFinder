@@ -63,6 +63,9 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
   const city = await getCityBySlug(citySlug, stateSlug);
   if (!city) notFound();
 
+  // Cities with no active listings should 404
+  if (city._count.listings === 0) notFound();
+
   // Small cities are shown inline on the state page — redirect there
   if (city._count.listings < CITY_PAGE_MIN_LISTINGS) {
     redirect(`/tattoo-shops/${stateSlug}#city-${citySlug}`);

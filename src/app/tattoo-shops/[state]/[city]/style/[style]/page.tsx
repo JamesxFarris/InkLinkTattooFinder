@@ -54,6 +54,9 @@ export default async function CityStylePage({ params }: Props) {
   const city = await getCityBySlug(citySlug, stateSlug);
   if (!city) notFound();
 
+  // Cities with no active listings should 404
+  if (city._count.listings === 0) notFound();
+
   // Small cities don't have dedicated pages — redirect to state page
   if (city._count.listings < CITY_PAGE_MIN_LISTINGS) {
     redirect(`/tattoo-shops/${stateSlug}#city-${citySlug}`);
