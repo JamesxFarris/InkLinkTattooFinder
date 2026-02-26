@@ -24,6 +24,9 @@ const ACTION_LABELS: Record<string, string> = {
   "user.delete": "Deleted user",
   "user.register": "User registered",
   "city.delete": "Deleted city",
+  "blog.create": "Created blog post",
+  "blog.update": "Updated blog post",
+  "blog.delete": "Deleted blog post",
 };
 
 export default async function AuditLogPage({

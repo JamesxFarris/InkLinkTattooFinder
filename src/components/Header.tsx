@@ -45,6 +45,7 @@ export async function Header() {
             { href: "/tattoo-shops", label: "Browse States" },
             { href: "/categories", label: "Styles" },
             { href: "/search", label: "Search" },
+            { href: "/blog", label: "Blog" },
             { href: "/about", label: "About" },
           ].map((link) => (
             <Link

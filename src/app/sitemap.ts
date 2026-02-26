@@ -36,7 +36,20 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       { url: `${baseUrl}/for-shop-owners`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
       { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
       { url: `${baseUrl}/dmca`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
+      { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
     ];
+
+    // Blog posts
+    const blogPosts = await prisma.blogPost.findMany({
+      where: { status: "published", publishedAt: { not: null } },
+      select: { slug: true, updatedAt: true },
+    });
+    const blogPages: MetadataRoute.Sitemap = blogPosts.map((p) => ({
+      url: `${baseUrl}/blog/${p.slug}`,
+      lastModified: p.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    }));
 
     const states = await prisma.state.findMany({ select: { slug: true } });
     const statePages: MetadataRoute.Sitemap = states.map((s) => ({
@@ -74,7 +87,7 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       priority: 0.7,
     }));
 
-    return [...staticPages, ...statePages, ...cityPages, ...categoryPages];
+    return [...staticPages, ...blogPages, ...statePages, ...cityPages, ...categoryPages];
   }
 
   // IDs 1..listingChunks: listing pages

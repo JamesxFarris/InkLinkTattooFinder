@@ -275,6 +275,56 @@ export function faqJsonLd(items: { question: string; answer: string }[]) {
   };
 }
 
+export function articleJsonLd({
+  title,
+  description,
+  url,
+  image,
+  publishedAt,
+  updatedAt,
+  authorName,
+}: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string | null;
+  publishedAt: string;
+  updatedAt: string;
+  authorName: string;
+}) {
+  const data: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    url: `${SITE_URL}${url}`,
+    datePublished: publishedAt,
+    dateModified: updatedAt,
+    author: {
+      "@type": "Person",
+      name: authorName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/icon`,
+      },
+    },
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  };
+  if (image) {
+    data.image = image;
+  }
+  return data;
+}
+
 export function itemListJsonLd(
   items: { name: string; url: string; position: number }[]
 ) {

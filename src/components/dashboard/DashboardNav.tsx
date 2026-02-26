@@ -24,6 +24,7 @@ export function DashboardNav({ isAdmin, isPremium = false }: { isAdmin: boolean;
     { href: "/dashboard/admin/cities", label: "Manage Cities" },
     { href: "/dashboard/admin/claims", label: "Review Claims" },
     { href: "/dashboard/admin/users", label: "Manage Users" },
+    { href: "/dashboard/admin/blog", label: "Manage Blog" },
     { href: "/dashboard/admin/audit", label: "Audit Log" },
   ];
 
