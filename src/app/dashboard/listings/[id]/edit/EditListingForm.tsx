@@ -35,6 +35,7 @@ type ListingData = {
   hours: Record<string, string> | null;
   photos: string[] | null;
   artists: unknown[];
+  services: string[];
   featured: boolean;
   ctaLabel: string | null;
   ctaUrl: string | null;
@@ -59,6 +60,8 @@ export function EditListingForm({
   const [result, formAction, isPending] = useActionState(boundUpdate, null);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(listing.categoryIds);
   const [stateId, setStateId] = useState<string | null>(String(listing.stateId));
+  const [services, setServices] = useState<string[]>(listing.services);
+  const [newService, setNewService] = useState("");
 
   return (
     <form action={formAction} className="space-y-6">
@@ -374,6 +377,69 @@ export function EditListingForm({
           />
           Offers tattoo removal
         </label>
+      </div>
+
+      {/* Services / Tags */}
+      <div>
+        <label className={labelClass}>Services &amp; Features</label>
+        <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+          Add custom tags for your shop (e.g. &ldquo;Complimentary Consultations&rdquo;, &ldquo;Tattoo Supply Sales&rdquo;).
+        </p>
+        {services.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-2">
+            {services.map((s, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1 rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 dark:border-violet-700 dark:bg-violet-900/40 dark:text-violet-300"
+              >
+                {s}
+                <button
+                  type="button"
+                  onClick={() => setServices((prev) => prev.filter((_, idx) => idx !== i))}
+                  className="ml-0.5 rounded-full p-0.5 text-violet-400 hover:bg-violet-200 hover:text-violet-600 dark:hover:bg-violet-800 dark:hover:text-violet-200"
+                  aria-label={`Remove ${s}`}
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="mt-2 flex gap-2">
+          <input
+            type="text"
+            value={newService}
+            onChange={(e) => setNewService(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const val = newService.trim();
+                if (val && !services.some((s) => s.toLowerCase() === val.toLowerCase())) {
+                  setServices((prev) => [...prev, val]);
+                  setNewService("");
+                }
+              }
+            }}
+            className={inputClass}
+            placeholder="Type a service and press Enter or Add"
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              const val = newService.trim();
+              if (val && !services.some((s) => s.toLowerCase() === val.toLowerCase())) {
+                setServices((prev) => [...prev, val]);
+                setNewService("");
+              }
+            }}
+          >
+            Add
+          </Button>
+        </div>
+        <input type="hidden" name="servicesJson" value={JSON.stringify(services)} />
       </div>
 
       {/* Call-to-Action Button (Premium) */}

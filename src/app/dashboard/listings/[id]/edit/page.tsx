@@ -61,6 +61,7 @@ export default async function EditListingPage({
     categoryIds: listing.categories.map((c) => c.category.id),
     photos: listing.photos as string[] | null,
     artists: Array.isArray(listing.artists) ? (listing.artists as unknown[]) : [],
+    services: Array.isArray(listing.services) ? (listing.services as string[]) : [],
     featured: listing.featured,
     ctaLabel: listing.ctaLabel,
     ctaUrl: listing.ctaUrl,

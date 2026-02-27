@@ -110,6 +110,20 @@ export async function updateListing(
       }
     }
 
+    // Parse services JSON
+    const servicesJsonRaw = formData.get("servicesJson") as string | null;
+    let services: string[] = [];
+    if (servicesJsonRaw) {
+      try {
+        const parsed = JSON.parse(servicesJsonRaw);
+        if (Array.isArray(parsed)) {
+          services = parsed.filter((s: unknown) => typeof s === "string" && s.trim().length > 0).map((s: string) => s.trim());
+        }
+      } catch {
+        // ignore invalid JSON
+      }
+    }
+
     // Parse hours JSON
     const VALID_DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
     let parsedHours: Record<string, string> | null = null;
@@ -177,6 +191,7 @@ export async function updateListing(
           hours: parsedHours ?? Prisma.JsonNull,
           photos: photos.length > 0 ? photos : Prisma.JsonNull,
           artists: artists.length > 0 ? (artists as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
+          services: services.length > 0 ? (services as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
           ctaLabel: ctaLabel?.trim() || null,
           ctaUrl: ctaUrl?.trim() || null,
           // status is NOT changed (edits stay live if active, stay pending if pending)
