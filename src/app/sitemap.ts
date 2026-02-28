@@ -7,19 +7,34 @@ import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
 const baseUrl = "https://inklinktattoofinder.com";
 const URLS_PER_SITEMAP = 2000;
 
-// id 0 = static + states + cities (above threshold) + categories
-// id 1..2 = listing chunks (2000 each, covers ~3500 listings)
-// id 3..6 = city+category combo chunks (only for cities above threshold)
-// Empty sitemaps are harmless — Google just ignores them.
-// Increase these if listings grow past 4000 or combos past 8000.
+// id 0 = static + states + cities (above threshold) + categories + blog
+// id 1..N = listing chunks (2000 each)
+// id N+1..M = city+category combo chunks (only for cities above threshold)
+// Sitemaps are calculated dynamically — no manual adjustment needed.
 export async function generateSitemaps() {
-  return [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
+  const listingCount = await prisma.listing.count({ where: { status: "active" } });
+  const listingChunks = Math.ceil(listingCount / URLS_PER_SITEMAP) || 1;
+
+  // Estimate combo count to determine chunk count without fetching all combos
+  const comboCount = await prisma.$queryRaw<[{ count: bigint }]>`
+    SELECT COUNT(DISTINCT CONCAT(l."cityId", '-', lc."categoryId")) AS count
+    FROM "ListingCategory" lc
+    JOIN "Listing" l ON l.id = lc."listingId"
+    JOIN "City" c ON c.id = l."cityId"
+    WHERE l.status = 'active'
+      AND (SELECT COUNT(*) FROM "Listing" l2 WHERE l2."cityId" = c.id AND l2.status = 'active') >= ${CITY_PAGE_MIN_LISTINGS}
+  `;
+  const totalCombos = Number(comboCount[0]?.count ?? 0);
+  const comboChunks = Math.ceil(totalCombos / URLS_PER_SITEMAP) || 1;
+
+  const totalSitemaps = 1 + listingChunks + comboChunks; // 1 for id 0
+  return Array.from({ length: totalSitemaps }, (_, i) => ({ id: i }));
 }
 
 export default async function sitemap(props: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
   const id = Number(await props.id);
   const listingCount = await prisma.listing.count({ where: { status: "active" } });
-  const listingChunks = Math.ceil(listingCount / URLS_PER_SITEMAP);
+  const listingChunks = Math.ceil(listingCount / URLS_PER_SITEMAP) || 1;
 
   // ID 0: static pages + states + qualifying cities + categories
   if (id === 0) {
@@ -27,7 +42,6 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       { url: baseUrl, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
       { url: `${baseUrl}/tattoo-shops`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
       { url: `${baseUrl}/categories`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-      { url: `${baseUrl}/search`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
       { url: `${baseUrl}/styles`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
       { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
       { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.3 },
