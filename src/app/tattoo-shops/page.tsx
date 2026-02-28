@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // ISR: rebuild every 5 minutes
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { StateGrid } from "@/components/StateGrid";

@@ -1,6 +1,7 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // ISR: rebuild every 5 minutes
 
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { prisma } from "@/lib/db";
 import { fullMeta } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -92,9 +93,12 @@ export default async function BlogPostPage({ params }: Props) {
         </header>
 
         {post.coverImage && (
-          <img
+          <Image
             src={post.coverImage}
             alt={post.title}
+            width={1200}
+            height={630}
+            priority
             className="mb-8 w-full rounded-xl object-cover"
           />
         )}
