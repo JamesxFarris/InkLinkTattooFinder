@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { prisma } from "@/lib/db";
 import { fullMeta } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -91,17 +90,6 @@ export default async function BlogPostPage({ params }: Props) {
             </time>
           </div>
         </header>
-
-        {post.coverImage && (
-          <Image
-            src={post.coverImage}
-            alt={post.title}
-            width={1200}
-            height={630}
-            priority
-            className="mb-8 w-full rounded-xl object-cover"
-          />
-        )}
 
         <div className="prose prose-stone max-w-none prose-headings:font-display prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:prose-a:text-teal-400">
           <MarkdownContent content={post.content} />
