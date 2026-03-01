@@ -1,4 +1,4 @@
-export const revalidate = 300; // ISR: rebuild every 5 minutes
+export const dynamic = "force-dynamic";
 
 import { CategoryCard } from "@/components/CategoryCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
