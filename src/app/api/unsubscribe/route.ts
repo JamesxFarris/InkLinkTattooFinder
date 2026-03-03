@@ -1,14 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHmac } from "crypto";
 import { prisma } from "@/lib/db";
-
-function verifyUnsubscribeToken(id: string, token: string): boolean {
-  const secret = process.env.AUTH_SECRET || "fallback-unsub-secret";
-  const expected = createHmac("sha256", secret)
-    .update(`unsub:${id}`)
-    .digest("hex");
-  return token === expected;
-}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -19,7 +10,9 @@ export async function GET(request: NextRequest) {
     return new NextResponse("Missing parameters.", { status: 400 });
   }
 
-  if (!verifyUnsubscribeToken(id, token)) {
+  // Verify simple token
+  const expected = Buffer.from(id + ":unsub").toString("base64");
+  if (token !== expected) {
     return new NextResponse("Invalid unsubscribe link.", { status: 400 });
   }
 

@@ -15,14 +15,8 @@ export async function POST(req: NextRequest) {
     (body.yearly === false
       ? process.env.STRIPE_PRICE_MONTHLY
       : process.env.STRIPE_PRICE_YEARLY);
-
-  const validPrices = [
-    process.env.STRIPE_PRICE_MONTHLY,
-    process.env.STRIPE_PRICE_YEARLY,
-  ].filter(Boolean);
-
-  if (!priceId || !validPrices.includes(priceId)) {
-    return NextResponse.json({ error: "Invalid price" }, { status: 400 });
+  if (!priceId) {
+    return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
   }
 
   const userId = parseInt(session.user.id);

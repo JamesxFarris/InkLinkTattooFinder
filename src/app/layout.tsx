@@ -87,13 +87,11 @@ gtag('config', '${GA_ID}', {
             </Script>
           </>
         )}
-        {process.env.NEXT_PUBLIC_AHREFS_KEY && (
-          <Script
-            src="https://analytics.ahrefs.com/analytics.js"
-            data-key={process.env.NEXT_PUBLIC_AHREFS_KEY}
-            strategy="afterInteractive"
-          />
-        )}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="DDuYLpll8VzMdUzVsBDFyw"
+          strategy="afterInteractive"
+        />
       </head>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <SessionProvider>
