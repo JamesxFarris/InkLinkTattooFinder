@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { isOptimizableImage } from "@/lib/utils";
 
 type StockImageProps = {
   src: string;
@@ -42,6 +43,7 @@ export function StockImage({
       fill={fill}
       width={fill ? undefined : width}
       height={fill ? undefined : height}
+      unoptimized={!isOptimizableImage(src)}
       className={className}
       priority={priority}
       onError={() => setError(true)}

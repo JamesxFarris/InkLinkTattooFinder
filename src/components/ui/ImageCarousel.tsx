@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useMemo } from "react";
 import Image from "next/image";
-import { ensureHttps } from "@/lib/utils";
+import { ensureHttps, isOptimizableImage } from "@/lib/utils";
 
 export function ImageCarousel({
   images: rawImages,
@@ -69,6 +69,7 @@ export function ImageCarousel({
         src={images[current]}
         alt={`${alt} — photo ${current + 1}`}
         fill
+        unoptimized={!isOptimizableImage(images[current])}
         className="object-cover transition-transform duration-500 group-hover:scale-105"
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
       />

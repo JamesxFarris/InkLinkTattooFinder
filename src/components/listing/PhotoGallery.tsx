@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import Image from "next/image";
-import { ensureHttps } from "@/lib/utils";
+import { ensureHttps, isOptimizableImage } from "@/lib/utils";
 
 export function PhotoGallery({
   photos: rawPhotos,
@@ -49,6 +49,7 @@ export function PhotoGallery({
               src={src}
               alt={shopName ? `Tattoo work by ${shopName} — photo ${i + 1} of ${items.length}` : `Tattoo photo ${i + 1}`}
               fill
+              unoptimized={!isOptimizableImage(src)}
               className="object-cover transition-transform duration-300 hover:scale-105"
               sizes="(max-width: 640px) 50vw, 33vw"
               onError={() => handleImageError(src)}
@@ -99,6 +100,7 @@ export function PhotoGallery({
               alt={shopName ? `Tattoo work by ${shopName} — photo ${safeLightboxIndex + 1} of ${items.length}` : `Tattoo photo ${safeLightboxIndex + 1}`}
               width={1200}
               height={800}
+              unoptimized={!isOptimizableImage(items[safeLightboxIndex])}
               className="max-h-[85vh] w-auto rounded-lg object-contain"
               onError={() => handleImageError(items[safeLightboxIndex])}
             />

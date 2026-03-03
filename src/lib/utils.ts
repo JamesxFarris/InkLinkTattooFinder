@@ -48,6 +48,27 @@ export function ensureHttps(url: string): string {
   return url;
 }
 
+/** Domains that Next.js Image can optimize (must match next.config.ts remotePatterns). */
+const OPTIMIZABLE_HOSTS = [
+  "res.cloudinary.com",
+  "lh3.googleusercontent.com",
+  "lh5.googleusercontent.com",
+  "streetviewpixels-pa.googleapis.com",
+  "maps.googleapis.com",
+  "images.unsplash.com",
+  "images.pexels.com",
+];
+
+/** Returns true if the URL is on a domain listed in next.config.ts remotePatterns. */
+export function isOptimizableImage(url: string): boolean {
+  try {
+    const hostname = new URL(url).hostname;
+    return OPTIMIZABLE_HOSTS.some((h) => hostname === h);
+  } catch {
+    return false;
+  }
+}
+
 export const SITE_NAME = "InkLink Tattoo Finder";
 export const SITE_DESCRIPTION =
   "Find the best tattoo artists and shops near you. Browse by style, city, and read reviews.";
