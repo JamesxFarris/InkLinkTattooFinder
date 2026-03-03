@@ -10,7 +10,9 @@
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "npx tsx prisma/seed.ts",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "reddit:scan": "npx tsx scripts/reddit-monitor.ts",
+    "reddit:scan:48h": "npx tsx scripts/reddit-monitor.ts --hours 48"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
