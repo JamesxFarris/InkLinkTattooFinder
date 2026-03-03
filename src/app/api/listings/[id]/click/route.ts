@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/db";
+import { rateLimit } from "@/lib/rate-limit";
 
 const VALID_TYPES = ["phone", "website", "instagram", "facebook", "cta"] as const;
 type ClickType = (typeof VALID_TYPES)[number];
@@ -12,6 +14,9 @@ const FIELD_MAP: Record<ClickType, string> = {
   cta: "ctaClicks",
 };
 
+// 5 clicks per listing per IP per 5 minutes
+const clickLimiter = rateLimit("click", 5, 5 * 60_000);
+
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -20,6 +25,14 @@ export async function POST(
   const listingId = parseInt(id, 10);
   if (isNaN(listingId)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
+
+  const headersList = await headers();
+  const ip =
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const { success } = clickLimiter.check(`${ip}:${listingId}`);
+  if (!success) {
+    return NextResponse.json({ ok: true });
   }
 
   let type: ClickType = "website";

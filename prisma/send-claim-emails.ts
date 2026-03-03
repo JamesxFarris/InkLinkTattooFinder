@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Resend } from "resend";
+import { createHmac } from "crypto";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -8,6 +9,13 @@ const prisma = new PrismaClient();
 const SENT_FILE = path.join(__dirname, "outreach-sent.json");
 const BASE_URL = "https://inklinktattoofinder.com";
 const PHYSICAL_ADDRESS = "InkLink Tattoo Finder, 1942 Broadway STE 314C, Boulder, CO 80302";
+
+function generateUnsubscribeToken(listingId: number): string {
+  const secret = process.env.AUTH_SECRET || "fallback-unsub-secret";
+  return createHmac("sha256", secret)
+    .update(`unsub:${listingId}`)
+    .digest("hex");
+}
 
 function loadSentIds(): Set<number> {
   try {
@@ -24,7 +32,7 @@ function saveSentIds(ids: Set<number>) {
 }
 
 function buildEmailHtml(name: string, city: string, state: string, listingUrl: string, listingId: number): string {
-  const unsubscribeUrl = `${BASE_URL}/api/unsubscribe?id=${listingId}&token=${Buffer.from(String(listingId) + ":unsub").toString("base64")}`;
+  const unsubscribeUrl = `${BASE_URL}/api/unsubscribe?id=${listingId}&token=${generateUnsubscribeToken(listingId)}`;
 
   return `<!DOCTYPE html>
 <html>
@@ -175,7 +183,7 @@ async function main() {
       listing.id
     );
 
-    const unsubscribeUrl = `${BASE_URL}/api/unsubscribe?id=${listing.id}&token=${Buffer.from(String(listing.id) + ":unsub").toString("base64")}`;
+    const unsubscribeUrl = `${BASE_URL}/api/unsubscribe?id=${listing.id}&token=${generateUnsubscribeToken(listing.id)}`;
 
     try {
       const { error } = await resend!.emails.send({
