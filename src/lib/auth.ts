@@ -11,6 +11,7 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
   .filter(Boolean);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       credentials: {
@@ -18,20 +19,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        try {
+          if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
-        });
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email as string },
+          });
 
-        if (!user) return null;
+          if (!user) return null;
 
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.passwordHash
-        );
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.passwordHash
+          );
 
-        if (!isValid) return null;
+          if (!isValid) return null;
 
         // Auto-promote hardcoded admin emails on login
         const isHardcodedAdmin = ADMIN_EMAILS.includes(user.email.toLowerCase());
@@ -50,6 +52,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           role: user.role,
           plan: user.plan,
         };
+        } catch (err) {
+          console.error("authorize error:", err);
+          return null;
+        }
       },
     }),
   ],
