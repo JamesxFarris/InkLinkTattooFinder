@@ -255,28 +255,81 @@ export default async function HomePage() {
 
       {/* CTA Section */}
       <section className="bg-stone-900">
-        <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
-          <h2 className="font-display text-3xl font-bold text-white">
-            Own a tattoo shop?
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-stone-400">
-            Join {shopCount} shops already listed on InkLink. Claim your listing,
-            update your info, and reach thousands of people looking for their
-            next tattoo artist.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/for-shop-owners"
-              className="inline-flex rounded-full bg-teal-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:bg-teal-600 hover:shadow-xl hover:shadow-teal-500/30"
-            >
-              Claim Your Shop
-            </Link>
-            <Link
-              href="/list-your-shop"
-              className="inline-flex rounded-full border border-stone-600 px-8 py-3.5 text-sm font-semibold text-stone-300 transition-all hover:border-stone-500 hover:text-white"
-            >
-              Add a New Listing
-            </Link>
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16 lg:items-center">
+            {/* Free / Claim side */}
+            <div>
+              <h2 className="font-display text-3xl font-bold text-white">
+                Own a tattoo shop?
+              </h2>
+              <p className="mt-4 text-lg text-stone-400">
+                Join {shopCount} shops already listed on InkLink. Claim your listing,
+                update your info, and reach thousands of people looking for their
+                next tattoo artist — for free.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/for-shop-owners"
+                  className="inline-flex rounded-full bg-teal-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/25 transition-all hover:bg-teal-600 hover:shadow-xl hover:shadow-teal-500/30"
+                >
+                  Claim Your Shop Free
+                </Link>
+                <Link
+                  href="/list-your-shop"
+                  className="inline-flex rounded-full border border-stone-600 px-8 py-3.5 text-sm font-semibold text-stone-300 transition-all hover:border-stone-500 hover:text-white"
+                >
+                  Add a New Listing
+                </Link>
+              </div>
+            </div>
+
+            {/* Premium upsell side */}
+            <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl text-amber-400">&#9733;</span>
+                <span className="text-sm font-semibold uppercase tracking-wider text-amber-400">
+                  Featured Listing
+                </span>
+              </div>
+              <h3 className="mt-3 text-xl font-bold text-white">
+                Get seen before your competitors
+              </h3>
+              <p className="mt-2 text-stone-300">
+                Featured shops appear at the top of every city and state search page — the first listings visitors see when looking for a tattoo artist near them.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-stone-300">
+                <li className="flex items-center gap-2">
+                  <svg className="h-4 w-4 shrink-0 text-amber-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  Top placement in all city &amp; state searches
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="h-4 w-4 shrink-0 text-amber-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  Amber Featured badge on your listing
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="h-4 w-4 shrink-0 text-amber-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  Custom call-to-action button for bookings
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="h-4 w-4 shrink-0 text-amber-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  Upload up to 24 portfolio photos
+                </li>
+              </ul>
+              <Link
+                href="/for-shop-owners"
+                className="mt-5 inline-flex items-center rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-500/25 transition-all hover:bg-amber-600 hover:shadow-xl"
+              >
+                Upgrade to Featured — $19/mo &rarr;
+              </Link>
+            </div>
           </div>
         </div>
       </section>

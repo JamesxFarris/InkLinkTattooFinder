@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { CityCard } from "./CityCard";
 import { ListingCard } from "./ListingCard";
 import type { CityWithCount, ListingWithRelations } from "@/types";
@@ -12,6 +13,8 @@ type Props = {
   smallCities: CityWithCount[];
   listingsByCityId: Record<number, ListingWithRelations[]>;
   stateName: string;
+  stateSlug: string;
+  featuredListings?: ListingWithRelations[];
 };
 
 export function StatePageClient({
@@ -19,6 +22,8 @@ export function StatePageClient({
   smallCities,
   listingsByCityId,
   stateName,
+  stateSlug,
+  featuredListings = [],
 }: Props) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortMode>("alpha");
@@ -115,6 +120,36 @@ export function StatePageClient({
 
   return (
     <>
+      {/* Featured Shops in State */}
+      {featuredListings.length > 0 && (
+        <section className="mb-10">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
+                <span className="mr-2 text-amber-500">&#9733;</span>
+                Featured Shops in {stateName}
+              </h2>
+              <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
+                These shops have upgraded for top placement across {stateName}.
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredListings.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+          <div className="mt-4 text-sm">
+            <Link
+              href="/for-shop-owners"
+              className="text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+            >
+              Is your shop in {stateName}? Get featured above the rest &rarr;
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* Unified search + sort controls */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative">

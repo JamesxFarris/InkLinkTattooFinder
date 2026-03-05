@@ -9,7 +9,6 @@ import type { ListingWithRelations } from "@/types";
 
 export function OwnedListingCard({ listing, isPremium = false }: { listing: ListingWithRelations; isPremium?: boolean }) {
   const { score, missing } = getProfileCompleteness(listing);
-  const [showBadge, setShowBadge] = useState(false);
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -166,48 +165,56 @@ export function OwnedListingCard({ listing, isPremium = false }: { listing: List
 
       {/* Upgrade Prompt */}
       {!isPremium && (
-        <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50/50 px-3 py-2 dark:border-amber-800 dark:bg-amber-900/10">
-          <Link href="/dashboard/upgrade" className="flex items-center gap-2 text-xs font-medium text-amber-700 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300">
-            <span className="text-amber-500">&#9733;</span>
-            Upgrade to Premium for a featured badge &amp; priority placement in search results
-          </Link>
+        <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
+          <div className="flex items-start gap-3">
+            <span className="mt-0.5 text-xl text-amber-500">&#9733;</span>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+                Appear at the top of every city &amp; state search
+              </p>
+              <p className="mt-0.5 text-xs text-amber-700 dark:text-amber-400">
+                Featured shops are shown above all regular listings — get seen first by people looking for tattoos near you.
+              </p>
+              <Link
+                href="/dashboard/upgrade"
+                className="mt-2 inline-flex items-center rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-amber-600"
+              >
+                Upgrade to Premium — $19/mo &rarr;
+              </Link>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Badge Embed */}
-      <div className="mt-3 border-t border-stone-100 pt-3 dark:border-stone-700">
-        <button
-          onClick={() => setShowBadge(!showBadge)}
-          className="text-xs font-medium text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300"
-        >
-          {showBadge ? "Hide Badge" : "Get Badge"}
-        </button>
-        {showBadge && (
-          <div className="mt-3 space-y-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={badgeUrl}
-              alt="InkLink badge preview"
-              width={240}
-              height={52}
-              className="rounded"
-            />
-            <div className="relative">
-              <pre className="overflow-x-auto rounded-lg bg-stone-100 p-3 text-xs text-stone-700 dark:bg-stone-900 dark:text-stone-300">
-                {embedCode}
-              </pre>
-              <button
-                onClick={handleCopy}
-                className="absolute right-2 top-2 rounded bg-teal-500 px-2 py-1 text-xs font-medium text-white transition hover:bg-teal-600"
-              >
-                {copied ? "Copied!" : "Copy"}
-              </button>
-            </div>
-            <p className="text-xs text-stone-400 dark:text-stone-500">
-              Add this badge to your website to link back to your InkLink listing.
-            </p>
+      <div className="mt-4 rounded-xl border border-stone-200 bg-stone-50 p-4 dark:border-stone-700 dark:bg-stone-800/40">
+        <p className="text-xs font-semibold text-stone-700 dark:text-stone-300">
+          Add your InkLink badge to your website
+        </p>
+        <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+          Link visitors straight back to your listing and build credibility.
+        </p>
+        <div className="mt-3 space-y-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={badgeUrl}
+            alt="InkLink badge preview"
+            width={240}
+            height={52}
+            className="rounded"
+          />
+          <div className="relative">
+            <pre className="overflow-x-auto rounded-lg bg-stone-100 p-3 text-xs text-stone-700 dark:bg-stone-900 dark:text-stone-300">
+              {embedCode}
+            </pre>
+            <button
+              onClick={handleCopy}
+              className="absolute right-2 top-2 rounded bg-teal-500 px-2 py-1.5 text-xs font-semibold text-white transition hover:bg-teal-600"
+            >
+              {copied ? "Copied!" : "Copy Code"}
+            </button>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

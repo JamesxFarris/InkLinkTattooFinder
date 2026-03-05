@@ -18,6 +18,7 @@ import {
   getAllStates,
   getPopularCategoriesInState,
   getListingsForCities,
+  getFeaturedListingsForState,
 } from "@/lib/queries";
 import { statePageMeta, fullMeta } from "@/lib/seo";
 import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
@@ -38,11 +39,12 @@ export default async function StatePillarPage({ params }: Props) {
   const state = await getStateBySlug(stateSlug);
   if (!state) notFound();
 
-  const [cities, stats, allStates, popularCategories] = await Promise.all([
+  const [cities, stats, allStates, popularCategories, featuredListings] = await Promise.all([
     getCitiesByState(state.id),
     getStateStats(state.id),
     getAllStates(),
     getPopularCategoriesInState(state.id),
+    getFeaturedListingsForState(state.id),
   ]);
 
   // Split cities: big ones get their own pages, small ones are shown inline
@@ -118,6 +120,8 @@ export default async function StatePillarPage({ params }: Props) {
           smallCities={smallCities}
           listingsByCityId={listingsByCityId}
           stateName={state.name}
+          stateSlug={state.slug}
+          featuredListings={featuredListings}
         />
       </div>
 

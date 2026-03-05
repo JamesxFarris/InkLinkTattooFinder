@@ -200,7 +200,30 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
               <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
+          {/* Upsell slot after featured grid */}
+          <div className="mt-4">
+            <Link
+              href="/for-shop-owners"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 transition hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/30"
+            >
+              <span className="text-amber-500">&#9733;</span>
+              Want your shop to appear here? Upgrade to Featured — $19/mo &rarr;
+            </Link>
+          </div>
         </section>
+      )}
+
+      {/* Upsell slot when no featured shops exist */}
+      {featured.length === 0 && (
+        <div className="mt-10">
+          <Link
+            href="/for-shop-owners"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-amber-300 bg-amber-50/50 px-4 py-2.5 text-sm font-medium text-amber-700 transition hover:bg-amber-50 dark:border-amber-700 dark:bg-amber-900/10 dark:text-amber-400 dark:hover:bg-amber-900/20"
+          >
+            <span className="text-amber-500">&#9733;</span>
+            Be the first featured shop in {city.name} — $19/mo &rarr;
+          </Link>
+        </div>
       )}
 
       {/* All Listings with search */}

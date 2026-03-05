@@ -4,9 +4,24 @@ import { useState } from "react";
 
 const features = [
   { name: "Photos per listing", free: "12", premium: "24" },
-  { name: "Featured badge & placement", free: false, premium: true },
-  { name: "Custom CTA button", free: false, premium: true },
-  { name: "Priority in search results", free: false, premium: true },
+  {
+    name: "Top placement in city & state searches",
+    desc: "Appear above all regular listings — the first shops visitors see",
+    free: false,
+    premium: true,
+  },
+  {
+    name: "Amber Featured badge on your listing",
+    desc: "Stand out visually and signal quality to potential clients",
+    free: false,
+    premium: true,
+  },
+  {
+    name: "Custom call-to-action button",
+    desc: "Send clients straight to your booking page or contact form",
+    free: false,
+    premium: true,
+  },
 ];
 
 export function UpgradePage() {
@@ -43,6 +58,12 @@ export function UpgradePage() {
         </p>
       </div>
 
+      {/* Social proof callout */}
+      <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-800 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-300">
+        <span className="font-semibold">Featured shops appear at the top of every city and state page</span>
+        {" "}— get seen before your competitors.
+      </div>
+
       {/* Billing Toggle */}
       <div className="mt-8 flex items-center justify-center gap-3">
         <span
@@ -68,7 +89,7 @@ export function UpgradePage() {
         >
           Yearly
           <span className="ml-1.5 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-400">
-            Save 34%
+            Save 26%
           </span>
         </span>
       </div>
@@ -92,13 +113,13 @@ export function UpgradePage() {
           </div>
           <ul className="mt-6 space-y-3">
             {features.map((f) => (
-              <li key={f.name} className="flex items-center gap-3 text-sm">
+              <li key={f.name} className="flex items-start gap-3 text-sm">
                 {f.free === false ? (
-                  <svg className="h-4 w-4 shrink-0 text-stone-300 dark:text-stone-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <svg className="mt-0.5 h-4 w-4 shrink-0 text-stone-300 dark:text-stone-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 ) : (
-                  <svg className="h-4 w-4 shrink-0 text-green-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <svg className="mt-0.5 h-4 w-4 shrink-0 text-green-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
                 )}
@@ -125,12 +146,12 @@ export function UpgradePage() {
             Premium
           </h2>
           <p className="mt-1 text-3xl font-bold text-stone-900 dark:text-stone-100">
-            ${yearly ? "19" : "29"}
+            ${yearly ? "14" : "19"}
             <span className="text-base font-normal text-stone-500">/mo</span>
           </p>
           {yearly && (
             <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
-              $228 billed yearly
+              $168 billed yearly
             </p>
           )}
           <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
@@ -143,17 +164,24 @@ export function UpgradePage() {
           >
             {loading ? "Redirecting..." : "Upgrade to Premium"}
           </button>
-          <ul className="mt-6 space-y-3">
+          <ul className="mt-6 space-y-4">
             {features.map((f) => (
-              <li key={f.name} className="flex items-center gap-3 text-sm">
-                <svg className="h-4 w-4 shrink-0 text-amber-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <li key={f.name} className="flex items-start gap-3 text-sm">
+                <svg className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span className="text-stone-700 dark:text-stone-300">
-                  {f.name}
-                  {typeof f.premium === "string" && (
-                    <span className="ml-1 font-semibold text-amber-600 dark:text-amber-400">
-                      ({f.premium})
+                <span>
+                  <span className="font-medium text-stone-700 dark:text-stone-300">
+                    {f.name}
+                    {typeof f.premium === "string" && (
+                      <span className="ml-1 font-semibold text-amber-600 dark:text-amber-400">
+                        ({f.premium})
+                      </span>
+                    )}
+                  </span>
+                  {"desc" in f && f.desc && (
+                    <span className="mt-0.5 block text-xs text-stone-500 dark:text-stone-400">
+                      {f.desc}
                     </span>
                   )}
                 </span>

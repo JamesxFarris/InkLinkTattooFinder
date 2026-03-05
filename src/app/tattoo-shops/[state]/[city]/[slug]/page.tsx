@@ -157,16 +157,29 @@ export default async function ListingPage({ params }: Props) {
         ]}
       />
 
-      {!listing.ownerId && (
+      {!listing.ownerId ? (
         <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/50 dark:bg-amber-900/20">
           <p className="text-sm text-amber-800 dark:text-amber-300">
             This listing has not been claimed by the owner. Information shown is based on publicly available data and may not be current.{" "}
             <Link href="/for-shop-owners" className="font-semibold underline hover:text-amber-900 dark:hover:text-amber-200">
-              Own this shop? Claim your listing for free.
+              Own this shop? Claim free
+            </Link>
+            {" "}or{" "}
+            <Link href="/for-shop-owners" className="font-semibold underline hover:text-amber-900 dark:hover:text-amber-200">
+              upgrade to Featured for top placement — $19/mo &rarr;
             </Link>
           </p>
         </div>
-      )}
+      ) : !listing.featured && !isOwned ? (
+        <div className="mb-6 rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 dark:border-stone-700 dark:bg-stone-800/40">
+          <p className="text-sm text-stone-600 dark:text-stone-400">
+            <span className="text-amber-500">&#9733;</span>{" "}
+            <Link href="/for-shop-owners" className="font-semibold text-amber-700 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300">
+              Is this your shop? Get a Featured listing and appear at the top of city searches — $19/mo &rarr;
+            </Link>
+          </p>
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Main Content */}

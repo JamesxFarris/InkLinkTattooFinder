@@ -662,6 +662,20 @@ export async function getListingsForCities(cityIds: number[]) {
   });
 }
 
+/** Fetch up to 6 featured listings across all cities in a state (for state page hero section). */
+export async function getFeaturedListingsForState(stateId: number) {
+  return prisma.listing.findMany({
+    where: { city: { stateId }, featured: true, status: "active" },
+    orderBy: [{ googleRating: "desc" }, { name: "asc" }],
+    take: 6,
+    include: {
+      city: { include: { state: true } },
+      state: true,
+      categories: { include: { category: true } },
+    },
+  });
+}
+
 // ── Proximity / Zip Code Search ──────────────────────────
 
 /**
