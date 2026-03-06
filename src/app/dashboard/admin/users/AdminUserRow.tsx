@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { changeUserRole, adminDeleteUser } from "../actions";
+import { changeUserRole, adminDeleteUser, adminResetPassword } from "../actions";
 
 type AdminUserRowProps = {
   user: {
@@ -18,6 +18,7 @@ type AdminUserRowProps = {
 
 export function AdminUserRow({ user, isSelf }: AdminUserRowProps) {
   const [loading, setLoading] = useState(false);
+  const [tempPassword, setTempPassword] = useState<string | null>(null);
 
   async function handleRoleChange() {
     const newRole = user.role === "admin" ? "owner" : "admin";
@@ -25,6 +26,18 @@ export function AdminUserRow({ user, isSelf }: AdminUserRowProps) {
     setLoading(true);
     await changeUserRole(user.id, newRole);
     setLoading(false);
+  }
+
+  async function handleResetPassword() {
+    if (!confirm(`Reset password for ${user.name} (${user.email})? A temporary password will be generated.`)) return;
+    setLoading(true);
+    const result = await adminResetPassword(user.id);
+    setLoading(false);
+    if (result.success && result.tempPassword) {
+      setTempPassword(result.tempPassword);
+    } else {
+      alert(result.error || "Failed to reset password");
+    }
   }
 
   async function handleDelete() {
@@ -69,6 +82,13 @@ export function AdminUserRow({ user, isSelf }: AdminUserRowProps) {
         {!isSelf && (
           <div className="flex items-center gap-2">
             <button
+              onClick={handleResetPassword}
+              disabled={loading}
+              className="rounded-lg bg-amber-600/20 px-3 py-1.5 text-xs font-medium text-amber-400 transition hover:bg-amber-600/30 disabled:opacity-50"
+            >
+              Reset Password
+            </button>
+            <button
               onClick={handleRoleChange}
               disabled={loading}
               className="rounded-lg bg-teal-600/20 px-3 py-1.5 text-xs font-medium text-teal-400 transition hover:bg-teal-600/30 disabled:opacity-50"
@@ -85,6 +105,30 @@ export function AdminUserRow({ user, isSelf }: AdminUserRowProps) {
           </div>
         )}
       </div>
+
+      {tempPassword && (
+        <div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+          <p className="text-sm text-amber-300">
+            Temporary password for <strong>{user.email}</strong>:
+          </p>
+          <div className="mt-1 flex items-center gap-2">
+            <code className="rounded bg-stone-800 px-2 py-1 text-sm font-mono text-amber-200">
+              {tempPassword}
+            </code>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(tempPassword);
+              }}
+              className="rounded bg-amber-600/30 px-2 py-1 text-xs text-amber-300 hover:bg-amber-600/40"
+            >
+              Copy
+            </button>
+          </div>
+          <p className="mt-1 text-xs text-amber-400/70">
+            Send this to the user and ask them to change it after logging in.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

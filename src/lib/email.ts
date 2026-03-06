@@ -147,6 +147,80 @@ export async function sendClaimApprovedEmail({
   return { success: true as const };
 }
 
+export async function sendPasswordResetEmail({
+  userEmail,
+  userName,
+  resetUrl,
+}: {
+  userEmail: string;
+  userName: string;
+  resetUrl: string;
+}) {
+  if (!resend) {
+    console.log(`[email skip] Password reset email for ${userEmail} — Resend not configured`);
+    return { success: false as const, error: "Email service not configured" };
+  }
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:8px;overflow:hidden;margin-top:20px;margin-bottom:20px;">
+    <tr>
+      <td style="background:#1a1a2e;padding:24px 32px;">
+        <h1 style="margin:0;color:#ffffff;font-size:22px;">InkLink Tattoo Finder</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:32px;">
+        <h2 style="margin:0 0 16px;color:#1a1a2e;font-size:20px;">Reset Your Password</h2>
+        <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 16px;">
+          Hey ${userName}, we received a request to reset your password. Click the button below to choose a new one.
+        </p>
+        <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+          <tr>
+            <td style="background:#14b8a6;border-radius:6px;">
+              <a href="${resetUrl}" style="display:inline-block;padding:14px 28px;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;">
+                Reset Password
+              </a>
+            </td>
+          </tr>
+        </table>
+        <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:0 0 8px;">
+          This link expires in 1 hour. If you didn't request this, you can safely ignore this email.
+        </p>
+        <p style="color:#9ca3af;font-size:12px;line-height:1.5;margin:16px 0 0;">
+          If the button doesn't work, copy and paste this URL into your browser:<br/>
+          <a href="${resetUrl}" style="color:#14b8a6;word-break:break-all;">${resetUrl}</a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background:#f3f4f6;padding:16px 32px;text-align:center;">
+        <p style="color:#9ca3af;font-size:12px;margin:0;">
+          <a href="https://inklinktattoofinder.com" style="color:#9ca3af;">inklinktattoofinder.com</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  const { error } = await resend.emails.send({
+    from: "InkLink Tattoo Finder <hello@inklinktattoofinder.com>",
+    to: userEmail,
+    subject: "Reset your InkLink password",
+    html,
+  });
+
+  if (error) {
+    console.error(`[email error] Password reset email for ${userEmail}: ${error.message}`);
+    return { success: false as const, error: error.message };
+  }
+
+  return { success: true as const };
+}
+
 const ADMIN_EMAIL = "inklinktattoofinder@gmail.com";
 
 export async function notifyAdmin(subject: string, body: string) {
