@@ -149,7 +149,7 @@ export default async function ForShopOwnersPage() {
             },
             {
               q: "What does Premium include?",
-              a: "Premium ($29/mo or $19/mo billed yearly) gives you up to 20 photos, an \"Open Now\" badge, view-count analytics on your dashboard, and priority placement in search results.",
+              a: "Premium ($14/mo or $9/mo billed yearly) gives you up to 24 photos, an \"Open Now\" badge, view-count analytics on your dashboard, and priority placement in search results.",
             },
           ].map((faq) => (
             <div key={faq.q}>

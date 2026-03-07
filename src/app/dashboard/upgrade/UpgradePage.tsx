@@ -68,7 +68,7 @@ export function UpgradePage() {
         >
           Yearly
           <span className="ml-1.5 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-900/40 dark:text-green-400">
-            Save 34%
+            Save 36%
           </span>
         </span>
       </div>
@@ -125,12 +125,12 @@ export function UpgradePage() {
             Premium
           </h2>
           <p className="mt-1 text-3xl font-bold text-stone-900 dark:text-stone-100">
-            ${yearly ? "19" : "29"}
+            ${yearly ? "9" : "14"}
             <span className="text-base font-normal text-stone-500">/mo</span>
           </p>
           {yearly && (
             <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
-              $228 billed yearly
+              $108 billed yearly
             </p>
           )}
           <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
