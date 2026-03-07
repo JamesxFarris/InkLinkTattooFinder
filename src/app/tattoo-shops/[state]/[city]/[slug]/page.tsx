@@ -497,6 +497,30 @@ export default async function ListingPage({ params }: Props) {
             isOwned={isOwned}
           />
 
+          {/* Premium CTA for shop owners */}
+          {!listing.featured && (
+            <div className="rounded-xl border-2 border-amber-300/60 bg-gradient-to-br from-amber-50 via-white to-amber-50/30 p-5 dark:border-amber-700/40 dark:from-amber-950/20 dark:via-stone-900 dark:to-amber-950/10">
+              <div className="flex items-center gap-2">
+                <span className="text-lg text-amber-500">&#9733;</span>
+                <h2 className="font-semibold text-stone-900 dark:text-stone-100">
+                  Own this shop?
+                </h2>
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+                Get a <strong className="text-amber-600 dark:text-amber-400">Featured</strong> badge, priority placement in search, 24 photos, and view analytics starting at <strong>$14/mo</strong>.
+              </p>
+              <Link
+                href="/for-shop-owners"
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+              >
+                Boost Your Listing
+              </Link>
+              <p className="mt-2 text-center text-xs text-stone-400 dark:text-stone-500">
+                Free to claim. Premium is optional.
+              </p>
+            </div>
+          )}
+
           {/* Hours */}
           {hours && (
             <div className="rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">

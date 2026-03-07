@@ -82,19 +82,24 @@ export default async function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-stone-200 bg-white p-5 dark:border-stone-700 dark:bg-stone-900">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="rounded-2xl border-2 border-amber-200 bg-gradient-to-r from-amber-50 via-white to-amber-50/30 p-5 dark:border-amber-800/50 dark:from-amber-950/20 dark:via-stone-900 dark:to-amber-950/10">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <span className="font-semibold text-stone-900 dark:text-stone-100">Free Plan</span>
-                  <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-                    Upgrade for a featured badge &amp; priority placement in search results.
+                  <div className="flex items-center gap-2">
+                    <span className="text-amber-500">&#9733;</span>
+                    <span className="font-semibold text-stone-900 dark:text-stone-100">Upgrade to Premium</span>
+                    <span className="rounded-full bg-amber-500 px-2 py-0.5 text-xs font-semibold text-white">$14/mo</span>
+                  </div>
+                  <p className="mt-1.5 text-sm text-stone-600 dark:text-stone-400">
+                    Get a featured badge, priority placement in search results, 24 photos, and view analytics.
+                    Shops with Premium get significantly more visibility.
                   </p>
                 </div>
                 <Link
                   href="/dashboard/upgrade"
-                  className="shrink-0 rounded-lg bg-amber-500 px-4 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+                  className="shrink-0 rounded-lg bg-amber-500 px-5 py-2.5 text-center text-sm font-semibold text-white shadow-sm shadow-amber-500/25 transition-all hover:bg-amber-600 hover:shadow-md hover:shadow-amber-500/30"
                 >
-                  Upgrade to Premium
+                  Upgrade Now
                 </Link>
               </div>
             </div>
