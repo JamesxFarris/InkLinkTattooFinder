@@ -8,7 +8,7 @@ const baseUrl = "https://inklinktattoofinder.com";
 const URLS_PER_SITEMAP = 2000;
 
 // Fallback sitemap IDs used when DB is unreachable at build time
-const FALLBACK_SITEMAPS = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
+const FALLBACK_SITEMAPS = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }];
 
 // id 0 = static + states + cities (above threshold) + categories + blog
 // id 1..N = listing chunks (2000 each)
