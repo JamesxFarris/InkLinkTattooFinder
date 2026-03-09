@@ -274,7 +274,11 @@ export async function searchListings(params: {
     where.acceptsWalkIns = true;
   }
 
-  let orderBy: Record<string, string>[] = [{ featured: "desc" }, { googleRating: "desc" }];
+  let orderBy: Record<string, unknown>[] = [
+    { featured: "desc" },
+    { ownerId: { sort: "desc", nulls: "last" } },
+    { googleRating: "desc" },
+  ];
   if (sort === "name") orderBy = [{ name: "asc" }];
   if (sort === "rating") orderBy = [{ googleRating: "desc" }];
   if (sort === "newest") orderBy = [{ createdAt: "desc" }];
