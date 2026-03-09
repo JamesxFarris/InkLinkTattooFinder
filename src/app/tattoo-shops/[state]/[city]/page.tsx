@@ -26,6 +26,7 @@ import {
 } from "@/lib/queries";
 import { cityPageMeta, fullMeta } from "@/lib/seo";
 import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
+import { CITY_INTROS } from "@/lib/city-intros";
 import type { Metadata } from "next";
 
 type Props = {
@@ -159,6 +160,13 @@ export default async function CityPillarPage({ params, searchParams }: Props) {
           ]}
         />
       </div>
+
+      {/* City SEO intro */}
+      {CITY_INTROS[citySlug] && (
+        <p className="mt-6 max-w-3xl text-stone-600 dark:text-stone-400 leading-relaxed">
+          {CITY_INTROS[citySlug]}
+        </p>
+      )}
 
       {/* Style filter */}
       {categories.length > 0 && (
