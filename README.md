@@ -6,9 +6,6 @@ InkLink Tattoo Finder is a modern tattoo shop directory that helps customers dis
 
 [Visit the live site](https://inklinktattoofinder.com)
 
-<!-- Replace the placeholder below with an actual screenshot -->
-![InkLink Homepage](docs/screenshot.png)
-
 ## What It Does
 
 **For customers:**
