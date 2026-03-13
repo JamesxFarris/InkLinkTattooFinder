@@ -493,6 +493,9 @@ export default async function ListingPage({ params }: Props) {
           {/* Claim this Business */}
           <ClaimButton
             listingId={listing.id}
+            listingSlug={listing.slug}
+            citySlug={citySlug}
+            stateSlug={stateSlug}
             existingClaimStatus={existingClaimStatus}
             isOwned={isOwned}
           />
