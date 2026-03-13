@@ -161,9 +161,18 @@ export default async function ListingPage({ params }: Props) {
         <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/50 dark:bg-amber-900/20">
           <p className="text-sm text-amber-800 dark:text-amber-300">
             This listing has not been claimed by the owner. Information shown is based on publicly available data and may not be current.{" "}
-            <Link href="/for-shop-owners" className="font-semibold underline hover:text-amber-900 dark:hover:text-amber-200">
-              Own this shop? Claim your listing for free.
-            </Link>
+            {session ? (
+              <a href="#claim" className="font-semibold underline hover:text-amber-900 dark:hover:text-amber-200">
+                Own this shop? Claim your listing for free.
+              </a>
+            ) : (
+              <Link
+                href={`/register?callbackUrl=/tattoo-shops/${stateSlug}/${citySlug}/${listing.slug}`}
+                className="font-semibold underline hover:text-amber-900 dark:hover:text-amber-200"
+              >
+                Own this shop? Claim your listing for free.
+              </Link>
+            )}
           </p>
         </div>
       )}
@@ -491,22 +500,24 @@ export default async function ListingPage({ params }: Props) {
           </div>
 
           {/* Claim this Business */}
-          <ClaimButton
-            listingId={listing.id}
-            listingSlug={listing.slug}
-            citySlug={citySlug}
-            stateSlug={stateSlug}
-            existingClaimStatus={existingClaimStatus}
-            isOwned={isOwned}
-          />
+          <div id="claim">
+            <ClaimButton
+              listingId={listing.id}
+              listingSlug={listing.slug}
+              citySlug={citySlug}
+              stateSlug={stateSlug}
+              existingClaimStatus={existingClaimStatus}
+              isOwned={isOwned}
+            />
+          </div>
 
-          {/* Premium CTA for shop owners */}
-          {!listing.featured && (
+          {/* Premium upsell — only shown to the verified owner of this listing */}
+          {isOwned && !listing.featured && (
             <div className="rounded-xl border-2 border-amber-300/60 bg-gradient-to-br from-amber-50 via-white to-amber-50/30 p-5 dark:border-amber-700/40 dark:from-amber-950/20 dark:via-stone-900 dark:to-amber-950/10">
               <div className="flex items-center gap-2">
                 <span className="text-lg text-amber-500">&#9733;</span>
                 <h2 className="font-semibold text-stone-900 dark:text-stone-100">
-                  Own this shop?
+                  Boost your listing
                 </h2>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
@@ -519,7 +530,7 @@ export default async function ListingPage({ params }: Props) {
                 Boost Your Listing
               </Link>
               <p className="mt-2 text-center text-xs text-stone-400 dark:text-stone-500">
-                Free to claim. Premium is optional.
+                Cancel anytime. No long-term contracts.
               </p>
             </div>
           )}
