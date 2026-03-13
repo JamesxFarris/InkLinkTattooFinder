@@ -272,34 +272,35 @@ export function StatePageClient({
                   className="scroll-mt-24"
                 >
                   <div className="flex w-full items-center justify-between transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/60">
-                    <button
-                      onClick={() => toggleCity(city.id)}
-                      className="flex flex-1 items-center gap-3 px-4 py-3 text-left"
-                      aria-expanded={expanded}
-                    >
-                      <svg
-                        className={`h-4 w-4 flex-shrink-0 text-stone-400 transition-transform duration-200 ${
-                          expanded ? "rotate-90" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    <div className="flex flex-1 items-center gap-3 px-4 py-3">
+                      <button
+                        onClick={() => toggleCity(city.id)}
+                        aria-expanded={expanded}
+                        className="flex items-center gap-3 text-left"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
+                        <svg
+                          className={`h-4 w-4 flex-shrink-0 text-stone-400 transition-transform duration-200 ${
+                            expanded ? "rotate-90" : ""
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </button>
                       <Link
                         href={`/tattoo-shops/${city.state.slug}/${city.slug}`}
-                        onClick={(e) => e.stopPropagation()}
                         className="font-medium text-stone-800 hover:text-teal-600 hover:underline dark:text-stone-200 dark:hover:text-teal-400"
                       >
                         {city.name}
                       </Link>
-                    </button>
+                    </div>
                     <span className="px-4 text-sm text-stone-500 dark:text-stone-400">
                       {listings.length}{" "}
                       {listings.length === 1 ? "shop" : "shops"}

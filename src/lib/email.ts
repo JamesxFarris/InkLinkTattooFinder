@@ -1,10 +1,4 @@
 import { Resend } from "resend";
-import { createHmac } from "crypto";
-
-function makeUnsubscribeToken(listingId: number): string {
-  const secret = process.env.AUTH_SECRET ?? "";
-  return createHmac("sha256", secret).update(String(listingId)).digest("hex");
-}
 
 const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
@@ -227,95 +221,6 @@ export async function sendPasswordResetEmail({
   return { success: true as const };
 }
 
-export async function sendOutreachEmail({
-  listingId,
-  listingName,
-  listingSlug,
-  cityName,
-  stateSlug,
-  citySlug,
-  shopEmail,
-}: {
-  listingId: number;
-  listingName: string;
-  listingSlug: string;
-  cityName: string;
-  stateSlug: string;
-  citySlug: string;
-  shopEmail: string;
-}) {
-  if (!resend) {
-    console.log(`[email skip] Outreach email for ${listingName} — Resend not configured`);
-    return { success: false as const, error: "Email service not configured" };
-  }
-
-  const baseUrl = process.env.AUTH_URL ?? "https://inklinktattoofinder.com";
-  const listingUrl = `${baseUrl}/tattoo-shops/${stateSlug}/${citySlug}/${listingSlug}`;
-  const claimUrl = `${listingUrl}#claim`;
-  const unsubscribeUrl = `${baseUrl}/api/unsubscribe?id=${listingId}&token=${makeUnsubscribeToken(listingId)}`;
-
-  const html = `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f9fafb;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:8px;overflow:hidden;margin-top:20px;margin-bottom:20px;">
-    <tr>
-      <td style="background:#1a1a2e;padding:20px 28px;">
-        <span style="color:#ffffff;font-size:18px;font-weight:600;">InkLink Tattoo Finder</span>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding:28px;">
-        <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 16px;">
-          Hey ${listingName},
-        </p>
-        <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 16px;">
-          Just wanted to let you know your shop has a listing on <a href="${baseUrl}" style="color:#14b8a6;text-decoration:underline;">InkLink Tattoo Finder</a> — people in ${cityName} are already finding you through it.
-        </p>
-        <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 24px;">
-          The info we have is pulled from public sources so it might be a bit off. If you want to update your hours, photos, or contact info it's free to claim.
-        </p>
-        <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-          <tr>
-            <td style="background:#14b8a6;border-radius:6px;">
-              <a href="${claimUrl}" style="display:inline-block;padding:12px 24px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:600;">
-                View &amp; Claim Your Listing
-              </a>
-            </td>
-          </tr>
-        </table>
-        <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:0;">
-          — The InkLink Team
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td style="background:#f3f4f6;padding:14px 28px;text-align:center;">
-        <p style="color:#9ca3af;font-size:11px;margin:0;">
-          <a href="${listingUrl}" style="color:#9ca3af;">${listingName} on InkLink</a>
-          &nbsp;·&nbsp;
-          <a href="${unsubscribeUrl}" style="color:#9ca3af;">Unsubscribe</a>
-        </p>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
-
-  const { error } = await resend.emails.send({
-    from: "InkLink Tattoo Finder <hello@inklinktattoofinder.com>",
-    to: shopEmail,
-    subject: `Your shop is on InkLink Tattoo Finder`,
-    html,
-  });
-
-  if (error) {
-    console.error(`[email error] Outreach email for ${listingName}: ${error.message}`);
-    return { success: false as const, error: error.message };
-  }
-
-  return { success: true as const };
-}
 
 const ADMIN_EMAIL = "inklinktattoofinder@gmail.com";
 
