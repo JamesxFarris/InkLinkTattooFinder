@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { CityCard } from "./CityCard";
 import { ListingCard } from "./ListingCard";
 import type { CityWithCount, ListingWithRelations } from "@/types";
@@ -270,11 +271,12 @@ export function StatePageClient({
                   id={anchorId}
                   className="scroll-mt-24"
                 >
-                  <button
-                    onClick={() => toggleCity(city.id)}
-                    className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/60"
-                  >
-                    <div className="flex items-center gap-3">
+                  <div className="flex w-full items-center justify-between transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/60">
+                    <button
+                      onClick={() => toggleCity(city.id)}
+                      className="flex flex-1 items-center gap-3 px-4 py-3 text-left"
+                      aria-expanded={expanded}
+                    >
                       <svg
                         className={`h-4 w-4 flex-shrink-0 text-stone-400 transition-transform duration-200 ${
                           expanded ? "rotate-90" : ""
@@ -290,15 +292,19 @@ export function StatePageClient({
                           d="M9 5l7 7-7 7"
                         />
                       </svg>
-                      <span className="font-medium text-stone-800 dark:text-stone-200">
+                      <Link
+                        href={`/tattoo-shops/${city.state.slug}/${city.slug}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="font-medium text-stone-800 hover:text-teal-600 hover:underline dark:text-stone-200 dark:hover:text-teal-400"
+                      >
                         {city.name}
-                      </span>
-                    </div>
-                    <span className="text-sm text-stone-500 dark:text-stone-400">
+                      </Link>
+                    </button>
+                    <span className="px-4 text-sm text-stone-500 dark:text-stone-400">
                       {listings.length}{" "}
                       {listings.length === 1 ? "shop" : "shops"}
                     </span>
-                  </button>
+                  </div>
                   {expanded && listings.length > 0 && (
                     <div className="border-t border-stone-100 bg-stone-50/50 px-4 py-4 dark:border-stone-800 dark:bg-stone-900/30">
                       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
