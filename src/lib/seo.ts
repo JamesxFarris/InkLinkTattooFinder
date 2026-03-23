@@ -86,7 +86,8 @@ export function cityCategoryPageMeta(
 export function listingPageMeta(
   listingName: string,
   cityName: string,
-  stateAbbr: string
+  stateAbbr: string,
+  opts?: { styles?: string[]; acceptsWalkIns?: boolean }
 ) {
   const suffix = ` — ${cityName}, ${stateAbbr}`;
   const maxNameLen = MAX_TITLE_LEN - suffix.length;
@@ -94,7 +95,15 @@ export function listingPageMeta(
     listingName.length > maxNameLen
       ? listingName.slice(0, maxNameLen - 1).trimEnd() + "\u2026"
       : listingName;
-  const desc = `${listingName} is a tattoo shop in ${cityName}, ${stateAbbr}. View portfolio, hours, pricing, walk-in availability, and contact information on InkLink.`;
+
+  const styleList = opts?.styles?.slice(0, 2);
+  const shopDesc =
+    styleList && styleList.length > 0
+      ? `specializes in ${styleList.join(" & ").toLowerCase()} tattoos`
+      : "is a tattoo shop";
+  const walkIn = opts?.acceptsWalkIns ? " Walk-ins welcome." : "";
+  const desc = `${listingName} ${shopDesc} in ${cityName}, ${stateAbbr}.${walkIn} View portfolio, hours, and contact info on InkLink.`;
+
   return {
     title: `${name}${suffix}`,
     description: desc.length > 160 ? desc.slice(0, 157) + "..." : desc,

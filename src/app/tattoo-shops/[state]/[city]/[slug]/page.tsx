@@ -32,7 +32,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const meta = listingPageMeta(
     listing.name,
     listing.city.name,
-    listing.city.state.abbreviation
+    listing.city.state.abbreviation,
+    {
+      styles: listing.categories.map((c) => c.category.name),
+      acceptsWalkIns: listing.acceptsWalkIns,
+    }
   );
   const photos = listing.photos as string[] | null;
   const ogImage = photos?.[0] ? ensureHttps(photos[0]) : undefined;
