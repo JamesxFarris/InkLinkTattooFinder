@@ -94,8 +94,14 @@ export async function PATCH(request: Request, context: RouteContext) {
 
       return NextResponse.json(updatedClaim);
     } else {
-      // Deny: update claim + clear listing owner if this claim had set it
-      const [updatedClaim] = await prisma.$transaction([
+      // Deny: update claim + clear listing owner only if this claimant was the owner
+      const listingForDeny = await prisma.listing.findUnique({
+        where: { id: claim.listingId },
+        select: { ownerId: true },
+      });
+      const claimantIsOwner = listingForDeny?.ownerId === claim.userId;
+
+      const denyOps: Parameters<typeof prisma.$transaction>[0] = [
         prisma.claim.update({
           where: { id: claimId },
           data: {
@@ -104,11 +110,16 @@ export async function PATCH(request: Request, context: RouteContext) {
             reviewedAt: new Date(),
           },
         }),
-        prisma.listing.update({
-          where: { id: claim.listingId },
-          data: { ownerId: null },
-        }),
-      ]);
+      ];
+      if (claimantIsOwner) {
+        denyOps.push(
+          prisma.listing.update({
+            where: { id: claim.listingId },
+            data: { ownerId: null },
+          })
+        );
+      }
+      const [updatedClaim] = await prisma.$transaction(denyOps);
       await auditLog({
         userId: parseInt(session.user.id),
         action: "claim.deny",
