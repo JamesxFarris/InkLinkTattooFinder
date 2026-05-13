@@ -1,65 +1,71 @@
 # InkLink Tattoo Finder
 
-**Find the best tattoo shops near you.**
+A production SEO-driven directory of 3,000+ U.S. tattoo shops. Built solo with Next.js, TypeScript, and Prisma. Live, indexed, monetized.
 
-InkLink Tattoo Finder is a modern tattoo shop directory that helps customers discover top-rated shops in their area — and helps shop owners get found by more clients.
+🔗 **[inklinktattoofinder.com](https://inklinktattoofinder.com)**
 
-[Visit the live site](https://inklinktattoofinder.com)
+---
 
-## What It Does
+## Why this exists
 
-**For customers:**
-- Browse 3,000+ tattoo shops across the United States
-- Filter by city, state, ratings, and walk-in availability
-- See real Google ratings, hours, photos, and contact info
-- Know instantly if a shop is open right now
+Finding a tattoo shop is annoying. Google Maps shows you the closest one, not the best one. Instagram is a firehose. Yelp is paywalled noise. I wanted a directory that loaded fast, ranked organically, and let shop owners claim and upgrade their listings without a sales call.
 
-**For shop owners:**
-- Claim your listing for free and keep your info up to date
-- Upload photos of your best work
-- Add your artists, hours, and social links
-- Get a verified badge that builds trust with potential clients
-- Embed an InkLink badge on your website to showcase your rating
-- Upgrade to Premium for featured placement and priority in search results
+So I built one.
 
-## Features
+## What's actually interesting under the hood
 
-- Real-time "Open Now" badges using each shop's local time zone
-- Google Places integration for ratings, reviews, and hours
-- Duplicate detection when submitting new listings
-- Stripe-powered premium subscriptions
-- SEO-optimized pages with structured data and schema markup
-- Mobile-friendly responsive design
-- Admin dashboard for managing claims and listings
-- Email notifications for new claims and submissions
+This is a real product with real users, so most of the work isn't in the obvious places. A few things worth calling out:
 
-## Tech Stack
+**SEO as a system, not a sprinkle.** Every shop and city has a server-rendered page with schema.org `LocalBusiness` markup, dynamic Open Graph images, and a generated sitemap. Canonical URLs are normalized at the middleware layer because `www` vs non-`www` was splitting domain authority before I caught it. Pages are statically generated where possible and revalidated on write.
 
-- **Framework:** Next.js (App Router)
-- **Language:** TypeScript
-- **Database:** PostgreSQL with Prisma ORM
-- **Payments:** Stripe
-- **Email:** Resend
-- **Hosting:** Railway
-- **Image Storage:** Cloudinary
+**"Open now" without lying to the user.** Each shop stores its hours in its local timezone, so the "Open Now" badge is computed per-request against the shop's tz, not the visitor's. Sounds small until you realize a shop in Hawaii showing as closed at 2pm EST is a bug that kills trust.
 
-## Getting Started
+**Dedupe on submission.** When a shop owner submits a new listing, I run a fuzzy match (normalized name + geocoded address proximity) before letting it through. Stops the directory from filling up with "Bob's Tattoos" / "Bobs Tattoos LLC" / "Bob's Tattoo Shop" as three separate entries.
 
-1. Clone the repo
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Copy `.env.example` to `.env` and fill in your environment variables
-4. Set up the database:
-   ```bash
-   npx prisma migrate deploy
-   ```
-5. Run the dev server:
-   ```bash
-   npm run dev
-   ```
+**Stripe + claim flow.** Owners can claim a listing for free, then upgrade to Premium for featured placement. The claim flow has to handle verification, prevent claim-jacking, and gracefully recover from Stripe webhook failures. Premium status is derived from subscription state, not a manually-set boolean, so cancellations roll back placement automatically.
+
+**Embeddable badge.** Shops can drop a `<script>` snippet on their own site that renders their live InkLink rating. Cached aggressively, served from the edge.
+
+## Stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Framework | Next.js (App Router) | SSR + static generation for SEO, file-based routing, image optimization |
+| Language | TypeScript | Catches the bugs you'd otherwise find in production |
+| DB | PostgreSQL + Prisma | Relational data (shops → artists → claims), Prisma keeps migrations honest |
+| Payments | Stripe | Subscriptions, webhooks, customer portal |
+| Email | Resend | Transactional email for claims & notifications |
+| Media | Cloudinary | On-the-fly image transforms, signed uploads |
+| External data | Google Places API | Ratings, reviews, hours sync |
+| Hosting | Railway | Postgres + Node deploys, no infra yak-shaving |
+
+## What I'd do differently next time
+
+- **Pick the DB schema more carefully up front.** The shop/artist/claim relationship grew organically. There are migrations in this repo I'm not proud of.
+- **Add observability earlier.** I had to bolt on logging after a Stripe webhook silently failed. Lesson learned: instrument the boring stuff before you need it.
+- **Start with an admin panel, not a database GUI.** I spent too many evenings running raw SQL against prod to approve claims. The admin dashboard I built later took two days and would have saved twenty.
+
+## Status
+
+Live with organic traffic and paying users. Active development — claims flow, premium tier, and SEO surface area are the current focus.
+
+## Running locally
+
+```bash
+git clone https://github.com/JamesxFarris/InkLinkTattooFinder.git
+cd InkLinkTattooFinder
+npm install
+cp .env.example .env  # fill in Stripe, Resend, Cloudinary, Google Places, DB
+npx prisma migrate deploy
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
 
 ## License
 
-All rights reserved.
+All rights reserved. Code is public for portfolio purposes — please don't fork to clone the product.
+
+---
+
+Built by [James Farris](https://github.com/JamesxFarris) · [J2 Solutions](https://github.com/JamesxFarris)
