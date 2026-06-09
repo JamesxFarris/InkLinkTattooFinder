@@ -15,7 +15,11 @@
 
 import { PrismaClient } from "@prisma/client";
 
-const GOOGLE_API_KEY = process.env.GOOGLE_PLACES_API_KEY || "AIzaSyCqd3yqLOTM2BiuDoUno4LojWenn-pZS-U";
+const GOOGLE_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
+if (!GOOGLE_API_KEY) {
+  console.error("GOOGLE_PLACES_API_KEY is not set");
+  process.exit(1);
+}
 const BATCH_DELAY_MS = 100; // delay between API calls to avoid rate limits
 const CONCURRENCY = 5;
 

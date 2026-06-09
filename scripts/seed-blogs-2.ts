@@ -4,8 +4,11 @@
  */
 import { PrismaClient } from "@prisma/client";
 
-const DB =
-  "postgresql://postgres:Xw6L8ShlDMVDa62TdMKiogkxhNvKNCQO@switchyard.proxy.rlwy.net:19608/railway";
+const DB = process.env.DATABASE_URL;
+if (!DB) {
+  console.error("DATABASE_URL is not set");
+  process.exit(1);
+}
 
 const AUTHOR_ID = 5; // Jordan Lydia
 
