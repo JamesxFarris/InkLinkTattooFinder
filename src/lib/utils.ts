@@ -77,3 +77,7 @@ export const ITEMS_PER_PAGE = 12;
 /** Minimum active listings for a city to get its own dedicated page.
  *  Cities below this threshold have their shops shown inline on the state page. */
 export const CITY_PAGE_MIN_LISTINGS = 10;
+
+/** Minimum matching listings for a city+style page to be indexed and sitemapped.
+ *  Pages below this are still reachable (noindex, follow) but don't spend crawl budget. */
+export const STYLE_PAGE_MIN_LISTINGS = 3;

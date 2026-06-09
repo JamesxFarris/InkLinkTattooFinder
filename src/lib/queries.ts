@@ -209,6 +209,15 @@ export async function getListingsByCityAndCategory(
   return { listings, total, totalPages: Math.ceil(total / perPage) };
 }
 
+export async function countListingsByCityAndCategory(
+  cityId: number,
+  categoryId: number
+) {
+  return prisma.listing.count({
+    where: { cityId, status: "active", categories: { some: { categoryId } } },
+  });
+}
+
 export async function getFeaturedListings(limit = 6) {
   return prisma.listing.findMany({
     where: { status: "active", featured: true },

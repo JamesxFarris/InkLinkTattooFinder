@@ -16,9 +16,10 @@ import {
   getCategoriesForCity,
   getCategoryBySlug,
   getTopCitiesForCategory,
+  countListingsByCityAndCategory,
 } from "@/lib/queries";
 import { cityCategoryPageMeta, fullMeta } from "@/lib/seo";
-import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
+import { CITY_PAGE_MIN_LISTINGS, STYLE_PAGE_MIN_LISTINGS } from "@/lib/utils";
 import type { Metadata } from "next";
 
 type Props = {
@@ -37,6 +38,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const category = await getCategoryBySlug(styleSlug);
   if (!category) return {};
+
+  // Thin combos (e.g. "1 watercolor artist in Austin") stay reachable but
+  // shouldn't spend crawl budget — keep them out of the index.
+  const comboCount = await countListingsByCityAndCategory(city.id, category.id);
+  if (comboCount < STYLE_PAGE_MIN_LISTINGS) {
+    return { robots: { index: false, follow: true } };
+  }
 
   const meta = cityCategoryPageMeta(
     city.name,

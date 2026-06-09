@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
-import { CITY_PAGE_MIN_LISTINGS } from "@/lib/utils";
+import { CITY_PAGE_MIN_LISTINGS, STYLE_PAGE_MIN_LISTINGS } from "@/lib/utils";
 
 const baseUrl = "https://inklinktattoofinder.com";
 const URLS_PER_SITEMAP = 2000;
@@ -178,24 +178,25 @@ async function buildSitemap(props: { id: Promise<string> }): Promise<MetadataRou
     },
   });
 
-  // Deduplicate by city+category combo, only for qualifying cities
-  const comboSet = new Set<string>();
-  const allCombos: MetadataRoute.Sitemap = [];
+  // Count listings per city+category combo (qualifying cities only) and include
+  // only combos thick enough to be indexed — matches the noindex threshold on
+  // the style pages themselves.
+  const comboCounts = new Map<string, number>();
   for (const combo of cityCategoryCombos) {
     if (!qualifyingCityIds.has(combo.listing.cityId)) continue;
     const cityInfo = cityLookup.get(combo.listing.cityId);
     if (!cityInfo) continue;
     const key = `${cityInfo.stateSlug}/${cityInfo.slug}/style/${combo.category.slug}`;
-    if (!comboSet.has(key)) {
-      comboSet.add(key);
-      allCombos.push({
-        url: `${baseUrl}/tattoo-shops/${key}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
-      });
-    }
+    comboCounts.set(key, (comboCounts.get(key) ?? 0) + 1);
   }
+  const allCombos: MetadataRoute.Sitemap = [...comboCounts.entries()]
+    .filter(([, count]) => count >= STYLE_PAGE_MIN_LISTINGS)
+    .map(([key]) => ({
+      url: `${baseUrl}/tattoo-shops/${key}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }));
 
   const start = comboChunkIndex * URLS_PER_SITEMAP;
   return allCombos.slice(start, start + URLS_PER_SITEMAP);
