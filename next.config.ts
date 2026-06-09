@@ -39,25 +39,55 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
+    // Every top-level route must be listed here, or the legacy /:state redirects
+    // below will 308 it to /tattoo-shops/:page (this broke /blog, then the auth pages).
+    const reservedTopLevel = [
+      "tattoo-shops",
+      "listing",
+      "categories",
+      "search",
+      "about",
+      "contact",
+      "privacy",
+      "terms",
+      "dmca",
+      "styles",
+      "login",
+      "register",
+      "forgot-password",
+      "reset-password",
+      "verify-email",
+      "list-your-shop",
+      "for-shop-owners",
+      "tattoo-products",
+      "dashboard",
+      "admin",
+      "api",
+      "_next",
+      "sitemap",
+      "opengraph-image",
+      "icon",
+      "apple-icon",
+      "favicon",
+      "blog",
+    ];
+    const notReserved = `(?!${reservedTopLevel.join("|")})[a-z0-9-]+`;
     return [
       // /:state/:city/:category → /tattoo-shops/:state/:city/style/:category
       {
-        source:
-          "/:state((?!tattoo-shops|listing|categories|search|about|contact|privacy|terms|dmca|styles|login|register|list-your-shop|for-shop-owners|dashboard|admin|api|_next|sitemap|opengraph-image|icon|apple-icon|favicon|blog)[a-z0-9-]+)/:city/:category",
+        source: `/:state(${notReserved})/:city/:category`,
         destination: "/tattoo-shops/:state/:city/style/:category",
         permanent: true,
       },
       // /:state/:city → /tattoo-shops/:state/:city
       {
-        source:
-          "/:state((?!tattoo-shops|listing|categories|search|about|contact|privacy|terms|dmca|styles|login|register|list-your-shop|for-shop-owners|dashboard|admin|api|_next|sitemap|opengraph-image|icon|apple-icon|favicon|blog)[a-z0-9-]+)/:city",
+        source: `/:state(${notReserved})/:city`,
         destination: "/tattoo-shops/:state/:city",
         permanent: true,
       },
       // /:state → /tattoo-shops/:state
       {
-        source:
-          "/:state((?!tattoo-shops|listing|categories|search|about|contact|privacy|terms|dmca|styles|login|register|list-your-shop|for-shop-owners|dashboard|admin|api|_next|sitemap|opengraph-image|icon|apple-icon|favicon|blog)[a-z0-9-]+)",
+        source: `/:state(${notReserved})`,
         destination: "/tattoo-shops/:state",
         permanent: true,
       },
