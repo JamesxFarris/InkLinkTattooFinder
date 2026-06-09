@@ -6,6 +6,8 @@ import { auditLog } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 import { enrichListingFromGoogle } from "@/lib/google-places";
 import { notifyIndexNow, listingChangedUrls } from "@/lib/indexnow";
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 async function requireAdmin() {
   const session = await auth();
@@ -157,6 +159,35 @@ export async function adminDeleteUser(id: number) {
     details: { email: user?.email },
   });
   revalidatePath("/dashboard/admin/users");
+}
+
+export async function adminResetPassword(id: number): Promise<{ success: boolean; tempPassword?: string; error?: string }> {
+  const session = await requireAdmin();
+
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { email: true },
+  });
+  if (!user) return { success: false, error: "User not found" };
+
+  const tempPassword = crypto.randomBytes(6).toString("base64url"); // ~8 chars
+  const hash = await bcrypt.hash(tempPassword, 12);
+
+  await prisma.user.update({
+    where: { id },
+    data: { passwordHash: hash },
+  });
+
+  await auditLog({
+    userId: parseInt(session.user.id),
+    action: "user.resetPassword",
+    targetType: "user",
+    targetId: id,
+    details: { email: user.email },
+  });
+
+  revalidatePath("/dashboard/admin/users");
+  return { success: true, tempPassword };
 }
 
 export async function adminDeleteCity(id: number) {

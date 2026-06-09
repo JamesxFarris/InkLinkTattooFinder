@@ -166,10 +166,22 @@ export function OwnedListingCard({ listing, isPremium = false }: { listing: List
 
       {/* Upgrade Prompt */}
       {!isPremium && (
-        <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50/50 px-3 py-2 dark:border-amber-800 dark:bg-amber-900/10">
-          <Link href="/dashboard/upgrade" className="flex items-center gap-2 text-xs font-medium text-amber-700 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300">
-            <span className="text-amber-500">&#9733;</span>
-            Upgrade to Premium for a featured badge &amp; priority placement in search results
+        <div className="mt-3 rounded-lg border border-amber-200 bg-gradient-to-r from-amber-50 to-amber-50/30 px-4 py-3 dark:border-amber-800/50 dark:from-amber-950/20 dark:to-amber-900/10">
+          <Link href="/dashboard/upgrade" className="block">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="flex items-center gap-1.5 text-sm font-semibold text-amber-800 dark:text-amber-300">
+                  <span className="text-amber-500">&#9733;</span>
+                  Get more customers with Premium
+                </p>
+                <p className="mt-1 text-xs text-amber-700/70 dark:text-amber-400/70">
+                  Featured badge, priority search placement, 24 photos, and analytics — just $14/mo
+                </p>
+              </div>
+              <span className="mt-0.5 shrink-0 rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white">
+                Upgrade
+              </span>
+            </div>
           </Link>
         </div>
       )}

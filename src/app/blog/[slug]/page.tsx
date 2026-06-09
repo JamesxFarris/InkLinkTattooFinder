@@ -91,14 +91,6 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </header>
 
-        {post.coverImage && (
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="mb-8 w-full rounded-xl object-cover"
-          />
-        )}
-
         <div className="prose prose-stone max-w-none prose-headings:font-display prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:prose-a:text-teal-400">
           <MarkdownContent content={post.content} />
         </div>

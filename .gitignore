@@ -30,9 +30,10 @@ yarn-error.log*
 # claude code local settings
 .claude/
 
-# local data and photos
-data/
-photos/
+# local data and photos (root-level only, not src/data)
+/data/
+/photos/
+/prisma/data/
 
 # vercel
 .vercel

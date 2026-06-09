@@ -1,3 +1,6 @@
+-- Replace the raw-token PasswordResetToken table with the hashed AuthToken table below.
+DROP TABLE IF EXISTS "PasswordResetToken";
+
 -- Add email verification timestamp to users.
 ALTER TABLE "User" ADD COLUMN "emailVerifiedAt" TIMESTAMP(3);
 

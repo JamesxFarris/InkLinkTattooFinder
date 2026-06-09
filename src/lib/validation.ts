@@ -43,6 +43,8 @@ const ALLOWED_IMAGE_HOSTS = [
   "images.unsplash.com",
   "images.pexels.com",
   "lh3.googleusercontent.com",
+  "lh5.googleusercontent.com",
+  "streetviewpixels-pa.googleapis.com",
   "maps.googleapis.com",
 ];
 

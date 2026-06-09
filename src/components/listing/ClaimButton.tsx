@@ -7,11 +7,14 @@ import { useRouter } from "next/navigation";
 
 type ClaimButtonProps = {
   listingId: number;
+  listingSlug: string;
+  citySlug: string;
+  stateSlug: string;
   existingClaimStatus?: "pending" | "approved" | "denied" | null;
   isOwned: boolean;
 };
 
-export function ClaimButton({ listingId, existingClaimStatus, isOwned }: ClaimButtonProps) {
+export function ClaimButton({ listingId, listingSlug, citySlug, stateSlug, existingClaimStatus, isOwned }: ClaimButtonProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -77,7 +80,7 @@ export function ClaimButton({ listingId, existingClaimStatus, isOwned }: ClaimBu
           Claim this listing to manage your shop&apos;s information.
         </p>
         <Link
-          href="/register"
+          href={`/register?callbackUrl=/tattoo-shops/${stateSlug}/${citySlug}/${listingSlug}`}
           className="mt-4 inline-block rounded-lg bg-teal-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-600"
         >
           Sign Up to Claim
