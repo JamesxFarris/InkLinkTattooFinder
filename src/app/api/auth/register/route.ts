@@ -5,12 +5,8 @@ import { prisma } from "@/lib/db";
 import { auditLog } from "@/lib/audit";
 import { authLimiter } from "@/lib/rate-limit";
 import { sanitizeString, isValidEmail, MAX_NAME, MAX_EMAIL } from "@/lib/validation";
-
-// Admin emails from environment — auto-assigned admin on registration
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
-  .split(",")
-  .map((e) => e.trim().toLowerCase())
-  .filter(Boolean);
+import { createAuthToken } from "@/lib/tokens";
+import { sendVerificationEmail, getBaseUrl } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -59,12 +55,25 @@ export async function POST(request: Request) {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
-    const role = ADMIN_EMAILS.includes(email) ? "admin" : "owner";
 
+    // Note: never assign admin here — emails are unverified at registration.
+    // Admin promotion happens at login (see lib/auth.ts) and requires a verified email.
     const user = await prisma.user.create({
-      data: { name, email, passwordHash, role },
+      data: { name, email, passwordHash },
       select: { id: true, email: true, name: true, role: true },
     });
+
+    try {
+      const token = await createAuthToken(user.id, "email_verify");
+      await sendVerificationEmail({
+        userEmail: user.email,
+        userName: user.name,
+        verifyUrl: `${getBaseUrl()}/verify-email?token=${token}`,
+      });
+    } catch (err) {
+      // Verification email failure shouldn't block registration
+      console.error("Failed to send verification email:", err);
+    }
 
     await auditLog({
       userId: user.id,

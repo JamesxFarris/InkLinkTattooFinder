@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { trackLimiter } from "@/lib/rate-limit";
 
 const VALID_TYPES = ["phone", "website", "instagram", "facebook", "cta"] as const;
 type ClickType = (typeof VALID_TYPES)[number];
@@ -16,6 +17,11 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (!trackLimiter.check(ip).success) {
+    return NextResponse.json({ ok: true }); // silently drop, don't error the client
+  }
+
   const { id } = await params;
   const listingId = parseInt(id, 10);
   if (isNaN(listingId)) {

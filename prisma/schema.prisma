@@ -52,11 +52,31 @@ model User {
   stripeCustomerId     String?  @unique
   stripeSubscriptionId String?  @unique
   planExpiresAt        DateTime?
+  emailVerifiedAt      DateTime?
   claims               Claim[]
   listings             Listing[] @relation("OwnedListings")
   blogPosts            BlogPost[]
+  authTokens           AuthToken[]
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
+}
+
+enum AuthTokenType {
+  password_reset
+  email_verify
+}
+
+model AuthToken {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      AuthTokenType
+  tokenHash String        @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime      @default(now())
+
+  @@index([userId, type])
 }
 
 model Claim {

@@ -56,3 +56,4 @@ export function rateLimit(name: string, limit: number, windowMs: number) {
 export const authLimiter = rateLimit("auth", 5, 60_000); // 5 attempts per minute
 export const formLimiter = rateLimit("form", 10, 60_000); // 10 submissions per minute
 export const searchLimiter = rateLimit("search", 30, 60_000); // 30 searches per minute
+export const trackLimiter = rateLimit("track", 30, 60_000); // 30 click/view pings per minute

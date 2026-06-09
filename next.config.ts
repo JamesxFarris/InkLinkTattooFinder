@@ -11,11 +11,13 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   images: {
+    // Keep in sync with ALLOWED_IMAGE_HOSTS in src/lib/validation.ts
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "images.pexels.com" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "maps.googleapis.com" },
     ],
   },
   async headers() {

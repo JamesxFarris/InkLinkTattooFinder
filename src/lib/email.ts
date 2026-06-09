@@ -147,6 +147,138 @@ export async function sendClaimApprovedEmail({
   return { success: true as const };
 }
 
+/** Base layout shared by transactional auth emails (reset, verify). */
+function authEmailHtml({
+  heading,
+  bodyText,
+  buttonLabel,
+  buttonUrl,
+  footnote,
+}: {
+  heading: string;
+  bodyText: string;
+  buttonLabel: string;
+  buttonUrl: string;
+  footnote: string;
+}) {
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:8px;overflow:hidden;margin-top:20px;margin-bottom:20px;">
+    <tr>
+      <td style="background:#1a1a2e;padding:24px 32px;">
+        <h1 style="margin:0;color:#ffffff;font-size:22px;">InkLink Tattoo Finder</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:32px;">
+        <h2 style="margin:0 0 16px;color:#1a1a2e;font-size:20px;">${heading}</h2>
+        <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 24px;">${bodyText}</p>
+        <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+          <tr>
+            <td style="background:#14b8a6;border-radius:6px;">
+              <a href="${buttonUrl}" style="display:inline-block;padding:14px 28px;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;">
+                ${buttonLabel}
+              </a>
+            </td>
+          </tr>
+        </table>
+        <p style="color:#6b7280;font-size:13px;line-height:1.5;margin:0 0 8px;">
+          If the button doesn't work, copy and paste this link into your browser:
+        </p>
+        <p style="color:#14b8a6;font-size:13px;line-height:1.5;margin:0 0 24px;word-break:break-all;">${buttonUrl}</p>
+        <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:0;">${footnote}</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background:#f3f4f6;padding:16px 32px;text-align:center;">
+        <p style="color:#9ca3af;font-size:12px;margin:0;">
+          <a href="https://inklinktattoofinder.com" style="color:#9ca3af;">inklinktattoofinder.com</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+export async function sendPasswordResetEmail({
+  userEmail,
+  userName,
+  resetUrl,
+}: {
+  userEmail: string;
+  userName: string;
+  resetUrl: string;
+}) {
+  if (!resend) {
+    console.log(`[email skip] Password reset for ${userEmail} — Resend not configured`);
+    return { success: false as const, error: "Email service not configured" };
+  }
+
+  const { error } = await resend.emails.send({
+    from: "InkLink Tattoo Finder <hello@inklinktattoofinder.com>",
+    to: userEmail,
+    subject: "Reset your InkLink password",
+    html: authEmailHtml({
+      heading: "Reset your password",
+      bodyText: `Hey ${userName}, we received a request to reset the password for your InkLink account. Click the button below to choose a new one. This link expires in 1 hour.`,
+      buttonLabel: "Reset Password",
+      buttonUrl: resetUrl,
+      footnote:
+        "If you didn't request a password reset, you can safely ignore this email — your password won't change.",
+    }),
+  });
+
+  if (error) {
+    console.error(`[email error] Password reset for ${userEmail}: ${error.message}`);
+    return { success: false as const, error: error.message };
+  }
+
+  return { success: true as const };
+}
+
+export async function sendVerificationEmail({
+  userEmail,
+  userName,
+  verifyUrl,
+}: {
+  userEmail: string;
+  userName: string;
+  verifyUrl: string;
+}) {
+  if (!resend) {
+    console.log(`[email skip] Verification email for ${userEmail} — Resend not configured`);
+    return { success: false as const, error: "Email service not configured" };
+  }
+
+  const { error } = await resend.emails.send({
+    from: "InkLink Tattoo Finder <hello@inklinktattoofinder.com>",
+    to: userEmail,
+    subject: "Verify your InkLink email address",
+    html: authEmailHtml({
+      heading: "Verify your email",
+      bodyText: `Hey ${userName}, welcome to InkLink Tattoo Finder! Please confirm your email address so we know it's really you. This link expires in 24 hours.`,
+      buttonLabel: "Verify Email",
+      buttonUrl: verifyUrl,
+      footnote: "If you didn't create an InkLink account, you can safely ignore this email.",
+    }),
+  });
+
+  if (error) {
+    console.error(`[email error] Verification email for ${userEmail}: ${error.message}`);
+    return { success: false as const, error: error.message };
+  }
+
+  return { success: true as const };
+}
+
+/** Absolute base URL for links in emails (AUTH_URL is set in all environments). */
+export function getBaseUrl(): string {
+  return (process.env.AUTH_URL || "https://inklinktattoofinder.com").replace(/\/+$/, "");
+}
+
 const ADMIN_EMAIL = "inklinktattoofinder@gmail.com";
 
 export async function notifyAdmin(subject: string, body: string) {

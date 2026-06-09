@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { inputClass, labelClass } from "@/lib/formClasses";
 import { gtagEvent } from "@/lib/gtag";
@@ -74,9 +75,17 @@ export function LoginForm() {
       </div>
 
       <div>
-        <label htmlFor="password" className={labelClass}>
-          Password
-        </label>
+        <div className="flex items-center justify-between">
+          <label htmlFor="password" className={labelClass}>
+            Password
+          </label>
+          <Link
+            href="/forgot-password"
+            className="text-xs text-teal-500 hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
         <div className="relative mt-1">
           <input
             id="password"

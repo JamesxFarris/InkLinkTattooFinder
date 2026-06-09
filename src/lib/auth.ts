@@ -3,7 +3,8 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "./db";
 
-// Emails that are always admin, regardless of how they registered.
+// Emails that are auto-promoted to admin on login — but only once the account's
+// email is verified, so registering someone else's address never grants admin.
 // Set ADMIN_EMAILS as a comma-separated list in your environment variables.
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
   .split(",")
@@ -33,8 +34,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!isValid) return null;
 
-        // Auto-promote hardcoded admin emails on login
-        const isHardcodedAdmin = ADMIN_EMAILS.includes(user.email.toLowerCase());
+        // Auto-promote hardcoded admin emails on login (verified emails only)
+        const isHardcodedAdmin =
+          ADMIN_EMAILS.includes(user.email.toLowerCase()) &&
+          user.emailVerifiedAt !== null;
         if (isHardcodedAdmin && user.role !== "admin") {
           await prisma.user.update({
             where: { id: user.id },

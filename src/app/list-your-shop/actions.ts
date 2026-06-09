@@ -11,6 +11,8 @@ import {
   isValidEmail,
   isValidUrl,
   isValidPhone,
+  isAllowedImageUrl,
+  parseArtistsJson,
   MAX_BUSINESS_NAME,
   MAX_EMAIL,
   MAX_DESCRIPTION,
@@ -54,24 +56,7 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
     const acceptsWalkIns = formData.get("acceptsWalkIns") === "on";
     const piercingServices = formData.get("piercingServices") === "on";
     const photos = formData.getAll("photos").filter((p) => typeof p === "string" && p.length > 0) as string[];
-    // Parse artists from JSON format
-    const artistsJsonRaw = formData.get("artistsJson") as string | null;
-    let artists: { name: string; instagramUrl?: string }[] = [];
-    if (artistsJsonRaw) {
-      try {
-        const parsed = JSON.parse(artistsJsonRaw);
-        if (Array.isArray(parsed)) {
-          artists = parsed
-            .filter((a: unknown) => typeof a === "object" && a !== null && "name" in a && typeof (a as { name: unknown }).name === "string" && (a as { name: string }).name.trim().length > 0)
-            .map((a: { name: string; instagramUrl?: string }) => ({
-              name: a.name.trim(),
-              ...(a.instagramUrl?.trim() ? { instagramUrl: a.instagramUrl.trim() } : {}),
-            }));
-        }
-      } catch {
-        // ignore invalid JSON
-      }
-    }
+    const artists = parseArtistsJson(formData.get("artistsJson") as string | null);
 
     // Validate required fields
     if (!name || !stateId || !cityName) {
@@ -96,6 +81,10 @@ export async function submitListing(formData: FormData): Promise<SubmitResult> {
 
     if (instagramUrl && !isValidUrl(instagramUrl)) {
       return { success: false, message: "Please enter a valid Instagram URL." };
+    }
+
+    if (photos.some((p) => !isAllowedImageUrl(p))) {
+      return { success: false, message: "One or more photo URLs are invalid. Please re-upload your photos." };
     }
 
     const parsedStateId = parseInt(stateId, 10);
