@@ -1,0 +1,46 @@
+#!/bin/sh
+# Pre-push secret scan: blocks pushes whose outgoing commits add secret-like strings.
+# Installed automatically via `npm install` (scripts/setup-git-hooks.js sets core.hooksPath).
+#
+# If it flags a FALSE positive, bypass once with:  SKIP_SECRET_SCAN=1 git push
+# If it flags a REAL secret: remove it from the commit AND rotate the credential.
+
+[ "$SKIP_SECRET_SCAN" = "1" ] && exit 0
+
+PATTERN='AIza[0-9A-Za-z_-]{30}|sk_(live|test)_[A-Za-z0-9]{10}|rk_(live|test)_[A-Za-z0-9]{10}|re_[A-Za-z0-9]{25}|whsec_[A-Za-z0-9]{20}|apify_api_[A-Za-z0-9]{20}|ghp_[A-Za-z0-9]{30}|github_pat_[A-Za-z0-9_]{30}|AKIA[0-9A-Z]{16}|xox[abp]-[A-Za-z0-9-]{10}|-----BEGIN [A-Z ]*PRIVATE KEY|postgres(ql)?://[A-Za-z0-9_.-]*:[^@"'"'"' ]{6,}@|mysql://[A-Za-z0-9_.-]*:[^@"'"'"' ]{6,}@'
+ALLOWLIST='localhost|127\.0\.0\.1|example|your-|placeholder|\$\{\{?|process\.env|env\('
+
+fail=0
+while read local_ref local_sha remote_ref remote_sha; do
+  # Skip ref deletions (local sha is all zeros)
+  case "$local_sha" in
+    *[!0]*) ;;
+    *) continue ;;
+  esac
+
+  # New remote branch: scan commits not on any remote; otherwise scan the outgoing range
+  case "$remote_sha" in
+    *[!0]*) range="$remote_sha..$local_sha" ;;
+    *) range="$local_sha --not --remotes" ;;
+  esac
+
+  hits=$(git log -p $range -- . ':(exclude)package-lock.json' ':(exclude).githooks' 2>/dev/null \
+    | grep -E '^\+' \
+    | grep -E "$PATTERN" \
+    | grep -vE "$ALLOWLIST")
+
+  if [ -n "$hits" ]; then
+    echo "" >&2
+    echo "PUSH BLOCKED: possible secrets in outgoing commits:" >&2
+    echo "$hits" | head -10 >&2
+    fail=1
+  fi
+done
+
+if [ "$fail" = "1" ]; then
+  echo "" >&2
+  echo "Remove the secret from the commit (git reset / rebase) and rotate it if it is real." >&2
+  echo "False positive? Bypass once with: SKIP_SECRET_SCAN=1 git push" >&2
+  exit 1
+fi
+exit 0
