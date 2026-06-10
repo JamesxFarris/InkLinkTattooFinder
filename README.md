@@ -39,18 +39,6 @@ This is a real product with real users, so most of the work isn't in the obvious
 | External data | Google Places API | Ratings, reviews, hours sync |
 | Hosting | Railway | Postgres + Node deploys, no infra yak-shaving |
 
-## What I learned
-
-**A leaked secret is two incidents, not one.** A one-off seed script with a pasted database URL got committed, and GitGuardian flagged it in a public repo. Rotating the password took two minutes — and immediately took the site down, because the app's `DATABASE_URL` was a pasted literal instead of a platform reference variable, so the rotation never propagated. Credentials now flow only through env vars, a pre-push hook plus gitleaks CI scan every commit, and rotation propagates automatically. The guardrails cost an afternoon; I just bought them after the incident instead of before.
-
-**HTTP 200 doesn't mean the page works.** With streaming SSR, a server component that throws after the shell is sent still returns 200 — the browser swaps in the error boundary afterwards. My health checks were green while every database-backed page showed "Something went wrong." I verify rendered content now, not status codes.
-
-**Google doesn't owe you an index.** 6,600 URLs submitted, ~1,800 indexed. Programmatic pages get judged one by one, and a "1 watercolor artist in Austin" page is thin content no matter how clean the schema markup is. The counterintuitive fix was to noindex thousands of my own pages and shrink the sitemap, so crawl budget concentrates on pages that deserve to rank. URL count is vanity; authority is the dial.
-
-**Catch-all routes tax every future feature.** A wildcard `/:state` redirect for legacy URLs silently swallowed each new top-level page I shipped — first `/blog`, then the password-reset pages, where emailed links dead-ended on a 404. Any pattern that matches "everything except a list" needs that list to live in exactly one place.
-
-**For a directory, distribution beats code.** The hardest problem isn't technical — it's that page 5,000 looks like page 4,999 to both Google and users. The features worth building are growth loops inside the product: claimable listings, embeddable rating badges that earn backlinks from shop websites, and owner dashboards that get shops to enrich their own pages for you.
-
 ## What I'd do differently next time
 
 - **Pick the DB schema more carefully up front.** The shop/artist/claim relationship grew organically. There are migrations in this repo I'm not proud of.
